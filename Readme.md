@@ -1,7 +1,7 @@
 ### ILDbench_Hmumu
 Main analyzer: Shin-ichi Kawada (DESY)
 shin-ichi.kawada@desy.de
-(wrote on 2018/Sep./24)
+(wrote on 2018/Sep./24, many things under construction)
 
 ### Introduction
 These codes are used for h->mu+mu- branching ratio measurement at the ILD.
@@ -16,45 +16,21 @@ Several different types of codes are used, so I will explain it at there.
 
 The files in bechmark/ directory are used for IDR analysis.
 
+### Analysis Flow
+Basically in all cases, the same analysis flow is used.
+In short:
+1. initialize your ilcsoft
+2. edit codes in src/ and include/ directories
+3. compile (if error occurs, you can enjoy bugfix)
+4. edit steering file, then run it
+5. technical things; merge root files, extract necessary variables, add weights, and so on (this is my favorite style, you can do it more clever way)
+6. enjoy cut-based analysis before TMVA, this is preselection part
+7. enjoy TMVA analysis
+8. enjoy toy MC analysis
 
+From procedure 5, I always created directory to perform next analysis. e.g,: the directory structure is getting like this: 5/6/7/8/ .
+In each channel, I always created LEFT/ and RIGHT/ directories.
+LEFT means the beam polarization of P(e+,e-) = (+0.3,-0.8), and RIGHT means P(e+,e-) = (-0.3,+0.8).
 
-
-
-
-### Installation
-
-Explain here:
-
-- what are the package dependencies (iLCSoft, others ?)
-- how to compile your package. Should normally be something like:
-
-```shell
-source /path/to/ilcsoft/init_ilcsoft.sh
-mkdir build
-cd build
-cmake -C $ILCSOFT/ILCSoft.cmake ..
-make install
-```
-
-### How to run the analysis
-
-Explain here:
-
-- where to find data needed for your analysis or how to produce them
-- how to run you analysis: 
-   - Marlin processors to run ?
-   - ROOT macros to run ?
-   - Shell scripts ?
-   - Run the analysis on grid if you provide scripts for that
-
-Example:
-
-```shell
-export MARLIN_DLL=./lib/libILDbench_Hmumu.so
-Marlin ./scripts/ExampleProcessor.xml
-```
-
-If you want to provide a lot of details on your analysis, use the doc/Readme.md and point to it from this Readme.md file:
-
-More documentation available here in [doc/Readme.md](doc/Readme.md) !
-
+Some codes/macros contain DESY-specific and ilcsoft-version-specific contents.
+You have to adjust to your own environment.
