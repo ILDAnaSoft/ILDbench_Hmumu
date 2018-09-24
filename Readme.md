@@ -1,7 +1,25 @@
+### ILDbench_Hmumu
+Main analyzer: Shin-ichi Kawada (DESY)
+shin-ichi.kawada@desy.de
+(wrote on 2018/Sep./24)
 
-## ILDbench_Hmumu
+### Introduction
+These codes are used for h->mu+mu- branching ratio measurement at the ILD.
+Since the structure of directory looks very different compare to other usual usage case,
+I will try to explain how to use these.
+Use these codes are your own risk.
 
-H->mumu branching ratio measurement
+### Structure
+You can see 2 different directories; DBD/ and benchmark/ .
+You can easily inagine that the files in DBD/ directory are used for DBD-style samples.
+Several different types of codes are used, so I will explain it at there.
+
+The files in bechmark/ directory are used for IDR analysis.
+
+
+
+
+
 
 ### Installation
 
@@ -39,14 +57,4 @@ Marlin ./scripts/ExampleProcessor.xml
 If you want to provide a lot of details on your analysis, use the doc/Readme.md and point to it from this Readme.md file:
 
 More documentation available here in [doc/Readme.md](doc/Readme.md) !
-
-### Issues and contact
-
-Explain here how can people reach you:
-
-- via the Github issue interface. For the skeleton package: https://github.com/ILDAnaSoft/ILDbench_Hmumu/issues
-- **not mandatory**:
-    - email address
-    - working institute
-
 
