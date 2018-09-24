@@ -11,7 +11,7 @@ Use these codes are your own risk.
 
 ### Structure
 You can see 2 different directories; DBD/ and benchmark/ .
-You can easily inagine that the files in DBD/ directory are used for DBD-style samples.
+You can easily imagine that the files in DBD/ directory are used for DBD-style samples.
 Several different types of codes are used, so I will explain it at there.
 
 The files in bechmark/ directory are used for IDR analysis.
