@@ -51,3 +51,10 @@ hmumu.xml
 - `hmumu.xml`: control input files, processors which you want to use
 
 ## Analysis flow
+1. `Add4MomCovMatrixCharged`: calculate convariance matrix in momenta space from track parameter space
+2. `ThrustReconstruction`, `Sphericity`: calculate event-shape variables
+3. `IsolatedLeptonTagging`: to select h->mu+mu- candidate from `PandoraPFOs`
+4. `ISRFinder`: to remove ISR photons from `PFOsWithoutIsoleps`
+5. `IsolatedLeptonTagging`: count number of isolated leptons in `PFOsWithoutISR`, and use it for vetoing in further analysis
+6. `SatoruJetFinder`: reconstruct 2-jets from `PFOsWithoutISR` using Durham algorithm
+7. `HiggsToMuMuProcessor`: extracte/calculate necessary variables, and store in NTuple
