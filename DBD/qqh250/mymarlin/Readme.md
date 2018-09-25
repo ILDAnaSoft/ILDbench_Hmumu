@@ -1,8 +1,8 @@
 # Caution
-These analysis processors will only work up to ilcsoft v01-17-09 or around (I did everything with v01-17-09).
+These codes will only work up to ilcsoft v01-17-09 or around (I did everything with v01-17-09).
 For higher version maybe does not work, because the FORTRAN-related things are not supported anymore.
-This is due to `SatoruJetFinder` which uses some FORTRAN code.
-If you want to use other jet clustering package, modify it by yourself.
+This is due to `SatoruJetFinder` which uses some FORTRAN codes.
+If you want to use with higher version of ilcsoft, you need to find proper package and modify your codes by yourself.
 
 # How To Use
 0. Assume you are in the plain terminal. Initialize your ilcsoft.
