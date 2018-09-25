@@ -34,7 +34,7 @@ source /YOUR_WORKING_DIRECTORY/mymarlin/init_ilcsoft.sh
 ```
 
 # Explanation
-These analysis processors are used for qqh250 analysis.
+These codes are used for qqh250 analysis.
 Basically you only need to edit following files:
 ```
 src/HiggsToMuMuProcessor.cc
@@ -49,6 +49,7 @@ hmumu.xml
 - `src/ISRFinder.cc`: very simple ISR finder
 - `src/HiggsToMuMuProcessor.cc`: extracting/calculating necessary variables, and store in NTuple
 - `hmumu.xml`: control input files, processors which you want to use
+- `procid250.txt`: external file contains process name/ID, beam polarization, and cross section
 
 ## Analysis flow
 1. `Add4MomCovMatrixCharged`: calculate convariance matrix in momenta space from track parameter space
