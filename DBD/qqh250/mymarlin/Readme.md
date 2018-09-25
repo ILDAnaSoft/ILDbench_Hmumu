@@ -1,8 +1,6 @@
 # How To Use
 0. Assume you are in the plain terminal. Initialize your ilcsoft.  
-'
-source /YOUR_ILCSOFT_PATH/init_ilcsoft.sh
-'  
+'source /YOUR_ILCSOFT_PATH/init_ilcsoft.sh'  
 1. Do following things.  
 '''bash:
 mkdir build
