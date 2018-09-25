@@ -1,2 +1,18 @@
-### Explanation
-WIP
+# How To Use
+0. Assume you are in the plain terminal. Initialize your ilcsoft.
+source /YOUR_ILCSOFT_PATH/init_ilcsoft.sh
+1. Do following things.
+mkdir build
+cd build
+cmake -C $ILCSOFT/ILCSoft.cmake ..
+make install
+cd ../
+export MARLIN_DLL=./lib/libmymarlin.so
+2. Edit xml file, then run it using next command:.
+Marlin hmumu.xml
+
+Alternatively, you can copy-and-paste init_ilcsoft.sh from somewhere, and add next sentence at the end of file.
+export MARLIN_DLL=/YOUR_WORKING_DIRECTORY/mymarlin/lib/libmymarlin.so
+
+# Explanation
+
