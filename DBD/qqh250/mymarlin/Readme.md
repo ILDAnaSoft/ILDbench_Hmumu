@@ -12,10 +12,11 @@ make install
 cd ../
 export MARLIN_DLL=./lib/libmymarlin.so
 ```  
-2. Edit xml file, then run it using next command:.
+2. Edit xml file (check your input (`LCIOInputFiles`) file is correct), then run it using next command:
 ```
 Marlin hmumu.xml
 ```
+3. Now you should have output.root.
 
 Alternatively (and my favorite style), you can copy-and-paste init_ilcsoft.sh from somewhere, and add next sentence at the end of init_ilcsoft.sh.  
 ```
