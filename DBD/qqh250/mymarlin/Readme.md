@@ -1,3 +1,9 @@
+# Caution
+These analysis processors will only work up to ilcsoft v01-17-09 or around (I did everything with v01-17-09).
+For higher version maybe does not work, because the FORTRAN-related things are not supported anymore.
+This is due to `SatoruJetFinder` which uses some FORTRAN code.
+If you want to use other jet clustering package, modify it by yourself.
+
 # How To Use
 0. Assume you are in the plain terminal. Initialize your ilcsoft.
 ```
@@ -12,7 +18,7 @@ make install
 cd ../
 export MARLIN_DLL=./lib/libmymarlin.so
 ```  
-2. Edit xml file (check your input (`LCIOInputFiles`) file is correct), then run it using next command:
+2. Edit xml file (check your input file(s) (`LCIOInputFiles`) are correct), then run it using next command:
 ```
 Marlin hmumu.xml
 ```
@@ -22,7 +28,7 @@ Alternatively (and my favorite style), you can copy-and-paste init_ilcsoft.sh fr
 ```
 export MARLIN_DLL=/YOUR_WORKING_DIRECTORY/mymarlin/lib/libmymarlin.so
 ```
-Then, when you restart your work, just do following things to initialize your ilcsoft, together with your own library.
+Then, when you restart your work, just type following command to initialize your ilcsoft, together with including your own library.
 ```
 source /YOUR_WORKING_DIRECTORY/mymarlin/init_ilcsoft.sh
 ```
