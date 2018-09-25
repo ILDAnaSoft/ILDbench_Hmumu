@@ -43,6 +43,7 @@ src/ISRFinder.cc
 include/ISRFinder.h
 hmumu.xml
 ```
+Other files are used to calculate evet-shape variables.
 
 ## Each file
 - `include/HiggsToMuMuProcessor.h`, `include/ISRFinder.h`: defining necessary variables
@@ -58,4 +59,4 @@ hmumu.xml
 4. `ISRFinder`: to remove ISR photons from `PFOsWithoutIsoleps`
 5. `IsolatedLeptonTagging`: count number of isolated leptons in `PFOsWithoutISR`, and use it for vetoing in further analysis
 6. `SatoruJetFinder`: reconstruct 2-jets from `PFOsWithoutISR` using Durham algorithm
-7. `HiggsToMuMuProcessor`: extracte/calculate necessary variables, and store in NTuple
+7. `HiggsToMuMuProcessor`: extract/calculate necessary variables, and store in NTuple
