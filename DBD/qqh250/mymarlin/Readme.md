@@ -5,12 +5,12 @@ source /YOUR_ILCSOFT_PATH/init_ilcsoft.sh
 ```
 1. Do following things.  
 ```
-	mkdir build
-	cd build
-	cmake -C $ILCSOFT/ILCSoft.cmake ..
-	make install
-	cd ../
-	export MARLIN_DLL=./lib/libmymarlin.so
+mkdir build
+cd build
+cmake -C $ILCSOFT/ILCSoft.cmake ..
+make install
+cd ../
+export MARLIN_DLL=./lib/libmymarlin.so
 ```  
 2. Edit xml file, then run it using next command:.
 ```
