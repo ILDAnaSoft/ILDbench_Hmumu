@@ -35,4 +35,19 @@ source /YOUR_WORKING_DIRECTORY/mymarlin/init_ilcsoft.sh
 
 # Explanation
 These analysis processors are used for qqh250 analysis.
+Basically you only need to edit following files:
+```
+src/HiggsToMuMuProcessor.cc
+include/HiggsToMuMuProcessor.h
+src/ISRFinder.cc
+include/ISRFinder.h
+hmumu.xml
+```
 
+## Each file
+- `include/HiggsToMuMuProcessor.h`, `include/ISRFinder.h`: defining necessary variables
+- `src/ISRFinder.cc`: very simple ISR finder
+- `src/HiggsToMuMuProcessor.cc`: extracting/calculating necessary variables, and store in NTuple
+- `hmumu.xml`: control input files, processors which you want to use
+
+## Analysis flow
