@@ -42,6 +42,7 @@ hmumu.xml
 Other files are used to calculate evet-shape variables.
 
 ## Each file
+- `include/HiggsToMuMuProcessor.h`: defining necessary variables
 - `src/HiggsToMuMuProcessor.cc`: extracting/calculating necessary variables, and store in NTuple
 - `hmumu.xml`: control input files, processors which you want to use
 - `procid250.txt`: external file contains process name/ID, beam polarization, and cross section
