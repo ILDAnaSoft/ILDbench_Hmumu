@@ -58,5 +58,5 @@ Other files are used to calculate evet-shape variables.
 3. `IsolatedLeptonTagging`: to select h->mu+mu- candidate from `PandoraPFOs`
 4. `ISRFinder`: to remove ISR photons from `PFOsWithoutIsoleps`
 5. `IsolatedLeptonTagging`: count number of isolated leptons in `PFOsWithoutISR`, and use it for vetoing in further analysis
-6. `SatoruJetFinder`: reconstruct 2-jets from `PFOsWithoutISR` using Durham algorithm
+6. `SatoruJetFinder`: reconstruct 2-jets from `PFOsWithoutISR` using Durham algorithm ans store it as `Jets`
 7. `HiggsToMuMuProcessor`: extract/calculate necessary variables, and store in NTuple
