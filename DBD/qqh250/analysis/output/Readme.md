@@ -25,5 +25,9 @@ cp alldata_select.root RIGHT./
 
 # Explanation
 This place is used for prepation of analysis: combine all small root files to single large root file, extract necessary variables, add process ID histogram, and copy the process root file at `LEFT/.` and `RIGHT/.`.
+This is my favorite style, you can do it more clever way I think.
 
 ## Each file
+- `hadd.sh`,`hadd2.sh`: for combining each root file into single large file (When the total file size is too huge, then ROOT will split this huge file. This is the reason why I have 2 scripts for merging.)
+- `SkimVar.C`: for extracting necessary variables from root file, somehow self-documented
+- `proc.C`: creating one histogram of process ID, will be used for further preparion
