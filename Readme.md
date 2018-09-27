@@ -1,12 +1,11 @@
 # ILDbench_Hmumu
 Main analyzer: Shin-ichi Kawada (DESY)  
-shin-ichi.kawada@desy.de  
-(wrote on 2018/Sep./24, many things under construction)
+shin-ichi.kawada[atmk]desy.de  
+(updated on 2018/Sep./27, many things under construction, updating for DBD part is ~40% finished)
 
 # Introduction
 These codes are used for h->mu+mu- branching ratio measurement at the ILD.
-Since the structure of directory looks very different compare to other usual usage case,
-I will try to explain how to use these.
+Since the structure of directory looks very different compare to other usual usage case, I will try to explain how to use these at each place.
 Use these codes are your own risk.
 
 # Structure
