@@ -14,7 +14,7 @@ root -l -b
 SkimVar("alldata1.root","alldata1_select.root","dataTree","var1:var2:var3:...")
 SkimVar("alldata2.root","alldata2_select.root","dataTree","var1:var2:var3:...")
 .q
-hadd2.sh
+. hadd2.sh
 root -l -b
 .L proc.C+
 process()
