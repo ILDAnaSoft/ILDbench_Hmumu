@@ -27,10 +27,10 @@ Now you have 2 root files: one is just the result of precuts and other is also c
 # Explanation
 This place is used fot TMVA analysis, especially for determination of input variables to TMVA.
 Also final TMVA analysis is performed at here after the study at `test/` directory.
+In all cases, I used BDTG technique, so you can replace TMVA into BDTG, also you can try other techniques.
 
 ## Each file
 - `treeseparate.C`: divide 1 data tree into 2 data trees. In my case, dataTree is divided into datatrain and datatest.
 - `count.C`: count number of MC events and weighted events for 2 trees
 - `HiggsToMuMutrain.C`: controling for TMVA method, input variables, internal TMVA parameters like nCuts, MaxDepth, and so on
-
-
+- `result.C`: to add TMVA result to your root file. Be careful that the order of input variables should be the same as you set at `HiggsToMuMutrain.C`, otherwise it does not work properly.
