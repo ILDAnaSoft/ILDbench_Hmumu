@@ -2,6 +2,7 @@
 1. preparation
 - condor_submit doing.submit (DESY-specific)
 - Or do `. doing.sh`(Not recommend to do this in worker node at usual working time because it takes long time. Do it in lunchtime/midnight or create your own job submission script and submit it is much better for your colleague.)
+
 2. cut-based analysis
 ```
 root -l alldata_cut1.root
@@ -11,12 +12,23 @@ MakeAllWithWeight("file1","file2",dataTree,nbin,nlow,nhigh,"variable","cut_condi
 ```
 Then you should see the histogram of variable with cut_condition applied (if cut_condition == 1, then no cuts are applied).
 Now you can investigate your favorite cuts.
+
 ```
 root -l
 .L driverwithcut.C+
 driver("file1","file2","inputrootfile","dataTree",nbin,nlow,nhigh,"variable")
 ```
 The `driverwithcut.C` will provide the result when you apply the cut sequentially.
+
+3. create your precuts root file
+When you finish your cut-based analysis for preselection, it is recommended to create your own preselected file by using `SkimCut.C`.
+```
+root -l -b
+.L SkimCut.C+
+SkimCut("alldata_cut1.root","alldata_precuts.root","dataTree","YOUR_PRESELECTION_CUTS")
+.q
+```
+The final product alldata_precuts.root is used for further analysis.
 
 # Explanation
 This place is used for further preparation and cut-based analysis.
