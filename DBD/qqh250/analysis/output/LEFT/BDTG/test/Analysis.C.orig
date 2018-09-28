@@ -1,0 +1,43 @@
+void Analysis(){
+  TFile file("AAAAA");
+  TTree *tree = (TTree*)file.Get("datatest");
+  ofstream output("BBBBB");
+
+  int processid;
+  tree->SetBranchAddress( "processid", &processid );
+  int type;
+  tree->SetBranchAddress( "type", &type );
+  double weight;
+  tree->SetBranchAddress( "weight", &weight );
+  double BDTGoutput;
+  tree->SetBranchAddress( "BDTGoutput", &BDTGoutput );
+
+  double MNsig = 0, MNbkg = 0, Msigni = 0, Mpoint = -1;
+
+  for( double point = -1; point < 1; point = point + 0.001 ){//loop for point of BDTGoutput
+    double Nsig = 0, Nbkg = 0, signi = 0;
+    for( int i = 0; i < tree->GetEntries(); i++ ){
+      tree->GetEntry(i);
+      if( processid >= 108001 && processid <= 108004 &&
+	  ( type >= 1 && type <= 5 ) &&
+	  BDTGoutput > point ){//signal counting
+	Nsig += weight*2.;//don't forget, its half of original
+      }
+      else if( !( processid >= 108001 && processid <= 108004 &&
+		  ( type >= 1 && type <= 5 ) ) &&
+	       BDTGoutput > point ){//background counting
+	Nbkg += weight*2.;//don't forget, its half of original
+      }
+    }
+    signi = Nsig / TMath::Sqrt( Nsig + Nbkg );
+    //cout << "significance = " << signi << ", Nsig = " << Nsig << ", Nbkg = " << Nbkg << ", at point = " << point << endl;
+    if( signi > Msigni ){//get highest significance info.
+      MNsig = Nsig; MNbkg = Nbkg; Msigni = signi; Mpoint = point;
+    }
+    if( Nsig == 0 ) break; //make CPU time shorter
+    if( Nbkg == 0 ) break; //make CPU time shorter
+  }
+
+    output << Msigni << " " << MNsig << " " << MNbkg << " " << Mpoint << endl;
+    cout   << Msigni << " " << MNsig << " " << MNbkg << " " << Mpoint << endl;
+}
