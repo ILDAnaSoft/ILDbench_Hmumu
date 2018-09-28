@@ -12,8 +12,8 @@ root -l
 TMVAGui("HiggsToMuMu.root")
 ```
 Then the control panel will be appeared.  
-7. Go to `test/` directory. This is for detemining TMVA internal parameters. Details can be found there.
-8. Return to this directory. Now you should have your input variables and TMVA internal parameters. Adjust them in `HiggsToMuMutrain.C`, and do `root -l -b -q HiggsToMuMutrain.C`.
+7. Go to `test/` directory. This is for detemining TMVA internal parameters. Details can be found there.  
+8. Return to this directory. Now you should have your input variables and TMVA internal parameters. Adjust them in `HiggsToMuMutrain.C`, and do `root -l -b -q HiggsToMuMutrain.C`.  
 9. Do following things.
 ```
 cp alldata_precuts.root alldata_after.root
