@@ -3,10 +3,7 @@ These codes will only work up to ilcsoft v01-17-09 or around (I did everything w
 For higher version maybe does not work, or tons of warning message will appear.
 
 # How To Use
-0. Assume you are in the plain terminal. Initialize your ilcsoft.
-```
-source /YOUR_ILCSOFT_PATH/init_ilcsoft.sh
-```
+0. Assume you are in the plain terminal. Initialize your ilcsoft by doing `source /YOUR_ILCSOFT_PATH/init_ilcsoft.sh`.
 1. Do following things.  
 ```
 mkdir build
@@ -16,10 +13,7 @@ make install
 cd ../  
 export MARLIN_DLL=./lib/libmymarlin.so
 ```  
-2. Edit xml file (check your input file(s) (`LCIOInputFiles`) are correct), then run it using next command:
-```
-Marlin hmumu.xml
-```
+2. Edit xml file (check your input file(s) (`LCIOInputFiles`) are correct), then run it using `Marlin hmumu.xml`
 3. Now you should have output.root.
 
 Alternatively (and my favorite style), you can copy-and-paste init_ilcsoft.sh from somewhere, and add next sentence at the end of init_ilcsoft.sh.  
