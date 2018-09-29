@@ -10,7 +10,7 @@ This part contains DESY-specific part.
 ```
 root -l alldata_cut1.root
 .L stackwithcut.C+
-MakeProcinfo("procid250.txt")
+MakeProcinfo("procid500.txt")
 MakeAllWithWeight("file1","file2",dataTree,nbin,nlow,nhigh,"variable","cut_condition")
 ```
 Then you should see the histogram of variable with cut_condition applied (if cut_condition == 1, then no cuts are applied).
@@ -40,7 +40,7 @@ Mainly this part is used to define preselection before TMVA analysis.
 ## Each file
 1. preparation
 - `doing.sh`: 3 steps will be performed
-  - Add event weight to each event, this weight is calculated to adjust 0.9 ab-1 with left-handed beam polarization. This step uses `AddWeight.C`.
+  - Add event weight to each event, this weight is calculated to adjust 1.6 ab-1 with left-handed beam polarization. This step uses `AddWeight.C`.
   - Remove h->mu+mu- event in DBD samples to avoid confusion, because we have dedicated ffh_mumu samples. This uses alldata_select.root, and produces alldata_wo.root.
   - Select events which only have one mu+ and one mu-. This used alldata_wo.root, and produces alldata_cut1.root.
 2. cut-based analysis
