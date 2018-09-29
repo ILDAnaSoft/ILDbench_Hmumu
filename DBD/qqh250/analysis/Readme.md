@@ -12,7 +12,6 @@ This part contains DESY-specific part.
 # Explanation
 This place is used for job submission.
 
-
 ## Each File
 - `list_*.txt`: external file which contain the path of slcio file you want to proceed
 - `runMarlin`: prepare lots of xml files and job controlling files, this works when you do `. job.sh`

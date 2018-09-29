@@ -1,6 +1,5 @@
 # Caution
-This part contains many DESY-specific part.
-You need to be careful.
+This part contains DESY-specific part.
 
 # How To Use
 0. Assume you already initialized ilcsoft and include own library. If not, do it (written in `../mymarlin/Readme.md`). This is also necessary for deeper directories.
@@ -12,7 +11,6 @@ You need to be careful.
 
 # Explanation
 This place is used for job submission.
-
 
 ## Each File
 - `list_*.txt`: external file which contain the path of slcio file you want to proceed
