@@ -26,7 +26,8 @@ Now you have 2 root files: one is just the result of precuts and other is also c
 # Explanation
 This place is used fot TMVA analysis, especially for determination of input variables to TMVA.
 Also final TMVA analysis is performed at here after the study at `test/` directory.
-In all cases, I used BDTG technique, so you can replace TMVA into BDTG, also you can try other techniques.
+In all cases, I only used BDTG technique.
+If you want to use other TMVA techniques, you need to modify proper places to perform TMVA analysis.
 
 ## Each file
 - `treeseparate.C`: divide 1 data tree into 2 data trees. In my case, dataTree is divided into datatrain and datatest.
