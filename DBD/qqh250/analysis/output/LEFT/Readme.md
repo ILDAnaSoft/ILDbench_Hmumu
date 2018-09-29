@@ -1,3 +1,6 @@
+# Caution
+This part contains DESY-specific part.
+
 # How To Use
 1. preparation
 - `condor_submit doing.submit` (DESY-specific)
@@ -21,7 +24,7 @@ driver("file1","file2","inputrootfile","dataTree",nbin,nlow,nhigh,"variable")
 The `driverwithcut.C` will provide the result when you apply the cut sequentially.
 
 3. create your precuts root file
-When you finish your cut-based analysis for preselection, it is recommended to create your own preselected file by using `SkimCut.C`.
+When you finish your cut-based analysis for preselection, it is recommended to create your own preselected file with using `SkimCut.C`.
 ```
 root -l -b
 .L SkimCut.C+
@@ -32,6 +35,7 @@ The final product alldata_precuts.root is used for further analysis.
 
 # Explanation
 This place is used for further preparation and cut-based analysis.
+Mainly this part is used to define preselection before TMVA analysis.
 
 ## Each file
 1. preparation
