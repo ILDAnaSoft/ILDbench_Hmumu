@@ -1,6 +1,5 @@
 # Caution
-This part contains many DESY-specific part.
-You need to be careful.
+This part contains DESY-specific part.
 
 # How To Use
 - Create `LEFT/` and `RIGHT/`
