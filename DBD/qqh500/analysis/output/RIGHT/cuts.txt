@@ -1,0 +1,29 @@
+avoid double counting of DBD h->mumu samples
+!((processid>=106515&&processid<=106526)&&abs(higgsdecay1)==13)
+
+precuts
+n_muminus==1&&n_muplus==1&&muminus_Chi2Ndf>0.5&&muminus_Chi2Ndf<1.5&&muplus_Chi2Ndf>0.5&&muplus_Chi2Ndf<1.5&&abs(muminus_d0)<0.01&&abs(muplus_d0)<0.01&&abs(muminus_d0-muplus_d0)<0.01&&abs(muminus_z0)<0.5&&abs(muplus_z0)<0.5&&abs(muminus_z0-muplus_z0)<0.5&&sigma_mumu_mass<1&&mumu_mass>100&&mumu_mass<130&&mumu_costh<0.55&&n_forveto==0&&nJetskT==4&&mass_jj>60&&mass_jj<180&&jet1_charged>=4&&jet2_charged>=4
+
+2f:153.182 (100% from mumu)
+4f:940.337 (912.513 from mumuqq, 4.63663 from tautauqq)
+
+
+
+
+ckeck performance number (for nnh)
+2f
+mumu abs(forff1)==13
+tautau abs(forff1)==15&&ff_nt_m==2
+4f, aa_4f
+2mu2nu nn==2&&nm==2
+2tau2nu nn==2&&nt==2&&nt_m==2
+1tau1mu2nu nn==2&&nt==1&&nt_m==1&&nm==1
+mumuh
+h->4nu type==13&&h_nn==4
+tautauh
+h->4nu type==15&&tau_m==2&&h_nn==4
+nunuh
+h->2tau (type==12||type==14||type==16)&&abs(higgsdecay1)==15&&h_nt_m==2
+h->2mu2nu (type==12||type==14||type==16)&&h_nn==2&&h_nm==2
+h->2tau2nu (type==12||type==14||type==16)&&h_nn==2&&h_nt==2&&h_nboson_m==2
+h->1tau1mu2nu (type==12||type==14||type==16)&&h_nn==2&&h_nt==1&&h_nboson_m==1&&h_nm==1
