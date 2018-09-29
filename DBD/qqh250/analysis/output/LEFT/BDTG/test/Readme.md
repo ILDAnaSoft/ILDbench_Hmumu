@@ -7,7 +7,7 @@ This part contains DESY-specific part.
 2. Edit `HiggsToMuMutrain.C.orig` and `result.C`. Make sure that the order of input variables should be the same between these 2 files, otherwise it does not work. You can test it will work by using `. test_job.sh`.
 3. `condor_submit job.submit` (DESY-specific), or create your own job submission script because it takes typically 8-12 hours with in total 720 combination cases.
 4. Do `Analysis_job.sh`.
-5. Do `. submit_all.sh` (DESY-specific), or create your own job submission script because the total number of jobs will be 720 when you use these scripts as it was.
+5. Do `. submit_all.sh` (DESY-specific), or create your own job submission script because the total number of jobs will be 720 when you use these scripts as it was (for each job typically takes a few ten minutes).
 6. Do `cat dat/* > Analysis_result.dat`.
 7. Do `root -l -b -q Maximum.C`. Finally you will obtain the best significance and the combination of TMVA internal variables.
 
