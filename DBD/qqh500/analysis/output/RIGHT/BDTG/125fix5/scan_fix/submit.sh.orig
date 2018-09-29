@@ -1,0 +1,8 @@
+#!/bin/bash
+source /afs/desy.de/user/s/skawada/sonas_work/stage_qqh500/analysis/init_ilcsoft.sh
+cd /afs/desy.de/user/s/skawada/sonas_work/stage_qqh500/analysis/output/RIGHT/BDTG/125fix5/scan_fix
+root -l -b <<EOF
+.L toyMCCASECASE.C
+toyMC()
+.q
+EOF

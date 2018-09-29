@@ -1,0 +1,12 @@
+executable = submitCASECASE.sh
+universe = vanilla
+notify_user = shin-ichi.kawada@desy.de
+JobNotification = Error
+log = /afs/desy.de/user/s/skawada/sonas_work/stage_qqh500/analysis/output/RIGHT/BDTG/125fix5/MOMRESMOMRES/jobstatusCASECASE.log
+output = /afs/desy.de/user/s/skawada/sonas_work/stage_qqh500/analysis/output/RIGHT/BDTG/125fix5/MOMRESMOMRES/outputCASECASE.log
+error = /afs/desy.de/user/s/skawada/sonas_work/stage_qqh500/analysis/output/RIGHT/BDTG/125fix5/MOMRESMOMRES/errorCASECASE.log
++RequestRuntime = 3600*12
+RequestMemory = 8G
+RequestDisk = 2G
+Requirements = OpSysAndVer == "SL6"
+queue
