@@ -15,6 +15,6 @@ This part contains DESY-specific part.
 This place is used for TMVA analysis, especially to determine the TMVA internal variables.
 
 ## Each file
-- `job.sh`: setup the TMVA internal variable, train and test, then change the combination of internal variable, then train and test. In my analysis, I used typical numbers for these TMVA internal variables, and iys total is 720 combinations. You can modify tochange the combination variables, but of course be careful when you increase the number of combinations, it takes even much longer time.
+- `job.sh`: setup the TMVA internal variable, train and test, then change the combination of internal variable, then train and test. In my analysis, I used typical numbers for these TMVA internal variables, and its total is 720 combinations. You can modify to change the combination variables, but of course be careful when you increase the number of combinations, it takes even much longer time.
 - `Analysis_job.sh`: prepare scripts to evaluate the significance
 - `Maximum.C`: pickup best significance case, and show corresponding internal variables
