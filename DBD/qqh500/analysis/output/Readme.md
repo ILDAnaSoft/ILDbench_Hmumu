@@ -2,9 +2,8 @@
 This part contains DESY-specific part.
 
 # How To Use
-- Create `LEFT/` and `RIGHT/`
-- condor_submit doing.submit (DESY-specific)
-- Or, do `. doing.sh` (Not recommend to do this in worker node at usual working time because it takes very long time. Do it in midnight or create your own job submission script and submit it is much better for your colleague.)
+1. Create `LEFT/` and `RIGHT/`
+2. `condor_submit doing.submit` (DESY-specific), or, do `. doing.sh` (Not recommend to do this in worker node at usual working time because it takes very long time. Do it in midnight or create your own job submission script and submit it is much better for your colleague.).
 
 ## Step by step case
 ```
