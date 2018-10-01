@@ -1,7 +1,7 @@
 # ILDbench_Hmumu
 Main analyzer: Shin-ichi Kawada (DESY)  
 shin-ichi.kawada[atmk]desy.de  
-(updated on 2018/Sep./29, many things under construction, updating for DBD part is 99% finished, still need to check typo and mistakes)
+(updated on 2018/Oct./1, many things under construction, but for DBD part is finished)
 
 # Introduction
 These codes are used for h->mu+mu- branching ratio measurement at the ILD.
