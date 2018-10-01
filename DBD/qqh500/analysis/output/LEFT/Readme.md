@@ -42,7 +42,7 @@ Mainly this part is used to define preselection before TMVA analysis.
 - `doing.sh`: 3 steps will be performed
   - Add event weight to each event, this weight is calculated to adjust 1.6 ab-1 with left-handed beam polarization. This step uses `AddWeight.C`.
   - Remove h->mu+mu- event in DBD samples to avoid confusion, because we have dedicated ffh_mumu samples. This uses alldata_select.root, and produces alldata_wo.root.
-  - Select events which only have one mu+ and one mu-. This used alldata_wo.root, and produces alldata_cut1.root.
+  - Select events which only have one mu+ and one mu-. This uses alldata_wo.root, and produces alldata_cut1.root.
 2. cut-based analysis
 - `stackwithcut.C`: create histogram of variable, using different color for different processes, hard-coded many things to specify process
 - `simple.C`: similar to `stackwithcut.C` but all backgrounds are treated inclusively
