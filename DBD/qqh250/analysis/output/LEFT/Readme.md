@@ -23,7 +23,7 @@ driver("file1","file2","inputrootfile","dataTree",nbin,nlow,nhigh,"variable")
 ```
 The `driverwithcut.C` will provide the result when you apply the cut sequentially.
 
-3. create your precuts root file
+3. create your precuts root file  
 When you finish your cut-based analysis for preselection, it is recommended to create your own preselected file with using `SkimCut.C`.
 ```
 root -l -b
