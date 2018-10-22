@@ -1,4 +1,18 @@
+# Caution
+This part contains DESY-specific part.
+
+# How To Use
+0. Assume you already initialized ilcsoft and include own library. If not, do it (written in `../mymarlin/Readme.md`). This is also necessary for deeper directories.
+1. Prepare your list which contains the path of slcio file you want to proceed.
+2. Edit `hmumu.xml` (check your parameters carefully).
+3. Edit `job.sh` by hand, then do `. job.sh`. `tmp/` directory will be created, and it contains all xml files.
+4. Edit `submit.sh` by hand, then do `. submit.sh`.
+5. You should have processed root files at `output/PROCESS_NAME/SOMETHING.root`.
+
 # Explanation
-`mymarlin/` : for editing codes and tests  
-`analysis/` : for full analysis using many samples (l5-option)  
-`analysisS/` : for full analysis using many samples (s5-option)
+This place is used for job submission.
+
+## Each File
+- `list_*.txt`: external file which contain the path of slcio file you want to proceed
+- `runMarlin`: prepare lots of xml files and job controlling files, this works when you do `. job.sh`
+- `submit.sh`: for submitting all jobs
