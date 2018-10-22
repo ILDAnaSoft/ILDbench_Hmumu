@@ -1,0 +1,12 @@
+executable = doing.sh
+universe = vanilla
+notify_user = shin-ichi.kawada@desy.de
+JobNotification = Always
+log = jobstatus.log
+output = output.log
+error = error.log
++RequestRuntime = 3600*8
+RequestMemory = 8G
+RequestDisk = 15G
+Requirements = OpSysAndVer == "SL6"
+queue
