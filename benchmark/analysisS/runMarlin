@@ -1,0 +1,73 @@
+#!/bin/bash
+
+if [ -z $1 ]; then
+	echo "runMarlin 20120312 tomohiko."
+	echo "Usage: runMarlin process envshell xmlfile filelist output_start output_end"
+	exit 1;
+fi
+
+#parameters
+process=$1
+shellfile=$2
+xmlfile=$3
+filelist=$4
+output_start=$5
+output_end=$6
+
+inputanchor='INPUTINPUT'
+outputanchor='OUTPUTOUTPUT'
+
+outputdir=output/$process
+tmpdir=tmp/$process
+currentdir=$(cd $(dirname $0) && pwd )
+#collecting full path of xml files
+rm -f condor_submit.sh
+echo \#!/bin/bash > condor_submit.sh
+echo >> condor_submit.sh
+
+[ -d $outputdir ] || mkdir -p $outputdir
+[ -d $tmpdir ] || mkdir -p $tmpdir
+
+ncur=$output_start
+while [ $ncur -le $output_end ]; do
+	inputfile=`head -$ncur $filelist | tail -1`
+	inputfilesed=$(echo $inputfile | sed "s/\//\\\\\//g" | sed "s/\./\\\./g")
+
+	basename=P$process-`printf %03d $ncur`
+	steerfile=$tmpdir/$basename.xml
+	shfile=$tmpdir/$basename.sh
+	HTCondor=$tmpdir/$basename.submit
+
+#	outputfile=$outputdir/$process-`printf %03d $ncur`.root
+	outputfile=$currentdir/$outputdir/$process-`printf %03d $ncur`.root
+#outputfile=$outputdir/$process-`printf %03d $ncur`.slcio
+
+	outputfilesed=$(echo $outputfile | sed "s/\//\\\\\//g" | sed "s/\./\\\./g")
+
+	cat $xmlfile | sed "s/$outputanchor/$outputfilesed/" | sed "s/$inputanchor/$inputfilesed/" > $steerfile
+
+	echo $steerfile
+	echo \#!/bin/bash > $shfile
+	echo >> $shfile
+#DESY BIRD_HTCondor system specific part
+	echo "executable = $shfile " >> $HTCondor
+	echo "universe = vanilla" >> $HTCondor
+	echo "notify_user = shin-ichi.kawada@desy.de" >> $HTCondor
+	echo "Notification = Error" >> $HTCondor
+	echo "log = $currentdir/$tmpdir/$basename.jobstatus.log" >> $HTCondor
+	echo "output = $currentdir/$tmpdir/$basename.output.log" >> $HTCondor
+	echo "error = $currentdir/$tmpdir/$basename.error.log" >> $HTCondor
+	echo "+RequestRuntime = 1800" >> $HTCondor
+	echo "RequestMemory = 2G" >> $HTCondor
+	echo "RequestDisk = 5G" >> $HTCondor
+	echo "Requirements = OpSysAndVer == \"SL6\"" >> $HTCondor
+	echo "queue" >> $HTCondor
+#DESY BIRD_HTCondor system specific part
+	echo source $shellfile >> $shfile
+#	echo source /group/ilc/soft/opt/gf44.setup >> $shfile
+	echo Marlin $currentdir/$steerfile >> $shfile
+	chmod 755 $shfile
+#	bsub -C0 -q s -o $bsublog -L /bin/bash $shfile
+	echo condor_submit $currentdir/$HTCondor >> condor_submit.sh
+	ncur=$(($ncur + 1)) 
+done
