@@ -402,6 +402,11 @@ class HiggsToMuMuProcessor : public Processor{
     float mumu_costh_tobeam;
     float mumu_mom_mag;
 
+    float vtxPos_x;
+    float vtxPos_y;
+    float vtxPos_z;
+    float vtxChisq;
+
     float muminus_momres;
     float muplus_momres;
     float pseudomass;

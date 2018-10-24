@@ -16,6 +16,9 @@
 #include "UTIL/PIDHandler.h"
 #include "LCIOSTLTypes.h"
 
+//Vertex informaion
+#include "VertexInfo.h"
+
 //----- include for verbosity dependend logging ---------
 #include "marlin/VerbosityLevels.h"
 
@@ -930,6 +933,7 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
   float muminus_covMat4 = 0, muminus_covMat5 = 0, muminus_covMat6 = 0, muminus_covMat7 = 0;
   float muminus_covMat8 = 0, muminus_covMat9 = 0;
   TLorentzVector muminus_4mom_mc(0,0,0,0), muplus_4mom_mc(0,0,0,0);
+  Track *muplus_track = 0, *muminus_track = 0;
   if( Isoleps != 0 ){
     IntVec types;
     IntVec isoleptypes = Isoleps->getParameters().getIntVals( "ISOLepType", types );
@@ -976,6 +980,7 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
           muplus_covMat9 = isolep->getCovMatrix()[9];
 
 	  if( trkvec.size() > 0 ){//track parameters of mu+
+	    muplus_track = trkvec[0];
 	    const Track* trk = trkvec[0];
             _data.muplus_d0        = trk->getD0();
             //_data.muplus_z0        = trk->getZ0();
@@ -1057,6 +1062,7 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
           muminus_covMat9 = isolep->getCovMatrix()[9];
 
 	  if( trkvec.size() > 0 ){//track parameters of mu-
+	    muminus_track = trkvec[0];
             const Track* trk = trkvec[0];
             _data.muminus_d0        = trk->getD0();
             //_data.muminus_z0        = trk->getZ0();
@@ -1173,6 +1179,21 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
 			        + muminus_4mom[2]*muplus_covMat8 + muminus_4mom[3]*muplus_covMat9 );
   if( _data.mumu_mass > 0 ){
     _data.sigma_mumu_mass = ( 1. / _data.mumu_mass ) * TMath::Sqrt( term1st + term2nd );
+  }
+
+  //vertex information
+  if( muminus_track != 0 && muplus_track != 0 ){
+    VertexInfo vv;
+    //vv.setBField(3.5);
+    vv.addTrack( muminus_track );
+    vv.addTrack( muplus_track  );
+    TVector3 vtxPos = vv.getVertexPosition();
+    _data.vtxPos_x = vtxPos[0];
+    _data.vtxPos_y = vtxPos[1];
+    _data.vtxPos_z = vtxPos[2];
+    _data.vtxChisq = vv.getVertexChisq();
+    //cout << "vtxPos_z = " << vtxPos[2] << endl;
+    //cout << "chi2 = " << vv.getVertexChisq() << endl;
   }
 
   //momentum resolution sigma{p}
@@ -1624,6 +1645,11 @@ void HiggsToMuMuProcessor::makeNTuple() {
   _dataTree->Branch( "recoilmass"       , &d.recoilmass       , "recoilmass"        );
   _dataTree->Branch( "mumu_costh_tobeam", &d.mumu_costh_tobeam, "mumu_costh_tobeam" );
   _dataTree->Branch( "mumu_mom_mag"     , &d.mumu_mom_mag     , "mumu_mom_mag"      );
+
+  _dataTree->Branch( "vtxPos_x", &d.vtxPos_x, "vtxPos_x" );
+  _dataTree->Branch( "vtxPos_y", &d.vtxPos_y, "vtxPos_y" );
+  _dataTree->Branch( "vtxPos_z", &d.vtxPos_z, "vtxPos_z" );
+  _dataTree->Branch( "vtxChisq", &d.vtxChisq, "vtxChisq" );
 
   _dataTree->Branch( "muminus_momres", &d.muminus_momres, "muminus_momres" );
   _dataTree->Branch( "muplus_momres" , &d.muplus_momres , "muplus_momres"  );
