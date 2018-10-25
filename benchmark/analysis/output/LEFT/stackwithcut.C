@@ -12,7 +12,6 @@ this macro does not use hev, instead of calculated weight
 #include "TString.h"
 #include "TH1.h"
 #include "TH2.h"
-#include "THStack.h"
 #include "TNtupleD.h"
 #include "TTreeFormula.h"
 #include "TLorentzVector.h"
@@ -105,55 +104,38 @@ void MakeAllWithWeight( TString file1, TString file2, TTree *nt,
   TLegend *leg = new TLegend(0.7,0.5,0.95,0.95);
   leg->SetFillColor(kWhite);
   leg->SetLineColor(kWhite);
-  //h[0]->SetLineColor(kBlack);h[0]->Draw("HIST");//ALL
+  h[0]->SetLineColor(kBlack);h[0]->Draw("HIST");//ALL
   leg->AddEntry(h[0], "All", "l");
   if( counter[0] != 0 ){//nnh, h->mumu
     h[1]->SetLineColor(kBlue);h[1]->SetMarkerColor(kBlue);h[1]->SetLineWidth(3);
-    h[1]->SetFillColor(kBlue);
-    //h[1]->Draw("same HIST");
+    h[1]->Draw("same HIST");
     leg->AddEntry(h[1], "#nu#nuh, h->#mu#mu", "l");
   }
   if( counter[1] != 0 ){//qqh/llh, h->mumu
     h[2]->SetLineColor(kBlue);h[2]->SetMarkerColor(kBlue);h[2]->SetLineStyle(2);
-    h[2]->SetFillColor(kBlue);h[2]->SetFillStyle(3490);
-    //h[2]->Draw("same HIST");
+    h[2]->Draw("same HIST");
     leg->AddEntry(h[2], "qqh/llh, h->#mu#mu", "l");
   }
   if( counter[2] != 0 ){//ffh, h->others
     h[3]->SetLineColor(kGray);h[3]->SetMarkerColor(kGray);
-    h[3]->SetFillColor(kGray);
-    //h[3]->Draw("same HIST");
+    h[3]->Draw("same HIST");
     leg->AddEntry(h[3], "ffh, h->other", "l");
   }
   if( counter[3] != 0 ){//2f
     h[4]->SetLineColor(kRed);h[4]->SetMarkerColor(kRed);
-    h[4]->SetFillColor(kRed);
-    //h[4]->Draw("same HIST");
+    h[4]->Draw("same HIST");
     leg->AddEntry(h[4], "2f", "l");
   }
   if( counter[4] != 0 ){//4f
     h[5]->SetLineColor(kTeal+4);h[5]->SetMarkerColor(kTeal+4);
-    h[5]->SetFillColor(kTeal+4);
-    //h[5]->Draw("same HIST");
+    h[5]->Draw("same HIST");
     leg->AddEntry(h[5], "4f", "l");
   }
   if( counter[5] != 0 ){//aa_4f
     h[6]->SetLineColor(kTeal+4);h[6]->SetMarkerColor(kTeal+4);h[6]->SetLineStyle(2);
-    h[6]->SetFillColor(kTeal+4);h[6]->SetFillStyle(3490);
-    //h[6]->Draw("same HIST");
+    h[6]->Draw("same HIST");
     leg->AddEntry(h[6], "#gamma#gamma->4f", "l");
   }
-
-  //stack histogram
-  THStack *stack = new THStack("stack","stack");
-  stack->Add(h[1]);
-  stack->Add(h[2]);
-  stack->Add(h[3]);
-  stack->Add(h[4]);
-  stack->Add(h[5]);
-  stack->Add(h[6]);
-  stack->Draw("HIST");
-
   leg->Draw();
 
   //show statistics
