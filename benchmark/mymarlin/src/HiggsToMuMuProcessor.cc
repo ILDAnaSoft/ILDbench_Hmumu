@@ -1187,6 +1187,11 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
     //vv.setBField(3.5);
     vv.addTrack( muminus_track );
     vv.addTrack( muplus_track  );
+    //beamspot constraint
+    float xyz[3] = { 10.e-3, 10.e-6, 0.3 }; //mm
+    vv.setBeamSpotSize( xyz );
+    vv.useIPcon( true );
+
     TVector3 vtxPos = vv.getVertexPosition();
     _data.vtxPos_x = vtxPos[0];
     _data.vtxPos_y = vtxPos[1];
