@@ -1,0 +1,1 @@
+muminus_Chi2Ndf>0.5&&muminus_Chi2Ndf<1.5&&muplus_Chi2Ndf>0.5&&muplus_Chi2Ndf<1.5&&abs(vtxPos_z)<0.5&&abs(vtxPos_x)<0.01&&abs(vtxPos_y)<0.5e-6&&sigma_mumu_mass<1&&mumu_mass>100&&mumu_mass<130&&mumu_costh<0.55&&n_highPt==0&&esum>125&&esum<300&&Pt_all>5&&abs(costh_missmom)<0.99
