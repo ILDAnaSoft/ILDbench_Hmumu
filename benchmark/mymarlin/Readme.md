@@ -2,7 +2,7 @@
 These codes will only work with ilcsoft v02-00-02.
 For other versions maybe does not work, or tons of warning message will appear.
 
-The `VertexInfo` functionality has some memory-related problem wchih I don't know how to solve it.
+The `VertexInfo` functionality has some memory-related problem which I don't know how to solve it.
 At the end of the job, `Marlin` will give us the crush information, while expected numbers are correctly filled in NTuple.
 For analyzers point of view it is not a problem, but this problem should be fixed at some point.
 
@@ -31,7 +31,7 @@ source /YOUR_WORKING_DIRECTORY/mymarlin/init_ilcsoft.sh
 ```
 
 # Explanation
-These codes are used for nnh500 analysis for IDR benchmark.
+These codes are used for nnh500 analysis of IDR benchmark.
 Basically you only need to edit following files:
 ```
 src/HiggsToMuMuProcessor.cc  
