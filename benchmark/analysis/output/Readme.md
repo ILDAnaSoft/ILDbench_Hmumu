@@ -28,4 +28,3 @@ This is my favorite style, you can do it more clever way I think.
 - `hadd.sh`: for combining each root file into single large file
 - `SkimVar.C`: for extracting necessary variables from root file, somehow self-documented
 - `proc.C`: creating one histogram of process ID, will be used for further prepartion
-- `selectvar.txt`: it would be useful to summarize your necessary variables, and easy to use `SkimVar.C`, just copy-and-paste it
