@@ -1,6 +1,11 @@
 # Caution
-These codes will only work up to ilcsoft v01-17-09 or around (I did everything with v01-17-09).
-For higher version maybe does not work, or tons of warning message will appear.
+These codes will only work with ilcsoft v02-00-02.
+For other versions maybe does not work, or tons of warning message will appear.
+
+The `VertexInfo` functionality has some memory-related problem wchih I don't know how to solve it.
+At the end of the job, `Marlin` will give us the crush information, while expected numbers are correctly filled in NTuple.
+For analyzers point of view it is not a problem, but this problem should be fixed at some point.
+
 
 # How To Use
 0. Assume you are in the plain terminal. Initialize your ilcsoft by doing `source /YOUR_ILCSOFT_PATH/init_ilcsoft.sh`.
@@ -26,23 +31,23 @@ source /YOUR_WORKING_DIRECTORY/mymarlin/init_ilcsoft.sh
 ```
 
 # Explanation
-These codes are used for nnh500 analysis.
+These codes are used for nnh500 analysis for IDR benchmark.
 Basically you only need to edit following files:
 ```
 src/HiggsToMuMuProcessor.cc  
 include/HiggsToMuMuProcessor.h  
 hmumu.xml
 ```
-Other files are used to calculate evet-shape variables.
 
 ## Each file
 - `include/HiggsToMuMuProcessor.h`: defining necessary variables
 - `src/HiggsToMuMuProcessor.cc`: extracting/calculating necessary variables, and store in NTuple
+- `VertexInfo`: extracting primary vertex position from 2 tracks; in this analysis 2 tracks correspond to 2 muons which is selected in `IsolatedLeptonTagging`
 - `hmumu.xml`: control input files, processors which you want to use
-- `procid500.txt`: external file contains process name/ID, beam polarization, and cross section
 
 ## Analysis flow
+0. `InitDD4hep`: necessary for `VertexInfo` functionality
 1. `Add4MomCovMatrixCharged`: calculate convariance matrix in momenta space from track parameter space
-2. `ThrustReconstruction`, `Sphericity`: calculate event-shape variables
+2. `ThrustReconstruction`,`Sphere`: calculate event-shape variables
 3. `IsolatedLeptonTagging`: to select h->mu+mu- candidate from `PandoraPFOs`
 4. `HiggsToMuMuProcessor`: extract/calculate necessary variables, and store in NTuple
