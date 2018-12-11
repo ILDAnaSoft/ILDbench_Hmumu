@@ -1,0 +1,30 @@
+# Caution
+This part contains DESY-specific part.
+
+# How To Use
+1. Create `LEFT/` and `RIGHT/`
+2. `condor_submit doing.submit` (DESY-specific), or do `. doing.sh` (Not recommend to do this in worker node at usual working time because it takes very long time. Do it in midnight or create your own job submission script and submit it is much better for your colleague.).
+
+## Step by step case
+```
+. hadd.sh
+root -l -b
+.L SkimVar.C+
+SkimVar("alldata.root","alldata_select.root","dataTree","var1:var2:var3:...")
+.q
+root -l -b
+.L proc.C+
+process()
+.q
+cp alldata_select.root LEFT/.
+cp alldata_select.root RIGHT/.
+```
+
+# Explanation
+This place is used for prepation of analysis: combine all small root files to single large root file, extract necessary variables, add process ID histogram, and copy the processed root file at `LEFT/.` and `RIGHT/.`.
+This is my favorite style, you can do it more clever way I think.
+
+## Each file
+- `hadd.sh`: for combining each root file into single large file
+- `SkimVar.C`: for extracting necessary variables from root file, somehow self-documented
+- `proc.C`: creating one histogram of process ID, will be used for further prepartion
