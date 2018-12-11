@@ -1,10 +1,11 @@
 # ILDbench_Hmumu
 Main analyzer: Shin-ichi Kawada (DESY)  
 shin-ichi.kawada[atmk]desy.de  
-(updated on 2018/Oct./1, many things under construction, but for DBD part is finished)
+(updated on 2018/Dec./11)
+(Both DBD and bechmark are updated)
 
 # Introduction
-These codes are used for h->mu+mu- branching ratio measurement at the ILD.
+These codes are used for h->mu+mu- branching ratio measurement at the ILC using ILD model.
 Since the structure of directory looks very different compare to other usual usage case, I will try to explain how to use these at each place.
 Use these codes are your own risk.
 
@@ -14,7 +15,8 @@ You can easily imagine that the files in `DBD/` directory are used for DBD-style
 Several different types of codes are used, so I will explain it at there.
 
 The files in `bechmark/` directory are used for IDR analysis.
-This is WIP.
+The IDR-style MC samples are used for the analysis.
+The corresponding IDR-note is now ongoing at my private overleaf project.
 
 # Analysis Flow
 Basically in all cases, the same analysis flow is used.
