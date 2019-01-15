@@ -1,3 +1,9 @@
+# Current Status
+Now new feature of IsolatedLeptonTagging: not using impact parameters are implemented.
+Now I'm working on for such version.
+In order to use current package, you have to download the entire MarlinReco package and compile/install them.
+(I downloaded the version as of 2019/Jan./15)
+
 # Caution
 These codes will only work with ilcsoft v02-00-02.
 For other versions maybe does not work, or tons of warning message will appear.
