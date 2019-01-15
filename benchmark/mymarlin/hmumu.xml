@@ -13,18 +13,18 @@
 </execute>
 
 <global>
-  <!--parameter name="LCIOInputFiles">
+  <parameter name="LCIOInputFiles">
 /pnfs/desy.de/ilc/prod/ilc/mc-opt-3/ild/dst-merged/500-TDR_ws/higgs_ffh/ILD_l5_o1_v02/v02-00-01/rv02-00-01.sv02-00-01.mILD_l5_o1_v02.E500-TDR_ws.I108161.Pffh_mumu.eL.pL.n001.d_dstm_10260_0.slcio
 /pnfs/desy.de/ilc/prod/ilc/mc-opt-3/ild/dst-merged/500-TDR_ws/higgs_ffh/ILD_l5_o1_v02/v02-00-01/rv02-00-01.sv02-00-01.mILD_l5_o1_v02.E500-TDR_ws.I108162.Pffh_mumu.eL.pR.n001.d_dstm_10260_0.slcio
 /pnfs/desy.de/ilc/prod/ilc/mc-opt-3/ild/dst-merged/500-TDR_ws/higgs_ffh/ILD_l5_o1_v02/v02-00-01/rv02-00-01.sv02-00-01.mILD_l5_o1_v02.E500-TDR_ws.I108163.Pffh_mumu.eR.pL.n001.d_dstm_10260_0.slcio
 /pnfs/desy.de/ilc/prod/ilc/mc-opt-3/ild/dst-merged/500-TDR_ws/higgs_ffh/ILD_l5_o1_v02/v02-00-01/rv02-00-01.sv02-00-01.mILD_l5_o1_v02.E500-TDR_ws.I108164.Pffh_mumu.eR.pR.n001.d_dstm_10260_0.slcio
-  </parameter-->
-  <parameter name="LCIOInputFiles">
+  </parameter>
+  <!--parameter name="LCIOInputFiles">
 /pnfs/desy.de/ilc/prod/ilc/mc-opt-3/ild/dst-merged/500-TDR_ws/higgs_ffh/ILD_s5_o1_v02/v02-00-01/rv02-00-01.sv02-00-01.mILD_s5_o1_v02.E500-TDR_ws.I108161.Pffh_mumu.eL.pL.n001.d_dstm_10259_0.slcio
 /pnfs/desy.de/ilc/prod/ilc/mc-opt-3/ild/dst-merged/500-TDR_ws/higgs_ffh/ILD_s5_o1_v02/v02-00-01/rv02-00-01.sv02-00-01.mILD_s5_o1_v02.E500-TDR_ws.I108162.Pffh_mumu.eL.pR.n001.d_dstm_10259_0.slcio
 /pnfs/desy.de/ilc/prod/ilc/mc-opt-3/ild/dst-merged/500-TDR_ws/higgs_ffh/ILD_s5_o1_v02/v02-00-01/rv02-00-01.sv02-00-01.mILD_s5_o1_v02.E500-TDR_ws.I108163.Pffh_mumu.eR.pL.n001.d_dstm_10259_0.slcio
 /pnfs/desy.de/ilc/prod/ilc/mc-opt-3/ild/dst-merged/500-TDR_ws/higgs_ffh/ILD_s5_o1_v02/v02-00-01/rv02-00-01.sv02-00-01.mILD_s5_o1_v02.E500-TDR_ws.I108164.Pffh_mumu.eR.pR.n001.d_dstm_10259_0.slcio
-  </parameter>
+  </parameter-->
   <!--parameter name="LCIOInputFiles">
 /pnfs/desy.de/ilc/prod/ilc/mc-dbd/ild/dst-merged/500-TDR_ws/higgs_ffh/ILD_o1_v05/v01-16-p05_500/rv01-16-p05_500.sv01-14-01-p00.mILD_o1_v05.E500-TDR_ws.I108161.Pffh_mumu.eL.pL_dst_6796_00001-DST.slcio
 /pnfs/desy.de/ilc/prod/ilc/mc-dbd/ild/dst-merged/500-TDR_ws/higgs_ffh/ILD_o1_v05/v01-16-p05_500/rv01-16-p05_500.sv01-14-01-p00.mILD_o1_v05.E500-TDR_ws.I108162.Pffh_mumu.eL.pR_dst_6811_00001-DST.slcio
@@ -42,8 +42,8 @@
 <processor name="InitDD4hep" type="InitializeDD4hep">
   <!--InitializeDD4hep reads a compact xml file and initializes the DD4hep::LCDD object-->
   <!--Name of the DD4hep compact xml file to load-->
-  <!--parameter name="DD4hepXMLFile" type="string"> $lcgeo_DIR/ILD/compact/ILD_l5_v02/ILD_l5_v02.xml </parameter-->
-  <parameter name="DD4hepXMLFile" type="string"> $lcgeo_DIR/ILD/compact/ILD_s5_v02/ILD_s5_v02.xml </parameter>
+  <parameter name="DD4hepXMLFile" type="string"> $lcgeo_DIR/ILD/compact/ILD_l5_v02/ILD_l5_v02.xml </parameter>
+  <!--parameter name="DD4hepXMLFile" type="string"> $lcgeo_DIR/ILD/compact/ILD_s5_v02/ILD_s5_v02.xml </parameter-->
 </processor>
 
 <!--processor name="MyFastJetProcessor" type="FastJetProcessor">
@@ -100,10 +100,9 @@
   <!--Cut on the mva output of isolated muon selection-->
   <parameter name="CutOnTheISOMuonMVA" type="float">0.7 </parameter>
   <!--Directory of Weights for the Isolated Electron MVA Classification-->
-  <parameter name="DirOfISOElectronWeights" type="string"> /cvmfs/ilc.desy.de/sw/x86_64_gcc49_sl6/v02-00-02/MarlinReco/v01-25/Analysis/IsolatedLeptonTagging/example/isolated_electron_weights </parameter>
+  <parameter name="DirOfISOElectronWeights" type="string"> /afs/desy.de/user/s/skawada/sonas_work/bench_nnh500/mymarlin/MarlinReco/Analysis/IsolatedLeptonTagging/example/isolated_electron_weights_woIP </parameter>
   <!--Directory of Weights for the Isolated Muon MVA Classification-->
-  <parameter name="DirOfISOMuonWeights" type="string"> /cvmfs/ilc.desy.de/sw/x86_64_gcc49_sl6/v02-00-02/MarlinReco/v01-25/Analysis/IsolatedLeptonTagging/example/isolated_muon_weights </parameter>
-  <!--parameter name="DirOfISOMuonWeights" type="string"> /cvmfs/ilc.desy.de/sw/x86_64_gcc49_sl6/v02-00-02/MarlinReco/v01-25/Analysis/IsolatedLeptonTagging/weights/yyxylv_yyxyyx_woYoke_500.mILD_l5_o1_v02 </parameter-->
+  <parameter name="DirOfISOMuonWeights" type="string"> /afs/desy.de/user/s/skawada/sonas_work/bench_nnh500/mymarlin/MarlinReco/Analysis/IsolatedLeptonTagging/example/isolated_muon_weights_woIP_woYoke </parameter>
   <!--Name of the PandoraPFOs collection-->
   <parameter name="InputPandoraPFOsCollection" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs </parameter>
   <!--Name of the Primary Vertex collection-->
@@ -127,13 +126,15 @@
   <!--minimum ratio of energy in ecal over energy in ecal+hcal-->
   <parameter name="MinEecalOverTotEForElectron" type="float">0.9 </parameter>
   <!--use yoke for muon ID-->
-  <parameter name="UseYokeForMuonID" type="bool"> true </parameter>
+  <parameter name="UseYokeForMuonID" type="bool"> false </parameter>
   <!--Minimum energy in yoke for electron-->
   <parameter name="MinEyokeForMuon" type="float">0.5 </parameter>
   <!--Minimum momentum for electron-->
   <parameter name="MinPForElectron" type="float">5 </parameter>
   <!--Minimum momentum for muon-->
   <parameter name="MinPForMuon" type="float">10 </parameter>
+  <!--use impact parameters-->
+  <parameter name="UseIP" type="bool"> false </parameter>
   <!--Name of collection with the selected isolated lepton-->
   <parameter name="OutputIsoLeptonsCollection" type="string" lcioOutType="ReconstructedParticle"> Isoleps </parameter>
   <!--Name of the new PFOs collection without isolated lepton-->
