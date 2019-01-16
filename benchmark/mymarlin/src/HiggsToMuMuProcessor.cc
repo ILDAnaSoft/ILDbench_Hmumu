@@ -1187,8 +1187,9 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
     //vv.setBField(3.5);
     vv.addTrack( muminus_track );
     vv.addTrack( muplus_track  );
-    //beamspot constraint
-    float xyz[3] = { 10.e-3, 10.e-6, 0.3 }; //mm
+    //beam spot constraint
+    //float xyz[3] = { 10.e-3, 10.e-6, 0.3 }; //mm
+    float xyz[3] = { 150e-6, 5e-6, 0.2 }; //mm
     vv.setBeamSpotSize( xyz );
     vv.useIPcon( true );
 
