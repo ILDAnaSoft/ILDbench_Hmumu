@@ -49,11 +49,11 @@
   <!--Cut on the mva output of isolated electron selection-->
   <parameter name="CutOnTheISOElectronMVA" type="float"> 2 </parameter>
   <!--Cut on the mva output of isolated muon selection-->
-  <parameter name="CutOnTheISOMuonMVA" type="float">0.7 </parameter>
+  <parameter name="CutOnTheISOMuonMVA" type="float">0.8 </parameter>
   <!--Directory of Weights for the Isolated Electron MVA Classification-->
-  <parameter name="DirOfISOElectronWeights" type="string"> /cvmfs/ilc.desy.de/sw/x86_64_gcc49_sl6/v02-00-02/MarlinReco/v01-25/Analysis/IsolatedLeptonTagging/example/isolated_electron_weights </parameter>
+  <parameter name="DirOfISOElectronWeights" type="string"> /afs/desy.de/user/s/skawada/sonas_work/bench_nnh500/mymarlin/MarlinReco/Analysis/IsolatedLeptonTagging/example/isolated_electron_weights_woIP </parameter>
   <!--Directory of Weights for the Isolated Muon MVA Classification-->
-  <parameter name="DirOfISOMuonWeights" type="string"> /cvmfs/ilc.desy.de/sw/x86_64_gcc49_sl6/v02-00-02/MarlinReco/v01-25/Analysis/IsolatedLeptonTagging/example/isolated_muon_weights </parameter>
+  <parameter name="DirOfISOMuonWeights" type="string"> /afs/desy.de/user/s/skawada/sonas_work/bench_nnh500/mymarlin/MarlinReco/Analysis/IsolatedLeptonTagging/example/isolated_muon_weights_woIP_woYoke </parameter>
   <!--Name of the PandoraPFOs collection-->
   <parameter name="InputPandoraPFOsCollection" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs </parameter>
   <!--Name of the Primary Vertex collection-->
@@ -77,13 +77,15 @@
   <!--minimum ratio of energy in ecal over energy in ecal+hcal-->
   <parameter name="MinEecalOverTotEForElectron" type="float">0.9 </parameter>
   <!--use yoke for muon ID-->
-  <parameter name="UseYokeForMuonID" type="bool"> true </parameter>
+  <parameter name="UseYokeForMuonID" type="bool"> false </parameter>
   <!--Minimum energy in yoke for electron-->
   <parameter name="MinEyokeForMuon" type="float">0.5 </parameter>
   <!--Minimum momentum for electron-->
   <parameter name="MinPForElectron" type="float">5 </parameter>
   <!--Minimum momentum for muon-->
   <parameter name="MinPForMuon" type="float">10 </parameter>
+  <!--use impact parameters-->
+  <parameter name="UseIP" type="bool"> false </parameter>
   <!--Name of collection with the selected isolated lepton-->
   <parameter name="OutputIsoLeptonsCollection" type="string" lcioOutType="ReconstructedParticle"> Isoleps </parameter>
   <!--Name of the new PFOs collection without isolated lepton-->
