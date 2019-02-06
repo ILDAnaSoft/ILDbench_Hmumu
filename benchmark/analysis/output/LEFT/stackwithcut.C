@@ -34,19 +34,27 @@ void MakeAllWithWeight( TString file1, TString file2, TTree *nt,
   TTreeFormula tfsel( "tfsel", selection, nt );
 
   //Make histograms
-  TH1F *h[7];
+  TH1F *h[11];
   h[0] = new TH1F("all","ILD simulation",nbin,nlow,nhigh);
   h[1] = new TH1F("nnh_mumu","nnh_mumu",nbin,nlow,nhigh);
   h[2] = new TH1F("other_h_mumu","other_h_mumu",nbin,nlow,nhigh);
   h[3] = new TH1F("other_h_decay","other_h_decay",nbin,nlow,nhigh);
   h[4] = new TH1F("2f","2f",nbin,nlow,nhigh);
-  h[5] = new TH1F("4f","4f",nbin,nlow,nhigh);
-  h[6] = new TH1F("aa_4f","aa_4f",nbin,nlow,nhigh);
+  h[5] = new TH1F("4f_2nu2mu","4f_2nu2mu",nbin,nlow,nhigh);
+  h[6] = new TH1F("4f_2nu2tau_mu","4f_2nu2tau_mu",nbin,nlow,nhigh);
+  h[7] = new TH1F("4f_other","4f_other",nbin,nlow,nhigh);
+  h[8] = new TH1F("aa_4f_2nu2mu","aa_4f_2nu2mu",nbin,nlow,nhigh);
+  h[9] = new TH1F("aa_4f_2nu2tau_mu","aa_4f_2nu2tau_mu",nbin,nlow,nhigh);
+  h[10] = new TH1F("aa_4f_other","aa_4f_other",nbin,nlow,nhigh);
 
   //int higgsdecay1;
   //nt->SetBranchAddress("higgsdecay1", &higgsdecay1);
   int type;
   nt->SetBranchAddress("type", &type);
+  int nn, nm, nt_m;
+  nt->SetBranchAddress("nn", &nn);
+  nt->SetBranchAddress("nm", &nm);
+  nt->SetBranchAddress("nt_m", &nt_m);
   double weight;
   nt->SetBranchAddress("weight", &weight);
   int processid;
@@ -87,17 +95,44 @@ void MakeAllWithWeight( TString file1, TString file2, TTree *nt,
       entryKind[3] += weight;
       h[4]->Fill(tfexp.EvalInstance(i),weight);
     }
-    else if( ( processid >= 250014 && processid <= 250060 ) ){//4f
+    else if( ( processid >= 250014 && processid <= 250060 ) 
+	     && ( nn == 2 && nm == 2 ) ){//4f, 2mu2nu
       counter[4]++;
       entryKind[4] += weight;
       h[5]->Fill(tfexp.EvalInstance(i),weight);
     }
-    else if( ( processid >= 37385 && processid <= 37464 ) ){//aa_4f
+    else if( ( processid >= 250014 && processid <= 250060 ) 
+	     && ( nn == 2 && nt_m == 2 ) ){//4f, 2tau2nu, tau to mu
       counter[5]++;
       entryKind[5] += weight;
       h[6]->Fill(tfexp.EvalInstance(i),weight);
     }
-
+    else if( ( processid >= 250014 && processid <= 250060 ) 
+	     && !( nn == 2 && nm == 2 )
+	     && !( nn == 2 && nt_m == 2 ) ){//4f, all other
+      counter[6]++;
+      entryKind[6] += weight;
+      h[7]->Fill(tfexp.EvalInstance(i),weight);
+    }
+    else if( ( processid >= 37385 && processid <= 37464 ) 
+	     && ( nn == 2 && nm == 2 ) ){//aa_4f, 2mu2nu
+      counter[7]++;
+      entryKind[7] += weight;
+      h[8]->Fill(tfexp.EvalInstance(i),weight);
+    }
+    else if( ( processid >= 37385 && processid <= 37464 ) 
+	     && ( nn == 2 && nt_m == 2 ) ){//aa_4f, 2tau2nu, tau to mu
+      counter[8]++;
+      entryKind[8] += weight;
+      h[9]->Fill(tfexp.EvalInstance(i),weight);
+    }
+    else if( ( processid >= 37385 && processid <= 37464 )
+	     && !( nn == 2 && nm == 2 ) 
+	     && !( nn == 2 && nt_m == 2 ) ){//aa_4f, other
+      counter[9]++;
+      entryKind[9] += weight;
+      h[10]->Fill(tfexp.EvalInstance(i),weight);
+    }
   }
 
   // write histograms and stats
@@ -126,36 +161,66 @@ void MakeAllWithWeight( TString file1, TString file2, TTree *nt,
     h[4]->Draw("same HIST");
     leg->AddEntry(h[4], "2f", "l");
   }
-  if( counter[4] != 0 ){//4f
+  if( counter[4] != 0 ){//4f, 2nu2mu
     h[5]->SetLineColor(kTeal+4);h[5]->SetMarkerColor(kTeal+4);
     h[5]->Draw("same HIST");
-    leg->AddEntry(h[5], "4f", "l");
+    leg->AddEntry(h[5], "4f(2#nu2#mu)", "l");
   }
-  if( counter[5] != 0 ){//aa_4f
+  if( counter[5] != 0 ){//4f, 2nu2tau, tau to mu
     h[6]->SetLineColor(kTeal+4);h[6]->SetMarkerColor(kTeal+4);h[6]->SetLineStyle(2);
     h[6]->Draw("same HIST");
-    leg->AddEntry(h[6], "#gamma#gamma->4f", "l");
+    leg->AddEntry(h[6], "4f(2#nu2#tau->#mu)", "l");
+  }
+  if( counter[6] != 0 ){//4f, other
+    h[7]->SetLineColor(kTeal+4);h[7]->SetMarkerColor(kTeal+4);h[7]->SetLineStyle(3);
+    h[7]->Draw("same HIST");
+    leg->AddEntry(h[7], "4f(other)", "l");
+  }
+  if( counter[7] != 0 ){//aa_4f, 2mu2nu
+    h[8]->SetLineColor(kViolet);h[8]->SetMarkerColor(kViolet);
+    h[8]->Draw("same HIST");
+    leg->AddEntry(h[8], "#gamma#gamma->4f(2#nu2#mu)", "l");
+  }
+  if( counter[8] != 0 ){//aa_4f, 2tau2nu, tau to mu
+    h[9]->SetLineColor(kViolet);h[9]->SetMarkerColor(kViolet);h[9]->SetLineStyle(2);
+    h[9]->Draw("same HIST");
+    leg->AddEntry(h[9], "#gamma#gamma->4f(2#nu2#tau->#mu)", "l");
+  }
+  if( counter[9] != 0 ){//aa_4f, other
+    h[10]->SetLineColor(kViolet);h[10]->SetMarkerColor(kViolet);h[10]->SetLineStyle(3);
+    h[10]->Draw("same HIST");
+    leg->AddEntry(h[10], "#gamma#gamma->4f(other)", "l");
   }
   leg->Draw();
 
   //show statistics
-  cout << setw(12) << "nnh hmumu" << setw(12) << "bkg hmumu" << setw(12) << "ffh other"
-       << setw(12) << "2f" << setw(12) << "4f" << setw(12) << "aa_4f" <<  endl;
+  cout << setw(12) << "nnh hmumu" << setw(12) << "bkg hmumu" << setw(12) << "ffh other" << setw(12) << "2f"
+       << setw(12) << "4f 2n2m" << setw(12) << "4f 2n2tm" << setw(12) << "4f other"
+       << setw(12) << "aa_4f 2n2m" << setw(12) << "aa_4f 2n2tm"<< setw(12) << "aa_4f other" << endl;
   cout << setw(12) << entryKind[0] << setw(12) << entryKind[1] << setw(12) << entryKind[2]
-       << setw(12) << entryKind[3] << setw(12) << entryKind[4] << setw(12) << entryKind[5] << endl;
+       << setw(12) << entryKind[3] << setw(12) << entryKind[4] << setw(12) << entryKind[5] 
+       << setw(12) << entryKind[6] << setw(12) << entryKind[7] << setw(12) << entryKind[8] 
+       << setw(12) << entryKind[9] << endl;
   cout << setw(12) << counter[0] << setw(12) << counter[1] << setw(12) << counter[2]
-       << setw(12) << counter[3] << setw(12) << counter[4] << setw(12) << counter[5] << endl;
+       << setw(12) << counter[3] << setw(12) << counter[4] << setw(12) << counter[5]
+       << setw(12) << counter[6] << setw(12) << counter[7] << setw(12) << counter[8]
+       << setw(12) << counter[9] << endl;
 
   ofstream ofs(file1);
-  ofs << setw(12) << "nnh hmumu" << setw(12) << "bkg hmumu" << setw(12) << "ffh other"
-      << setw(12) << "2f" << setw(12) << "4f" << setw(12) << "aa_4f" <<  endl;
+  ofs << setw(12) << "nnh hmumu" << setw(12) << "bkg hmumu" << setw(12) << "ffh other" << setw(12) << "2f"
+      << setw(12) << "4f 2n2m" << setw(12) << "4f 2n2tm" << setw(12) << "4f other" 
+      << setw(12) << "aa_4f 2n2m" << setw(12) << "aa_4f 2n2tm" << setw(12) << "aa_4f other" <<  endl;
   ofs << setw(12) << entryKind[0] << setw(12) << entryKind[1] << setw(12) << entryKind[2]
-      << setw(12) << entryKind[3] << setw(12) << entryKind[4] << setw(12) << entryKind[5] << endl;
+      << setw(12) << entryKind[3] << setw(12) << entryKind[4] << setw(12) << entryKind[5] 
+      << setw(12) << entryKind[6] << setw(12) << entryKind[7] << setw(12) << entryKind[8] 
+      << setw(12) << entryKind[9] << endl;
   ofs << setw(12) << counter[0] << setw(12) << counter[1] << setw(12) << counter[2]
-      << setw(12) << counter[3] << setw(12) << counter[4] << setw(12) << counter[5] << endl;
+      << setw(12) << counter[3] << setw(12) << counter[4] << setw(12) << counter[5]
+      << setw(12) << counter[6] << setw(12) << counter[7] << setw(12) << counter[8]
+      << setw(12) << counter[9] << endl;
 
   double bkg_tot = 0.;
-  for( int i = 1; i <= 5; i++ ){
+  for( int i = 1; i <= 9; i++ ){
     bkg_tot += entryKind[i];
   }
   cout << "signal = " << entryKind[0] << ", background = " << bkg_tot << endl;
