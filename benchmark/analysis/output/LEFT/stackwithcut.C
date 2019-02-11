@@ -34,7 +34,7 @@ void MakeAllWithWeight( TString file1, TString file2, TTree *nt,
   TTreeFormula tfsel( "tfsel", selection, nt );
 
   //Make histograms
-  TH1F *h[11];
+  TH1F *h[13];
   h[0] = new TH1F("all","ILD simulation",nbin,nlow,nhigh);
   h[1] = new TH1F("nnh_mumu","nnh_mumu",nbin,nlow,nhigh);
   h[2] = new TH1F("other_h_mumu","other_h_mumu",nbin,nlow,nhigh);
@@ -42,10 +42,12 @@ void MakeAllWithWeight( TString file1, TString file2, TTree *nt,
   h[4] = new TH1F("2f","2f",nbin,nlow,nhigh);
   h[5] = new TH1F("4f_2nu2mu","4f_2nu2mu",nbin,nlow,nhigh);
   h[6] = new TH1F("4f_2nu2tau_mu","4f_2nu2tau_mu",nbin,nlow,nhigh);
-  h[7] = new TH1F("4f_other","4f_other",nbin,nlow,nhigh);
-  h[8] = new TH1F("aa_4f_2nu2mu","aa_4f_2nu2mu",nbin,nlow,nhigh);
-  h[9] = new TH1F("aa_4f_2nu2tau_mu","aa_4f_2nu2tau_mu",nbin,nlow,nhigh);
-  h[10] = new TH1F("aa_4f_other","aa_4f_other",nbin,nlow,nhigh);
+  h[7] = new TH1F("4f_2nu1mu1tau_mu","4f_2nu1mu1tau_mu",nbin,nlow,nhigh);
+  h[8] = new TH1F("4f_other","4f_other",nbin,nlow,nhigh);
+  h[9] = new TH1F("aa_4f_2nu2mu","aa_4f_2nu2mu",nbin,nlow,nhigh);
+  h[10] = new TH1F("aa_4f_2nu2tau_mu","aa_4f_2nu2tau_mu",nbin,nlow,nhigh);
+  h[11] = new TH1F("aa_4f_2nu1mu1tau_mu","aa_4f_2nu1mu1tau_mu",nbin,nlow,nhigh);
+  h[12] = new TH1F("aa_4f_other","aa_4f_other",nbin,nlow,nhigh);
 
   //int higgsdecay1;
   //nt->SetBranchAddress("higgsdecay1", &higgsdecay1);
@@ -61,9 +63,9 @@ void MakeAllWithWeight( TString file1, TString file2, TTree *nt,
   nt->SetBranchAddress("processid", &processid);
 
   // stats                                                                
-  double entryKind[10];
+  double entryKind[15];
   memset(entryKind,0,sizeof(entryKind));
-  int counter[10];
+  int counter[15];
   memset(counter,0,sizeof(counter));
 
   for( int i = 0; i < nt->GetEntries(); i++ ){
@@ -108,30 +110,44 @@ void MakeAllWithWeight( TString file1, TString file2, TTree *nt,
       h[6]->Fill(tfexp.EvalInstance(i),weight);
     }
     else if( ( processid >= 250014 && processid <= 250060 ) 
-	     && !( nn == 2 && nm == 2 )
-	     && !( nn == 2 && nt_m == 2 ) ){//4f, all other
+	     && ( nn == 2 && nm == 1 && nt_m == 1 ) ){//4f, 1tau1mu2nu, tau to mu
       counter[6]++;
       entryKind[6] += weight;
       h[7]->Fill(tfexp.EvalInstance(i),weight);
     }
-    else if( ( processid >= 37385 && processid <= 37464 ) 
-	     && ( nn == 2 && nm == 2 ) ){//aa_4f, 2mu2nu
+    else if( ( processid >= 250014 && processid <= 250060 ) 
+	     && !( nn == 2 && nm == 2 )
+	     && !( nn == 2 && nm == 1 && nt_m == 1 )
+	     && !( nn == 2 && nt_m == 2 ) ){//4f, all other
       counter[7]++;
       entryKind[7] += weight;
       h[8]->Fill(tfexp.EvalInstance(i),weight);
     }
     else if( ( processid >= 37385 && processid <= 37464 ) 
-	     && ( nn == 2 && nt_m == 2 ) ){//aa_4f, 2tau2nu, tau to mu
+	     && ( nn == 2 && nm == 2 ) ){//aa_4f, 2mu2nu
       counter[8]++;
       entryKind[8] += weight;
       h[9]->Fill(tfexp.EvalInstance(i),weight);
     }
-    else if( ( processid >= 37385 && processid <= 37464 )
-	     && !( nn == 2 && nm == 2 ) 
-	     && !( nn == 2 && nt_m == 2 ) ){//aa_4f, other
+    else if( ( processid >= 37385 && processid <= 37464 ) 
+	     && ( nn == 2 && nt_m == 2 ) ){//aa_4f, 2tau2nu, tau to mu
       counter[9]++;
       entryKind[9] += weight;
       h[10]->Fill(tfexp.EvalInstance(i),weight);
+    }
+    else if( ( processid >= 37385 && processid <= 37464 ) 
+	     && ( nn == 2 && nm == 1 && nt_m == 1 ) ){//aa_4f, 1tau1mu2nu, tau to mu
+      counter[10]++;
+      entryKind[10] += weight;
+      h[11]->Fill(tfexp.EvalInstance(i),weight);
+    }
+    else if( ( processid >= 37385 && processid <= 37464 )
+	     && !( nn == 2 && nm == 2 ) 
+	     && !( nn == 2 && nm == 1 && nt_m == 1 )
+	     && !( nn == 2 && nt_m == 2 ) ){//aa_4f, other
+      counter[11]++;
+      entryKind[11] += weight;
+      h[12]->Fill(tfexp.EvalInstance(i),weight);
     }
   }
 
@@ -171,56 +187,70 @@ void MakeAllWithWeight( TString file1, TString file2, TTree *nt,
     h[6]->Draw("same HIST");
     leg->AddEntry(h[6], "4f(2#nu2#tau->#mu)", "l");
   }
-  if( counter[6] != 0 ){//4f, other
+  if( counter[6] != 0 ){//4f, 2nu1mu1tau tau to mu
     h[7]->SetLineColor(kTeal+4);h[7]->SetMarkerColor(kTeal+4);h[7]->SetLineStyle(3);
     h[7]->Draw("same HIST");
-    leg->AddEntry(h[7], "4f(other)", "l");
+    leg->AddEntry(h[7], "4f(2#nu1#mu1#tau->#mu)", "l");
   }
-  if( counter[7] != 0 ){//aa_4f, 2mu2nu
-    h[8]->SetLineColor(kViolet);h[8]->SetMarkerColor(kViolet);
+  if( counter[7] != 0 ){//4f, other
+    h[8]->SetLineColor(kTeal+4);h[8]->SetMarkerColor(kTeal+4);h[8]->SetLineStyle(4);
     h[8]->Draw("same HIST");
-    leg->AddEntry(h[8], "#gamma#gamma->4f(2#nu2#mu)", "l");
+    leg->AddEntry(h[8], "4f(other)", "l");
   }
-  if( counter[8] != 0 ){//aa_4f, 2tau2nu, tau to mu
-    h[9]->SetLineColor(kViolet);h[9]->SetMarkerColor(kViolet);h[9]->SetLineStyle(2);
+  if( counter[8] != 0 ){//aa_4f, 2mu2nu
+    h[9]->SetLineColor(kViolet);h[9]->SetMarkerColor(kViolet);
     h[9]->Draw("same HIST");
-    leg->AddEntry(h[9], "#gamma#gamma->4f(2#nu2#tau->#mu)", "l");
+    leg->AddEntry(h[9], "#gamma#gamma->4f(2#nu2#mu)", "l");
   }
-  if( counter[9] != 0 ){//aa_4f, other
-    h[10]->SetLineColor(kViolet);h[10]->SetMarkerColor(kViolet);h[10]->SetLineStyle(3);
+  if( counter[9] != 0 ){//aa_4f, 2tau2nu, tau to mu
+    h[10]->SetLineColor(kViolet);h[10]->SetMarkerColor(kViolet);h[10]->SetLineStyle(2);
     h[10]->Draw("same HIST");
-    leg->AddEntry(h[10], "#gamma#gamma->4f(other)", "l");
+    leg->AddEntry(h[10], "#gamma#gamma->4f(2#nu2#tau->#mu)", "l");
+  }
+  if( counter[10] != 0 ){//aa_4f, 1tau1mu2nu, tau to mu
+    h[11]->SetLineColor(kViolet);h[11]->SetMarkerColor(kViolet);h[11]->SetLineStyle(3);
+    h[11]->Draw("same HIST");
+    leg->AddEntry(h[11], "#gamma#gamma->4f(2#nu1#mu1#tau->#mu)", "l");
+  }
+  if( counter[11] != 0 ){//aa_4f, other
+    h[12]->SetLineColor(kViolet);h[12]->SetMarkerColor(kViolet);h[12]->SetLineStyle(4);
+    h[12]->Draw("same HIST");
+    leg->AddEntry(h[12], "#gamma#gamma->4f(other)", "l");
   }
   leg->Draw();
 
   //show statistics
   cout << setw(12) << "nnh hmumu" << setw(12) << "bkg hmumu" << setw(12) << "ffh other" << setw(12) << "2f"
-       << setw(12) << "4f 2n2m" << setw(12) << "4f 2n2tm" << setw(12) << "4f other"
-       << setw(12) << "aa_4f 2n2m" << setw(12) << "aa_4f 2n2tm"<< setw(12) << "aa_4f other" << endl;
+       << setw(12) << "4f 2n2m" << setw(12) << "4f 2n2t"
+       << setw(12) << "4f 2nmt" << setw(12) << "4f other"
+       << setw(12) << "aa_4f 2n2m" << setw(12) << "aa_4f 2n2t"
+       << setw(12) << "aa_4f 2nmt" << setw(12) << "aa_4f other" << endl;
   cout << setw(12) << entryKind[0] << setw(12) << entryKind[1] << setw(12) << entryKind[2]
        << setw(12) << entryKind[3] << setw(12) << entryKind[4] << setw(12) << entryKind[5] 
        << setw(12) << entryKind[6] << setw(12) << entryKind[7] << setw(12) << entryKind[8] 
-       << setw(12) << entryKind[9] << endl;
+       << setw(12) << entryKind[9] << setw(12) << entryKind[10] << setw(12) << entryKind[11] << endl;
   cout << setw(12) << counter[0] << setw(12) << counter[1] << setw(12) << counter[2]
        << setw(12) << counter[3] << setw(12) << counter[4] << setw(12) << counter[5]
        << setw(12) << counter[6] << setw(12) << counter[7] << setw(12) << counter[8]
-       << setw(12) << counter[9] << endl;
+       << setw(12) << counter[9] << setw(12) << counter[10] << setw(12) << counter[11] << endl;
 
   ofstream ofs(file1);
   ofs << setw(12) << "nnh hmumu" << setw(12) << "bkg hmumu" << setw(12) << "ffh other" << setw(12) << "2f"
-      << setw(12) << "4f 2n2m" << setw(12) << "4f 2n2tm" << setw(12) << "4f other" 
-      << setw(12) << "aa_4f 2n2m" << setw(12) << "aa_4f 2n2tm" << setw(12) << "aa_4f other" <<  endl;
+      << setw(12) << "4f 2n2m" << setw(12) << "4f 2n2t"
+      << setw(12) << "4f 2nmt" << setw(12) << "4f other"
+      << setw(12) << "aa_4f 2n2m" << setw(12) << "aa_4f 2n2t"
+      << setw(12) << "aa_4f 2nmt" << setw(12) << "aa_4f other" << endl;
   ofs << setw(12) << entryKind[0] << setw(12) << entryKind[1] << setw(12) << entryKind[2]
       << setw(12) << entryKind[3] << setw(12) << entryKind[4] << setw(12) << entryKind[5] 
       << setw(12) << entryKind[6] << setw(12) << entryKind[7] << setw(12) << entryKind[8] 
-      << setw(12) << entryKind[9] << endl;
+      << setw(12) << entryKind[9] << setw(12) << entryKind[10] << setw(12) << entryKind[11] << endl;
   ofs << setw(12) << counter[0] << setw(12) << counter[1] << setw(12) << counter[2]
       << setw(12) << counter[3] << setw(12) << counter[4] << setw(12) << counter[5]
       << setw(12) << counter[6] << setw(12) << counter[7] << setw(12) << counter[8]
-      << setw(12) << counter[9] << endl;
+      << setw(12) << counter[9] << setw(12) << counter[10] << setw(12) << counter[11] << endl;
 
   double bkg_tot = 0.;
-  for( int i = 1; i <= 9; i++ ){
+  for( int i = 1; i <= 11; i++ ){
     bkg_tot += entryKind[i];
   }
   cout << "signal = " << entryKind[0] << ", background = " << bkg_tot << endl;
