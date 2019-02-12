@@ -23,8 +23,7 @@ this macro does not use hev, instead of calculated weight
 
 using namespace std;
 
-void MakeAllWithWeight( TString file1, TString file2, TTree *nt,
-			int nbin, double nlow, double nhigh,
+void MakeAllWithWeight( TTree *nt, int nbin, double nlow, double nhigh,
 			const char *varexp, const char *selection )
 {
   if( selection == NULL ) selection = "1"; // select all events
@@ -136,7 +135,7 @@ void MakeAllWithWeight( TString file1, TString file2, TTree *nt,
       h[10]->Fill(tfexp.EvalInstance(i),weight);
     }
     else if( ( processid >= 37385 && processid <= 37464 ) 
-	     && ( nn == 2 && nm == 1 && nt_m == 1 ) ){//aa_4f, 1tau1mu2nu, tau to mu
+	     && ( nn == 2 && nm == 1 && nt_m == 1 ) ){//aa_4f, 1mu1tau2nu, tau to mu
       counter[10]++;
       entryKind[10] += weight;
       h[11]->Fill(tfexp.EvalInstance(i),weight);
@@ -187,7 +186,7 @@ void MakeAllWithWeight( TString file1, TString file2, TTree *nt,
     h[6]->Draw("same HIST");
     leg->AddEntry(h[6], "4f(2#nu2#tau->#mu)", "l");
   }
-  if( counter[6] != 0 ){//4f, 2nu1mu1tau tau to mu
+  if( counter[6] != 0 ){//4f, 2nu1mu1tau, tau to mu
     h[7]->SetLineColor(kTeal+4);h[7]->SetMarkerColor(kTeal+4);h[7]->SetLineStyle(3);
     h[7]->Draw("same HIST");
     leg->AddEntry(h[7], "4f(2#nu1#mu1#tau->#mu)", "l");
@@ -207,7 +206,7 @@ void MakeAllWithWeight( TString file1, TString file2, TTree *nt,
     h[10]->Draw("same HIST");
     leg->AddEntry(h[10], "#gamma#gamma->4f(2#nu2#tau->#mu)", "l");
   }
-  if( counter[10] != 0 ){//aa_4f, 1tau1mu2nu, tau to mu
+  if( counter[10] != 0 ){//aa_4f, 2nu1mu1tau, tau to mu
     h[11]->SetLineColor(kViolet);h[11]->SetMarkerColor(kViolet);h[11]->SetLineStyle(3);
     h[11]->Draw("same HIST");
     leg->AddEntry(h[11], "#gamma#gamma->4f(2#nu1#mu1#tau->#mu)", "l");
@@ -216,6 +215,18 @@ void MakeAllWithWeight( TString file1, TString file2, TTree *nt,
     h[12]->SetLineColor(kViolet);h[12]->SetMarkerColor(kViolet);h[12]->SetLineStyle(4);
     h[12]->Draw("same HIST");
     leg->AddEntry(h[12], "#gamma#gamma->4f(other)", "l");
+  }
+  //leg->Draw();
+
+  //normalized to 1
+  double norm_sig = h[1]->Integral();
+  h[1]->Scale(1./norm_sig);
+  h[1]->Draw("HIST");
+  for( int i = 2; i <= 12; i++ )
+  if( counter[i-1] != 0 ){
+    double norm = h[i]->Integral();
+    h[i]->Scale(1./norm);
+    h[i]->Draw("same HIST");
   }
   leg->Draw();
 
@@ -226,28 +237,13 @@ void MakeAllWithWeight( TString file1, TString file2, TTree *nt,
        << setw(12) << "aa_4f 2n2m" << setw(12) << "aa_4f 2n2t"
        << setw(12) << "aa_4f 2nmt" << setw(12) << "aa_4f other" << endl;
   cout << setw(12) << entryKind[0] << setw(12) << entryKind[1] << setw(12) << entryKind[2]
-       << setw(12) << entryKind[3] << setw(12) << entryKind[4] << setw(12) << entryKind[5] 
-       << setw(12) << entryKind[6] << setw(12) << entryKind[7] << setw(12) << entryKind[8] 
+       << setw(12) << entryKind[3] << setw(12) << entryKind[4] << setw(12) << entryKind[5]
+       << setw(12) << entryKind[6] << setw(12) << entryKind[7] << setw(12) << entryKind[8]
        << setw(12) << entryKind[9] << setw(12) << entryKind[10] << setw(12) << entryKind[11] << endl;
   cout << setw(12) << counter[0] << setw(12) << counter[1] << setw(12) << counter[2]
        << setw(12) << counter[3] << setw(12) << counter[4] << setw(12) << counter[5]
        << setw(12) << counter[6] << setw(12) << counter[7] << setw(12) << counter[8]
        << setw(12) << counter[9] << setw(12) << counter[10] << setw(12) << counter[11] << endl;
-
-  ofstream ofs(file1);
-  ofs << setw(12) << "nnh hmumu" << setw(12) << "bkg hmumu" << setw(12) << "ffh other" << setw(12) << "2f"
-      << setw(12) << "4f 2n2m" << setw(12) << "4f 2n2t"
-      << setw(12) << "4f 2nmt" << setw(12) << "4f other"
-      << setw(12) << "aa_4f 2n2m" << setw(12) << "aa_4f 2n2t"
-      << setw(12) << "aa_4f 2nmt" << setw(12) << "aa_4f other" << endl;
-  ofs << setw(12) << entryKind[0] << setw(12) << entryKind[1] << setw(12) << entryKind[2]
-      << setw(12) << entryKind[3] << setw(12) << entryKind[4] << setw(12) << entryKind[5] 
-      << setw(12) << entryKind[6] << setw(12) << entryKind[7] << setw(12) << entryKind[8] 
-      << setw(12) << entryKind[9] << setw(12) << entryKind[10] << setw(12) << entryKind[11] << endl;
-  ofs << setw(12) << counter[0] << setw(12) << counter[1] << setw(12) << counter[2]
-      << setw(12) << counter[3] << setw(12) << counter[4] << setw(12) << counter[5]
-      << setw(12) << counter[6] << setw(12) << counter[7] << setw(12) << counter[8]
-      << setw(12) << counter[9] << setw(12) << counter[10] << setw(12) << counter[11] << endl;
 
   double bkg_tot = 0.;
   for( int i = 1; i <= 11; i++ ){
@@ -257,7 +253,4 @@ void MakeAllWithWeight( TString file1, TString file2, TTree *nt,
   double signi = entryKind[0] / TMath::Sqrt( entryKind[0] + bkg_tot );
   cout << "significance = " << signi << endl;
   cout << "precision = " << 100./signi << "%" << endl;
-  ofstream ofs2(file2);
-  ofs2 << signi << " " << 100./signi << "%" << endl;
-
 }
