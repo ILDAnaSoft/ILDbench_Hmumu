@@ -24,7 +24,7 @@ this macro does not use hev, instead of calculated weight
 using namespace std;
 
 void MakeAllWithWeight( TTree *nt, int nbin, double nlow, double nhigh,
-			const char *varexp, const char *selection )
+			const char *varexp, const char *selection, bool irr )
 {
   if( selection == NULL ) selection = "1"; // select all events
 
@@ -35,7 +35,7 @@ void MakeAllWithWeight( TTree *nt, int nbin, double nlow, double nhigh,
   //Make histograms
   TH1F *h[13];
   h[0] = new TH1F("all","ILD simulation",nbin,nlow,nhigh);
-  h[1] = new TH1F("nnh_mumu","nnh_mumu",nbin,nlow,nhigh);
+  h[1] = new TH1F("nnh_mumu","ILD simulation",nbin,nlow,nhigh);
   h[2] = new TH1F("other_h_mumu","other_h_mumu",nbin,nlow,nhigh);
   h[3] = new TH1F("other_h_decay","other_h_decay",nbin,nlow,nhigh);
   h[4] = new TH1F("2f","2f",nbin,nlow,nhigh);
@@ -154,24 +154,25 @@ void MakeAllWithWeight( TTree *nt, int nbin, double nlow, double nhigh,
   TLegend *leg = new TLegend(0.7,0.5,0.95,0.95);
   leg->SetFillColor(kWhite);
   leg->SetLineColor(kWhite);
-  h[0]->SetLineColor(kBlack);h[0]->Draw("HIST");//ALL
-  leg->AddEntry(h[0], "All", "l");
+  //h[0]->SetLineColor(kWhite);h[0]->Draw("HIST");//ALL
+  //leg->AddEntry(h[0], "All", "l");
   if( counter[0] != 0 ){//nnh, h->mumu
     h[1]->SetLineColor(kBlue);h[1]->SetMarkerColor(kBlue);h[1]->SetLineWidth(3);
     h[1]->Draw("same HIST");
+    //if( irr == true ) h[1]->Draw("HIST");
     leg->AddEntry(h[1], "#nu#nuh, h->#mu#mu", "l");
   }
-  if( counter[1] != 0 ){//qqh/llh, h->mumu
+  if( counter[1] != 0 && irr == false ){//qqh/llh, h->mumu
     h[2]->SetLineColor(kBlue);h[2]->SetMarkerColor(kBlue);h[2]->SetLineStyle(2);
     h[2]->Draw("same HIST");
     leg->AddEntry(h[2], "qqh/llh, h->#mu#mu", "l");
   }
-  if( counter[2] != 0 ){//ffh, h->others
+  if( counter[2] != 0 && irr == false ){//ffh, h->others
     h[3]->SetLineColor(kGray);h[3]->SetMarkerColor(kGray);
     h[3]->Draw("same HIST");
     leg->AddEntry(h[3], "ffh, h->other", "l");
   }
-  if( counter[3] != 0 ){//2f
+  if( counter[3] != 0 && irr == false ){//2f
     h[4]->SetLineColor(kRed);h[4]->SetMarkerColor(kRed);
     h[4]->Draw("same HIST");
     leg->AddEntry(h[4], "2f", "l");
@@ -191,7 +192,7 @@ void MakeAllWithWeight( TTree *nt, int nbin, double nlow, double nhigh,
     h[7]->Draw("same HIST");
     leg->AddEntry(h[7], "4f(2#nu1#mu1#tau->#mu)", "l");
   }
-  if( counter[7] != 0 ){//4f, other
+  if( counter[7] != 0 && irr == false ){//4f, other
     h[8]->SetLineColor(kTeal+4);h[8]->SetMarkerColor(kTeal+4);h[8]->SetLineStyle(4);
     h[8]->Draw("same HIST");
     leg->AddEntry(h[8], "4f(other)", "l");
@@ -211,7 +212,7 @@ void MakeAllWithWeight( TTree *nt, int nbin, double nlow, double nhigh,
     h[11]->Draw("same HIST");
     leg->AddEntry(h[11], "#gamma#gamma->4f(2#nu1#mu1#tau->#mu)", "l");
   }
-  if( counter[11] != 0 ){//aa_4f, other
+  if( counter[11] != 0 && irr == false ){//aa_4f, other
     h[12]->SetLineColor(kViolet);h[12]->SetMarkerColor(kViolet);h[12]->SetLineStyle(4);
     h[12]->Draw("same HIST");
     leg->AddEntry(h[12], "#gamma#gamma->4f(other)", "l");
@@ -226,7 +227,12 @@ void MakeAllWithWeight( TTree *nt, int nbin, double nlow, double nhigh,
   if( counter[i-1] != 0 ){
     double norm = h[i]->Integral();
     h[i]->Scale(1./norm);
-    h[i]->Draw("same HIST");
+    if( irr == true && (i == 5 || i == 6 || i == 7 || i == 9 || i == 10 || i == 11) ){
+      h[i]->Draw("same HIST");
+    }
+    else if( irr == false ){
+      h[i]->Draw("same HIST");
+    }
   }
   leg->Draw();
 
