@@ -31,3 +31,4 @@ If you want to use other TMVA techniques, you need to modify proper places to pe
 - `treeseparate.C`: divide 1 data tree into 2 data trees. In my case, dataTree is divided into datatrain and datatest.
 - `HiggsToMuMutrain.C`: controling for TMVA method, input variables, internal TMVA parameters like nCuts, MaxDepth, and so on
 - `result.C`: to add TMVA result to your root file. Be careful that the order of input variables should be the same as you set at `HiggsToMuMutrain.C`, otherwise it does not work properly.
+- `norm_sig.C`: create histogram of variable, only show normalized signal, useful for comparison between IDR-L and IDR-S
