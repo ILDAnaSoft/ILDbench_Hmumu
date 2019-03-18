@@ -38,3 +38,6 @@ Mainly this part is used to define preselection before TMVA analysis.
 2. cut-based analysis
 - `stackwithcut.C`: create histogram of variable, using different color for different processes, hard-coded many things to specify process
 - `simple.C`: similar to `stackwithcut.C` but all backgrounds are treated inclusively
+3. tools
+- `norm.C`: create histogram of variable, using different colors for different processes, hard-coded many things to specify process, all histograms are normalized to 1
+- `norm_sig.C`: similar to `norm.C`, but only show normalized signal hiostogran, useful fro comparison between IDR-L and IDR-S
