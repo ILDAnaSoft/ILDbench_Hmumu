@@ -40,4 +40,4 @@ Mainly this part is used to define preselection before TMVA analysis.
 - `simple.C`: similar to `stackwithcut.C` but all backgrounds are treated inclusively
 3. tools
 - `norm.C`: create histogram of variable, using different color for different processes, hard-coded many things to specify process, all histograms are normalized 1
-- `norm_sig.C`: similar to 'norm.C', but only show normalized signal histogram, useful for comparison between IDR-L and IDR-S
+- `norm_sig.C`: similar to `norm.C`, but only show normalized signal histogram, useful for comparison between IDR-L and IDR-S
