@@ -1,7 +1,7 @@
 # ILDbench_Hmumu
 Main analyzer: Shin-ichi Kawada (DESY)  
 shin-ichi.kawada[atmk]desy.de  
-(updated on 2018/Dec./11)
+(updated on 2019/Mar./18)
 (Both DBD and bechmark are updated)
 
 # Introduction
@@ -30,7 +30,7 @@ In short:
 7. enjoy TMVA analysis
 8. enjoy toy MC analysis
 
-From procedure 5, I always created directory to perform next analysis. e.g,: the directory structure is getting like this: 5/6/7/8/ .
+From procedure 5, I always created directory to perform next analysis. e.g,: the directory structure is getting like this: 5/6/7/8/ , deeper and deeper.
 In each channel, I always created `LEFT/` and `RIGHT/` directories.
 LEFT means the beam polarization of P(e+,e-) = (+0.3,-0.8), and RIGHT means P(e+,e-) = (-0.3,+0.8).
 
