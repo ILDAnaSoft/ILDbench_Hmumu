@@ -58,6 +58,12 @@ HiggsToMuMuProcessor::HiggsToMuMuProcessor() : Processor( "HiggsToMuMuProcessor"
 			   _colPFOsWithoutIsoleps,
 			   std::string("PFOsWithoutIsoleps") );
 
+  registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE,
+			   "InputISRCOllection",
+			   "Name of ISR",
+			   _colISR,
+			   std::string("ISR") );
+
   registerInputCollection( LCIO::MCPARTICLE,
 			   "MCParticleCollection", 
 			   "Name of the MC particle collection",
@@ -134,6 +140,13 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
   }
   catch(...){
     cout << "no pfos after isolated lepton tagging in this event" << endl;
+  }
+  LCCollection* ISR = 0;
+  try{
+    ISR = evt->getCollection( _colISR );
+  }
+  catch(...){
+    cout << "no ISR in this event" << endl;
   }
   LCCollection* AllMC = evt->getCollection( _colMC ) ;
   _navpfo = new LCRelationNavigator( evt->getCollection( _mcpfoRelation ) );
@@ -1121,7 +1134,17 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
   _data.mumu_costh = ( muplus_3mom.Unit() ).Dot( muminus_3mom.Unit() );
   _data.mumu_costh_tobeam = TVector3(0,0,1).Dot( mupair_3mom.Unit() );
   _data.mumu_acop = TMath::Cos( muminus_3mom.Phi() - muplus_3mom.Phi() - TMath::Pi() );
-  _data.recoilmass = ( CM_4mom - mupair_4mom ).M();
+
+  //calcualte recoil mass against h->mumu, consider intial state, ISR effect, and h->mumu
+  TLorentzVector ISR_4mom(0,0,0,0);
+  if( ISR != 0 ){
+    int n_ISR = ISR->getNumberOfElements();
+    for( int i = 0; i < n_ISR; i++ ){
+      ReconstructedParticle* pfo_ISR = dynamic_cast< ReconstructedParticle* >( ISR->getElementAt(i) );
+      ISR_4mom += TLorentzVector( pfo_ISR->getMomentum(), pfo_ISR->getEnergy() );
+    }
+  }
+  _data.recoilmass = ( CM_4mom - ISR_4mom - mupair_4mom ).M();
 
   //_data.mumu_mass_mc = ( muplus_4mom_mc + muminus_4mom_mc ).M();
   //_data.mumu_E_mc = ( muplus_4mom_mc + muminus_4mom_mc ).E();
