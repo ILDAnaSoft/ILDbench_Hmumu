@@ -73,6 +73,7 @@ class HiggsToMuMuProcessor : public Processor{
   std::string _colAllPFOs;
   std::string _colIsoleps;
   std::string _colPFOsWithoutIsoleps;
+  std::string _colISR;
   std::string _colMC;
   std::string _mcpfoRelation;
   LCCollection* _mcpCol;
