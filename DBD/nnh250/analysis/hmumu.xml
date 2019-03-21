@@ -6,6 +6,7 @@
   <processor name="MyThrustReconstruction"/>
   <processor name="MySphericity"/>
   <processor name="MyIsolatedLeptonTaggingProcessor"/>
+  <processor name="MyISRFinder"/>
   <processor name="MyHiggsToMuMuProcessor"/>
 </execute>
 
@@ -95,19 +96,23 @@
   <parameter name="Verbosity" type="string"> SILENT </parameter>
 </processor>
 
-<!--processor name="MyFastJetProcessor" type="FastJetProcessor">
-  <parameter name="algorithm" type="StringVec"> kt_algorithm 1.0 </parameter>
-  <parameter name="clusteringMode" type="StringVec"> ExclusiveNJets 3 </parameter>
-  <parameter name="recombinationScheme" type="string"> E_scheme </parameter>
-  <parameter name="recParticleIn" type="string" lcioInType="ReconstructedParticle"> PFOsWithoutIsoleps </parameter>
-  <parameter name="jetOut" type="string" lcioInType="ReconstructedParticle"> Jets </parameter>
-</processor-->
+<processor name="MyISRFinder" type="ISRFinder">
+  <parameter name="InputCollection" type="ReconstructedParticle"> PFOsWithoutIsoleps </parameter>
+  <parameter name="AllPFOCollection" type="ReconstructedParticle"> PandoraPFOs </parameter>
+  <parameter name="OutputCollection" type="ReconstructedParticle"> PFOsWithoutISR </parameter>
+  <parameter name="ISRCollection" type="ReconstructedParticle"> ISR </parameter>
+  <parameter name="CosTheta" type="float"> 0.95 </parameter>
+  <parameter name="Energy" type="float"> 10 </parameter>
+  <parameter name="ConeCosTheta" type="float"> 0.95 </parameter>
+  <parameter name="Ratio" type="float"> 0.05 </parameter>
+</processor>
 
 <processor name="MyHiggsToMuMuProcessor" type="HiggsToMuMuProcessor">
   <parameter name="ProcessListFile" type="string"> /afs/desy.de/user/s/skawada/sonas_work/stage_nnh250/analysis/procid250.txt </parameter>
   <parameter name="InputAllPFOsCollection" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs </parameter>
   <parameter name="InputIsolepsCollection" type="string" lcioInType="ReconstructedParticle"> Isoleps </parameter>
   <parameter name="InputPFOsWithoutIsolepsCollection" type="string" lcioInType="ReconstructedParticle"> PFOsWithoutIsoleps </parameter>
+  <parameter name="InputISRCollection" type="string" lcioInType="ReconstructedParticle"> ISR </parameter>
   <parameter name="EnergeticPt" type="float"> 5 </parameter>
   <parameter name="RootFileName"> OUTPUTOUTPUT </parameter>
 </processor>
