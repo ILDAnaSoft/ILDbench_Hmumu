@@ -1291,6 +1291,8 @@ void HiggsToMuMuProcessor::end(){
   _otfile->Write();
   _otfile->Close();
 
+  std::cout << "END OF PROCESSING" << std::endl;
+
 }
 
 void HiggsToMuMuProcessor::makeNTuple() {
