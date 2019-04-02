@@ -90,7 +90,7 @@ void MakeAllWithWeight(
 
   //Make histograms
   TH1F *h[11];
-  h[ 0] = new TH1F("all","all",nbin,nlow,nhigh);
+  h[ 0] = new TH1F("all","ILD simulation",nbin,nlow,nhigh);
   h[ 1] = new TH1F("qqh_mumu","qqh_mumu",nbin,nlow,nhigh);
   h[ 2] = new TH1F("other_h_mumu","other_h_mumu",nbin,nlow,nhigh);
   h[ 3] = new TH1F("other_h_decay","other_h_decay",nbin,nlow,nhigh);
