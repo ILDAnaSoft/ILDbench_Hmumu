@@ -11,6 +11,7 @@
 #include "RooAbsData.h"
 #include "RooPlot.h"
 
+#include <fstream>
 #include "TStopwatch.h"
 using namespace RooFit;
 
@@ -22,6 +23,9 @@ void toyMC(){
   TCanvas* c = new TCanvas("c","c",1200,600);
   c->Divide(2);
   c->cd(1);
+
+  //result file
+  ofstream ofs("resultCASECASE.txt");
 
   //calculate # of sig.bkg events in template
   TFile *file = TFile::Open("../alldata_after.root");
@@ -114,8 +118,8 @@ void toyMC(){
   Double_t me = yield_mean.getError();
   Double_t sv = yield_sigma.getVal();
   Double_t se = yield_sigma.getError();
-  cerr << "finalprecision = " << 100 * sv / mv << "%" << endl;
-  cerr << "fiterror = " << 100 * TMath::Sqrt( (se*se)/(mv*mv) + (sv*sv*me*me)/(mv*mv*mv*mv) ) << "%" << endl;
+  ofs << "finalprecision = " << 100 * sv / mv << "%" << endl;
+  ofs << "fiterror = " << 100 * TMath::Sqrt( (se*se)/(mv*mv) + (sv*sv*me*me)/(mv*mv*mv*mv) ) << "%" << endl;
 
   sw.Stop();
   cerr << sw.Print() << endl;
