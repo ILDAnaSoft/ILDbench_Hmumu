@@ -15,46 +15,19 @@ vector<TCut> cuts;
 
 // setup cuts to be applied sequentially
 void setupCuts() {
-  /*
-  //precuts
+
   cuts.push_back( TCut( "n_muminus==1&&n_muplus==1" ) );
   cuts.push_back( TCut( "muminus_Chi2Ndf>0.5&&muminus_Chi2Ndf<1.5&&muplus_Chi2Ndf>0.5&&muplus_Chi2Ndf<1.5" ) );
-  cuts.push_back( TCut( "abs(muminus_d0)<0.02&&abs(muplus_d0)<0.02&&abs(muminus_d0-muplus_d0)<0.02" ) );
-  cuts.push_back( TCut( "abs(muminus_z0)<0.5&&abs(muplus_z0)<0.5&&abs(muminus_z0-muplus_z0)<0.5" ) );
+  cuts.push_back( TCut( "abs(muminus_d0)<0.01&&abs(muplus_d0)<0.01" ) );
+  cuts.push_back( TCut( "abs(muminus_z0-muplus_z0)<0.5" ) );
   cuts.push_back( TCut( "sigma_mumu_mass<0.5" ) );
   cuts.push_back( TCut( "mumu_mass>100&&mumu_mass<130" ) );
   cuts.push_back( TCut( "mumu_costh<-0.45" ) );
   cuts.push_back( TCut( "n_forveto==0" ) );
   cuts.push_back( TCut( "nJets==2" ) );
-  cuts.push_back( TCut( "jet1_charged>=4&&jet2_charged>=4" ) );
-  cuts.push_back( TCut( "mass_jj>60&&mass_jj<135" ) );
-  cuts.push_back( TCut( "recoilmass>70&&recoilmass<130" ) );
-  */
+  cuts.push_back( TCut( "jet1_charged>=1&&jet2_charged>=1" ) );
+  cuts.push_back( TCut( "mass_jj>60&&mass_jj<140" ) );
 
-  cuts.push_back( TCut( "n_muminus==1&&n_muplus==1" ) );
-  cuts.push_back( TCut( "muminus_Chi2Ndf>0.5&&muminus_Chi2Ndf<1.5&&muplus_Chi2Ndf>0.5&&muplus_Chi2Ndf<1.5" ) );
-  cuts.push_back( TCut( "abs(muminus_d0)<0.01&&abs(muplus_d0)<0.01&&abs(muminus_d0-muplus_d0)<0.01" ) );
-  cuts.push_back( TCut( "abs(muminus_z0)<0.5&&abs(muplus_z0)<0.5&&abs(muminus_z0-muplus_z0)<0.5" ) );
-  cuts.push_back( TCut( "sigma_mumu_mass<0.5" ) );
-  cuts.push_back( TCut( "mumu_mass>100&&mumu_mass<130" ) );
-  cuts.push_back( TCut( "mumu_costh<-0.45" ) );
-  cuts.push_back( TCut( "n_forveto==0" ) );
-  cuts.push_back( TCut( "nJets==2" ) );
-  cuts.push_back( TCut( "mass_jj>60&&mass_jj<135" ) );
-  cuts.push_back( TCut( "jet1_charged>=4&&jet2_charged>=4" ) );
-
-  /*
-  //optimization
-  cuts.push_back( TCut( "mumu_mass>124&&mumu_mass<126" ) );
-  cuts.push_back( TCut( "esum<265" ) );
-  cuts.push_back( TCut( "Pt_all>60" ) );
-  cuts.push_back( TCut( "principalthrust<0.88" ) );
-  cuts.push_back( TCut( "muminus_charge_costh>-0.8&&muplus_charge_costh>-0.8" ) );
-  //cuts.push_back( TCut( "abs(costh_thrustaxis)<0.96" ) );
-  //cuts.push_back( TCut( "abs(costh_missmom)<0.98" ) );
-  //cuts.push_back( TCut( "mumu_costh<0.56" ) );
-  */
-  
   //parameter search
   //cuts.push_back( TCut( "mumu_mass>124&&mumu_mass<126&&esum<265&&Pt_all>60&&principalthrust<0.88&&muplus_charge_costh>-0.8&&muminus_charge_costh>-0.8" ) );
   /*
@@ -78,16 +51,6 @@ void setupCuts() {
   cuts.push_back( TCut( "esum<310" ) );
   cuts.push_back( TCut( "esum<305" ) );
   cuts.push_back( TCut( "esum<300" ) );
-  cuts.push_back( TCut( "esum<295" ) );
-  cuts.push_back( TCut( "esum<290" ) );
-  cuts.push_back( TCut( "esum<285" ) );
-  cuts.push_back( TCut( "esum<280" ) );
-  cuts.push_back( TCut( "esum<275" ) );
-  cuts.push_back( TCut( "esum<270" ) );
-  cuts.push_back( TCut( "esum<265" ) );
-  cuts.push_back( TCut( "esum<260" ) );
-  cuts.push_back( TCut( "esum<255" ) );
-  cuts.push_back( TCut( "esum<250" ) );
   */
 }
 
