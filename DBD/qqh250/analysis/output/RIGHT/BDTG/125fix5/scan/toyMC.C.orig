@@ -25,7 +25,7 @@ void toyMC(){
   c->cd(1);
 
   //result file
-  ofstrema ofs("resultCASECASE.txt");
+  ofstream ofs("resultCASECASE.txt");
 
   //calculate # of sig.bkg events in template
   TFile *file = TFile::Open("../alldata_after.root");
