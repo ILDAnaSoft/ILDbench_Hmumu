@@ -23,15 +23,14 @@ void result( const char *fname )
 {
    // --- Create the Reader object
   vector<string> varsFinal;
-  varsFinal.push_back("E_jj");
-  varsFinal.push_back("costh_jj");
+  //varsFinal.push_back("E_jj");
+  //varsFinal.push_back("costh_jj");
   //varsFinal.push_back("costh_Z");
   varsFinal.push_back("mumu_E");
   varsFinal.push_back("mumu_costh");
-  varsFinal.push_back("mumu_costh_tobeam");
+  //varsFinal.push_back("mumu_costh_tobeam");
   varsFinal.push_back("sum_charge_costh");
   varsFinal.push_back("subleadingmu_E");
-  varsFinal.push_back("leadingmu_costh");
   varsFinal.push_back("subleadingmu_costh");
 
   TMVA::Reader *readerFinal = new TMVA::Reader(varsFinal, "!Color:!Silent" );

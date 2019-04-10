@@ -143,16 +143,16 @@ void HiggsToMuMutrain()
    // [all types of expressions that can also be parsed by TTree::Draw( "expression" )]
 
 
-   factory->AddVariable( "E_jj", 'F' );
-   factory->AddVariable( "costh_jj", 'F' );
-   //factory->AddVariable( "costh_Z", 'F' );
+   //factory->AddVariable( "E_jj", 'F' );
+   //factory->AddVariable( "costh_jj", 'F' );
    factory->AddVariable( "mumu_E", 'F' );
+   //factory->AddVariable( "mumu_Pt", 'F' );
    factory->AddVariable( "mumu_costh", 'F' );
-   factory->AddVariable( "mumu_costh_tobeam", 'F' );
+   //factory->AddVariable( "mumu_costh_tobeam", 'F' );
    factory->AddVariable( "sum_charge_costh", 'F' );
    //factory->AddVariable( "leadingmu_E", 'F' );
    factory->AddVariable( "subleadingmu_E", 'F' );
-   factory->AddVariable( "leadingmu_costh", 'F' );
+   //factory->AddVariable( "leadingmu_costh", 'F' );
    factory->AddVariable( "subleadingmu_costh", 'F' );
    
    // Read training and test data
@@ -415,7 +415,7 @@ cout << "Booking Start ******" << endl;
    if (Use["BDTG"]) // Gradient Boost
       factory->BookMethod( TMVA::Types::kBDT, "BDTG",
 			   //default "!H:!V:NTrees=1000:BoostType=Grad:Shrinkage=0.10:UseBaggedGrad:GradBaggingFraction=0.5:nCuts=20:MaxDepth=5:nEventsMin=100" );
-			   "!H:!V:NTrees=500:BoostType=Grad:Shrinkage=0.25:UseBaggedGrad:GradBaggingFraction=0.5:nCuts=30:MaxDepth=3:PruneMethod=CostComplexity:PruneStrength=5:MinNodeSize=3%" );
+			   "!H:!V:NTrees=500:BoostType=Grad:Shrinkage=0.3:UseBaggedGrad:GradBaggingFraction=0.5:nCuts=20:MaxDepth=4:PruneMethod=CostComplexity:PruneStrength=5:MinNodeSize=3%" );
                            //"!H:!V:NTrees=1000:BoostType=Grad:Shrinkage=0.10:UseBaggedGrad:GradBaggingFraction=0.5:nCuts=200:NNodesMax=5" );
                            //"!H:!V:NTrees=1000:BoostType=Grad:Shrinkage=0.30:UseBaggedGrad:GradBaggingFraction=0.5:nCuts=200:NNodesMax=5" );
                            //"!H:!V:NTrees=1000:BoostType=Grad:Shrinkage=0.30:UseBaggedGrad:GradBaggingFraction=0.5:nCuts=200:NNodesMax=10" );
