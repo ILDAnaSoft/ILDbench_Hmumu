@@ -18,7 +18,7 @@ void setupCuts() {
 
   cuts.push_back( TCut( "n_muminus==1&&n_muplus==1" ) );
   cuts.push_back( TCut( "muminus_Chi2Ndf>0.5&&muminus_Chi2Ndf<1.5&&muplus_Chi2Ndf>0.5&&muplus_Chi2Ndf<1.5" ) );
-  cuts.push_back( TCut( "abs(muminus_d0)<0.01&&abs(muplus_d0)<0.01&&" ) );
+  cuts.push_back( TCut( "abs(muminus_d0)<0.01&&abs(muplus_d0)<0.01" ) );
   cuts.push_back( TCut( "abs(muminus_z0-muplus_z0)<0.5" ) );
   cuts.push_back( TCut( "sigma_mumu_mass<0.5" ) );
   cuts.push_back( TCut( "mumu_mass>100&&mumu_mass<130" ) );
