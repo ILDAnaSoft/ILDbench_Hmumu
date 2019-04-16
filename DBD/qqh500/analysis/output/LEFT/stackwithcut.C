@@ -62,8 +62,6 @@ void MakeProcinfo( const char *file ){
     else if( str_proc == "e1e1h" || str_proc == "e2e2h" || str_proc == "e3e3h" ||
 	     str_proc == "nnh"   || str_proc == "qqh" ) tmpinfo.prockind = 2;
     else if( str_proc.BeginsWith("2f_") == true ) tmpinfo.prockind = 3;
-    //else if( tmpinfo.procid >= 37473 && tmpinfo.procid <= 37488 ) tmpinfo.prockind = 4;//aa_2f
-    //else if( tmpinfo.procid >= 37489 && tmpinfo.procid <= 37544 ) tmpinfo.prockind = 5;//3f
     else if( str_proc.BeginsWith("4f_") == true ) tmpinfo.prockind = 4;
     else if( str_proc.BeginsWith("aa_") == true &&
 	     !( tmpinfo.procid >= 37473 && tmpinfo.procid <= 37488 ) ) tmpinfo.prockind = 5;//aa_4f
@@ -93,30 +91,32 @@ void MakeAllWithWeight(
   int idi;
 
   //Make histograms
-  TH1F *h[9];
-  h[ 0] = new TH1F("all","all",nbin,nlow,nhigh);
+  TH1F *h[11];
+  h[ 0] = new TH1F("all","ILD simulation",nbin,nlow,nhigh);
   h[ 1] = new TH1F("qqh_mumu","qqh_mumu",nbin,nlow,nhigh);
   h[ 2] = new TH1F("other_h_mumu","other_h_mumu",nbin,nlow,nhigh);
   h[ 3] = new TH1F("other_h_decay","other_h_decay",nbin,nlow,nhigh);
   h[ 4] = new TH1F("2f","2f",nbin,nlow,nhigh);
-  //h[ 5] = new TH1F("aa_2f","aa_2f",nbin,nlow,nhigh);
-  //h[ 6] = new TH1F("ea_3f","ea_3f",nbin,nlow,nhigh);
-  h[ 5] = new TH1F("4f","4f",nbin,nlow,nhigh);
-  h[ 6] = new TH1F("aa_4f","aa_4f",nbin,nlow,nhigh);
-  h[ 7] = new TH1F("ea_5f","ea_5f",nbin,nlow,nhigh);
-  h[ 8] = new TH1F("other","other",nbin,nlow,nhigh);
+  h[ 5] = new TH1F("4f_qqmumu","4f_qqmumu",nbin,nlow,nhigh);
+  h[ 6] = new TH1F("4f_qqtautau","4f_tautau",nbin,nlow,nhigh);
+  h[ 7] = new TH1F("4f_other","4f_other",nbin,nlow,nhigh);
+  h[ 8] = new TH1F("aa_4f","aa_4f",nbin,nlow,nhigh);
+  h[ 9] = new TH1F("ea_5f","ea_5f",nbin,nlow,nhigh);
+  h[10] = new TH1F("other","other",nbin,nlow,nhigh);
 
-  int higgsdecay1;
-  nt->SetBranchAddress("higgsdecay1", &higgsdecay1);
   int type;
   nt->SetBranchAddress("type", &type);
+  int nq, nm, nt_m;
+  nt->SetBranchAddress("nq", &nq);
+  nt->SetBranchAddress("nm", &nm);
+  nt->SetBranchAddress("nt_m", &nt_m);
   double weight;
   nt->SetBranchAddress("weight", &weight);
 
   // stats                                                                
-  double entryKind[15];
+  double entryKind[12];
   memset(entryKind,0,sizeof(entryKind));
-  int counter[15];
+  int counter[12];
   memset(counter,0,sizeof(counter));
 
   if(isiddouble)
@@ -126,7 +126,7 @@ void MakeAllWithWeight(
 
   for( int i = 0; i < nt->GetEntries(); i++ ){
     nt->GetEntry(i);
-    if( i % 100000 == 0 && i > 0 ) cout << i << " entries processed." << endl;
+    if( i % 500000 == 0 && i > 0 ) cout << i << " entries processed." << endl;
 
     if( tfsel.EvalInstance(i) == 0 ) continue;
 
@@ -135,11 +135,13 @@ void MakeAllWithWeight(
     procinfo &info = g_procinfo[procid];
 
     // fill stats
-    if( info.prockind == 1 && ( type >= 1 && type <= 5 ) ){//qqh, h->mumu
+    if( info.prockind == 1
+	&& ( type >= 1 && type <= 5 ) ){//qqh, h->mumu
       counter[0]++;
       entryKind[0] += weight;
     }
-    else if( info.prockind == 1 && !( type >= 1 && type <= 5 ) ){//nnh/llh, h->mumu
+    else if( info.prockind == 1
+	     && !( type >= 1 && type <= 5 ) ){//nnh/llh, h->mumu
       counter[1]++;
       entryKind[1] += weight;
     }
@@ -151,31 +153,49 @@ void MakeAllWithWeight(
       counter[3]++;
       entryKind[3] += weight;
     }
-    else if( info.prockind == 4 ){//4f
+    else if( info.prockind == 4
+	     && ( nq == 2 && nm == 2 ) ){//4f, qqmumu
       counter[4]++;
       entryKind[4] += weight;
     }
-    else if( info.prockind == 5 ){//aa_4f
+    else if( info.prockind == 4
+	     && ( nq == 2 && nt_m == 2 ) ){//4f, qqtautau
       counter[5]++;
       entryKind[5] += weight;
     }
-    else if( info.prockind == 6 ){//ea_5f
+    else if( info.prockind == 4
+	     && !( nq == 2 && nm == 2 )
+	     && !( nq == 2 && nt_m == 2) ){//4f, other
       counter[6]++;
       entryKind[6] += weight;
     }
-    else entryKind[7] += weight;//other
+    else if( info.prockind == 5 ){//aa_4f
+      counter[7]++;
+      entryKind[7] += weight;
+    }
+    else if( info.prockind == 6 ){//ea_5f
+      counter[8]++;
+      entryKind[8] += weight;
+    }
+    else entryKind[9] += weight;//other
 
     h[ 0]->Fill(tfexp.EvalInstance(i),weight); //all
-    if( info.prockind == 1 && ( type >= 1 && type <= 5 ) ) h[ 1]->Fill(tfexp.EvalInstance(i),weight);//qqh, h->mumu
-    else if( info.prockind == 1 && !( type >= 1 && type <= 5 ) ) h[ 2]->Fill(tfexp.EvalInstance(i),weight);//nnh/llh, h->mumu
+    if( info.prockind == 1
+	&& ( type >= 1 && type <= 5 ) ) h[ 1]->Fill(tfexp.EvalInstance(i),weight);//qqh, h->mumu
+    else if( info.prockind == 1
+	     && !( type >= 1 && type <= 5 ) ) h[ 2]->Fill(tfexp.EvalInstance(i),weight);//nnh/llh, h->mumu
     else if( info.prockind == 2 ) h[ 3]->Fill(tfexp.EvalInstance(i),weight);//ffh, h->other
     else if( info.prockind == 3 ) h[ 4]->Fill(tfexp.EvalInstance(i),weight);//2f
-    //else if( info.prockind == 4 ) h[ 5]->Fill(tfexp.EvalInstance(i),weight);//aa_2f
-    //else if( info.prockind == 5 ) h[ 6]->Fill(tfexp.EvalInstance(i),weight);//ea_3f
-    else if( info.prockind == 4 ) h[ 5]->Fill(tfexp.EvalInstance(i),weight);//4f
-    else if( info.prockind == 5 ) h[ 6]->Fill(tfexp.EvalInstance(i),weight);//aa_4f
-    else if( info.prockind == 6 ) h[ 7]->Fill(tfexp.EvalInstance(i),weight);//ea_5f
-    else h[ 8]->Fill(tfexp.EvalInstance(i),weight); //other
+    else if( info.prockind == 4
+	     && ( nq == 2 && nm == 2 ) ) h[ 5]->Fill(tfexp.EvalInstance(i),weight);//4f, qqmumu
+    else if( info.prockind == 4
+	     && ( nq == 2 && nt_m == 2 ) ) h[ 6]->Fill(tfexp.EvalInstance(i),weight);//4f, qqtautau
+    else if( info.prockind == 4
+	     && !( nq == 2 && nm == 2 )
+	     && !( nq == 2 && nt_m == 2 ) ) h[ 7]->Fill(tfexp.EvalInstance(i),weight);//4f, other
+    else if( info.prockind == 5 ) h[ 8]->Fill(tfexp.EvalInstance(i),weight);//aa_4f
+    else if( info.prockind == 6 ) h[ 9]->Fill(tfexp.EvalInstance(i),weight);//ea_5f
+    else h[10]->Fill(tfexp.EvalInstance(i),weight); //other
 
   }
 
@@ -205,39 +225,55 @@ void MakeAllWithWeight(
     h[4]->Draw("same");
     leg->AddEntry(h[4], "2f", "lp");
   }
-  if( counter[4] != 0 ){//4f
+  if( counter[4] != 0 ){//4f, qqmumu
     h[5]->SetLineColor(kTeal+4);h[5]->SetMarkerColor(kTeal+4);
     h[5]->Draw("same");
-    leg->AddEntry(h[5], "4f", "lp");
+    leg->AddEntry(h[5], "4f qq#mu#mu", "lp");
   }
-  if( counter[5] != 0 ){//aa_4f
+  if( counter[5] != 0 ){//4f, qqtautau
     h[6]->SetLineColor(kTeal+4);h[6]->SetMarkerColor(kTeal+4);h[6]->SetLineStyle(2);
     h[6]->Draw("same");
-    leg->AddEntry(h[6], "#gamma#gamma->4f", "lp");
+    leg->AddEntry(h[6], "4f qq#tau#tau, #tau->#mu", "lp");
   }
-  if( counter[6] != 0 ){//ea_5f
-    h[7]->SetLineColor(kViolet);h[7]->SetMarkerColor(kViolet);
+  if( counter[6] != 0 ){//4f, other
+    h[7]->SetLineColor(kTeal+4);h[7]->SetMarkerColor(kTeal+4);h[7]->SetLineStyle(3);
     h[7]->Draw("same");
-    leg->AddEntry(h[7], "e#gamma->5f", "lp");
+    leg->AddEntry(h[7], "4f other", "lp");
+  }
+  if( counter[7] != 0 ){//aa_4f
+    h[8]->SetLineColor(kRed);h[8]->SetMarkerColor(kRed);h[8]->SetLineStyle(2);
+    h[8]->Draw("same");
+    leg->AddEntry(h[8], "#gamma#gamma->4f", "lp");
+  }
+  if( counter[8] != 0 ){//ea_5f
+    h[9]->SetLineColor(kViolet);h[9]->SetMarkerColor(kViolet);
+    h[9]->Draw("same");
+    leg->AddEntry(h[9], "e#gamma->5f", "lp");
   }
   leg->Draw();
 
   //show statistics
   cout << setw(12) << "qqh hmumu" << setw(12) << "bkg hmumu" << setw(12) << "ffh other"
-       << setw(12) << "2f" << setw(12) << "4f" << setw(12) << "aa_4f" << setw(12) << "5f" << endl;
+       << setw(12) << "2f" << setw(12) << "4f qqmumu" << setw(12) << "4f qqtautau" 
+       << setw(12) << "4f other" << setw(12) << "aa_4f" << setw(12) << "5f" << endl;
   cout << setw(12) << entryKind[0] << setw(12) << entryKind[1] << setw(12) << entryKind[2]
        << setw(12) << entryKind[3] << setw(12) << entryKind[4] << setw(12) << entryKind[5]
-       << setw(12) << entryKind[6] << endl;
+       << setw(12) << entryKind[6] << setw(12) << entryKind[7] << setw(12) << entryKind[8] << endl;
   cout << setw(12) << counter[0] << setw(12) << counter[1] << setw(12) << counter[2]
        << setw(12) << counter[3] << setw(12) << counter[4] << setw(12) << counter[5]
-       << setw(12) << counter[6] << endl;
+       << setw(12) << counter[6] << setw(12) << counter[7] << setw(12) << counter[8] << endl;
   ofs << setw(12) << "qqh hmumu" << setw(12) << "bkg hmumu" << setw(12) << "ffh other"
-      << setw(12) << "2f" << setw(12) << "4f" << setw(12) << "aa_4f" << setw(12) << "5f" << endl;
+      << setw(12) << "2f" << setw(12) << "4f qqmumu" << setw(12) << "4f qqtautau" 
+      << setw(12) << "4f other" << setw(12) << "aa_4f" << setw(12) << "5f" << endl;
   ofs << setw(12) << entryKind[0] << setw(12) << entryKind[1] << setw(12) << entryKind[2]
       << setw(12) << entryKind[3] << setw(12) << entryKind[4] << setw(12) << entryKind[5]
-      << setw(12) << entryKind[6] << endl;
+      << setw(12) << entryKind[6] << setw(12) << entryKind[7] << setw(12) << entryKind[8] << endl;
+  ofs << setw(12) << counter[0] << setw(12) << counter[1] << setw(12) << counter[2]
+      << setw(12) << counter[3] << setw(12) << counter[4] << setw(12) << counter[5]
+      << setw(12) << counter[6] << setw(12) << counter[7] << setw(12) << counter[8] << endl;
+
   double bkg_tot = 0.;
-  for( int i = 1; i <= 6; i++ ){
+  for( int i = 1; i <= 9; i++ ){
     bkg_tot += entryKind[i];
   }
   cout << "signal = " << entryKind[0] << ", background = " << bkg_tot << endl;
