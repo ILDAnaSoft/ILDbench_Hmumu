@@ -1269,8 +1269,9 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
   //************
   TLorentzVector jet_4mom(0,0,0,0);
   TVector3 jet1_3mom(0,0,0), jet2_3mom(0,0,0);
-  float jet1_E = 0., jet2_E = 0.;
+  float jet1_E = 0, jet2_E = 0;
   int jet1_n = 0, jet1_p = 0, jet2_n = 0, jet2_p = 0;
+  float jet1_costh = 0, jet2_costh = 0;
   if( Jets != 0 ){
     int nJets = Jets->getNumberOfElements();
     _data.nJets = nJets;
@@ -1280,6 +1281,7 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
       if( i == 0 ){//jet #1
 	jet1_3mom = TVector3( jet->getMomentum() );
 	jet1_E = jet->getEnergy();
+	jet1_costh = jet1_3mom.Unit().Dot( TVector3(0,0,1) );
 	const ReconstructedParticleVec& pfovec = jet->getParticles();
 	for( unsigned int j = 0; j < pfovec.size(); j++ ){
 	  ReconstructedParticle* jetparticle = pfovec[j];
@@ -1291,6 +1293,7 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
       if( i == 1 ){//jet #2
 	jet2_3mom = TVector3( jet->getMomentum() );
 	jet2_E = jet->getEnergy();
+	jet2_costh = jet2_3mom.Unit().Dot( TVector3(0,0,1) );
 	const ReconstructedParticleVec& pfovec = jet->getParticles();
 	for( unsigned int j = 0; j < pfovec.size(); j++ ){
 	  ReconstructedParticle* jetparticle = pfovec[j];
@@ -1313,12 +1316,20 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
       _data.jet1_charged = jet1_p;
       _data.jet2_neutral = jet2_n;
       _data.jet2_charged = jet2_p;
+      _data.jet1_E = jet1_E;
+      _data.jet2_E = jet2_E;
+      _data.jet1_costh = jet1_costh;
+      _data.jet2_costh = jet2_costh;
     }
     else{
       _data.jet1_neutral = jet2_n;
       _data.jet1_charged = jet2_p;
       _data.jet2_neutral = jet1_n;
       _data.jet2_charged = jet1_p;
+      _data.jet1_E = jet2_E;
+      _data.jet2_E = jet1_E;
+      _data.jet1_costh = jet2_costh;
+      _data.jet2_costh = jet1_costh;
     }
   }
 
@@ -1736,6 +1747,10 @@ void HiggsToMuMuProcessor::makeNTuple() {
   _dataTree->Branch( "jet1_charged", &d.jet1_charged, "jet1_charged/I" );
   _dataTree->Branch( "jet2_neutral", &d.jet2_neutral, "jet2_neutral/I" );
   _dataTree->Branch( "jet2_charged", &d.jet2_charged, "jet2_charged/I" );
+  _dataTree->Branch( "jet1_E"      , &d.jet1_E      , "jet1_E"         );
+  _dataTree->Branch( "jet2_E"      , &d.jet2_E      , "jet2_E"         );
+  _dataTree->Branch( "jet1_costh"  , &d.jet1_costh  , "jet1_costh"     );
+  _dataTree->Branch( "jet2_costh"  , &d.jet2_costh  , "jet2_costh"     );
 
   //for ISR
   _dataTree->Branch( "n_ISR" , &d.n_ISR , "n_ISR/I"       );
