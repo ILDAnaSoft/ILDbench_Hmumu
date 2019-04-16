@@ -143,24 +143,11 @@ void HiggsToMuMutrain()
    // [all types of expressions that can also be parsed by TTree::Draw( "expression" )]
 
    factory->AddVariable( "esum", 'F' );
-   factory->AddVariable( "Pt_all", 'F' );
-   //factory->AddVariable( "principalthrust", 'F' );
-   factory->AddVariable( "costh_thrustaxis", 'F' );
-   //factory->AddVariable( "costh_missmom", 'F' );
-   //factory->AddVariable( "mumu_mass", 'F' );
-   factory->AddVariable( "mumu_E", 'F' );
-   //factory->AddVariable( "mumu_Pt", 'F' );
+   factory->AddVariable( "mumu_Pt", 'F' );
    factory->AddVariable( "mumu_costh", 'F' );
-   //factory->AddVariable( "mumu_costh_tobeam", 'F' );
-   //factory->AddVariable( "mumu_acop", 'F' );
-   //factory->AddVariable( "mumu_mom_mag", 'F' );
    factory->AddVariable( "sum_charge_costh", 'F' );
-   factory->AddVariable( "leadingmu_E", 'F' );
    factory->AddVariable( "subleadingmu_E", 'F' );
-   factory->AddVariable( "leadingmu_costh", 'F' );
    factory->AddVariable( "subleadingmu_costh", 'F' );
-   //factory->AddVariable( "recoilmass", 'F' );
-   //factory->AddVariable( "pseudomass", 'F' );
    
    // Read training and test data
    //TString fileS = "../separate/qqhh.root";
@@ -422,7 +409,7 @@ cout << "Booking Start ******" << endl;
    if (Use["BDTG"]) // Gradient Boost
       factory->BookMethod( TMVA::Types::kBDT, "BDTG",
 			   //default "!H:!V:NTrees=1000:BoostType=Grad:Shrinkage=0.10:UseBaggedGrad:GradBaggingFraction=0.5:nCuts=20:MaxDepth=5:nEventsMin=100" );
-			   "!H:!V:NTrees=300:BoostType=Grad:Shrinkage=0.2:UseBaggedGrad:GradBaggingFraction=0.5:nCuts=30:MaxDepth=5:PruneMethod=CostComplexity:PruneStrength=5:MinNodeSize=3%" );
+			   "!H:!V:NTrees=800:BoostType=Grad:Shrinkage=0.25:UseBaggedGrad:GradBaggingFraction=0.5:nCuts=20:MaxDepth=4:PruneMethod=CostComplexity:PruneStrength=5:MinNodeSize=3%" );
                            //"!H:!V:NTrees=1000:BoostType=Grad:Shrinkage=0.10:UseBaggedGrad:GradBaggingFraction=0.5:nCuts=200:NNodesMax=5" );
                            //"!H:!V:NTrees=1000:BoostType=Grad:Shrinkage=0.30:UseBaggedGrad:GradBaggingFraction=0.5:nCuts=200:NNodesMax=5" );
                            //"!H:!V:NTrees=1000:BoostType=Grad:Shrinkage=0.30:UseBaggedGrad:GradBaggingFraction=0.5:nCuts=200:NNodesMax=10" );
