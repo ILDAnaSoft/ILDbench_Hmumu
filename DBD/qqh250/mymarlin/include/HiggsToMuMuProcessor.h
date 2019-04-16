@@ -431,6 +431,10 @@ class HiggsToMuMuProcessor : public Processor{
     int   jet1_charged;
     int   jet2_neutral;
     int   jet2_charged;
+    float jet1_E;
+    float jet2_E;
+    float jet1_costh;
+    float jet2_costh;
 
     //***********
     //loop of ISR
