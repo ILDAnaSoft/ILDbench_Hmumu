@@ -26,7 +26,6 @@ class ISRFinder : public Processor{
   std::string _outputCollection;
   std::string _isrCollection;
 
-  float _cosTheta;
   float _energy;
   float _coneCosTheta;
   float _ratio;
