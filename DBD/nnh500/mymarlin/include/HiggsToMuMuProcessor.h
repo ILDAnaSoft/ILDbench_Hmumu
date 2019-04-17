@@ -397,6 +397,8 @@ class HiggsToMuMuProcessor : public Processor{
 
     float muminus_momres;
     float muplus_momres;
+
+    int n_ISR;
     float pseudomass;
 
     //float mumu_mass_mc;
