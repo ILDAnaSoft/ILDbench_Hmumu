@@ -40,11 +40,6 @@ ISRFinder::ISRFinder()
 			    _isrCollection,
 			    std::string("ISR") );
 
-  registerProcessorParameter( "CosTheta",
-			      "polar angle of PFO",
-			      _cosTheta,
-			      float(0.95) );
-
   registerProcessorParameter( "Energy",
 			      "energy of PFO",
 			      _energy,
@@ -82,24 +77,23 @@ void ISRFinder::processEvent( LCEvent *evt ){
   isrCol->setSubset( true );
 
   if( inputCol != 0 ){
-    unsigned int npfo = inputCol->getNumberOfElements();
-    for( unsigned int i = 0; i < npfo; i++ ){
+    int npfo = inputCol->getNumberOfElements();
+    for( int i = 0; i < npfo; i++ ){
       ReconstructedParticle *pfo = dynamic_cast< ReconstructedParticle* >( inputCol->getElementAt(i) );
       if( pfo->getType() != 22 ) outputCol->addElement( pfo );
 
       if( pfo->getType() == 22 ){
 	TVector3 pfo_3mom = TVector3( pfo->getMomentum() );
-	float pfo_costh = pfo_3mom.Unit().Dot( TVector3(0,0,1) );
 	float pfo_E = pfo->getEnergy();
 
-	if( fabs( pfo_costh ) > _cosTheta && pfo_E > _energy ){
+	if( pfo_E > _energy ){
 	  float coneE = 0;
-	  for( unsigned int j = 0; j < npfo; j++ ){
+	  for( int j = 0; j < npfo; j++ ){
 	    //calcuate cone energy
 	    ReconstructedParticle* pfo_j = dynamic_cast< ReconstructedParticle* >( pfoCol->getElementAt(j) );
 	    TVector3 pfo_j_3mom = TVector3( pfo_j->getMomentum() );
 	    float conecosth = pfo_3mom.Unit().Dot( pfo_j_3mom.Unit() );
-	    if( pfo != pfo_j && fabs( conecosth ) > _coneCosTheta ) coneE += pfo_j->getEnergy();
+	    if( pfo != pfo_j && conecosth > _coneCosTheta ) coneE += pfo_j->getEnergy();
 	  }
 	  float ratioE = coneE / pfo_E;
 
