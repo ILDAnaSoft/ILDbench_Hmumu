@@ -162,7 +162,6 @@
   <parameter name="AllPFOCollection" type="ReconstructedParticle"> PandoraPFOs </parameter>
   <parameter name="OutputCollection" type="ReconstructedParticle"> PFOsWithoutISR </parameter>
   <parameter name="ISRCollection" type="ReconstructedParticle"> ISR </parameter>
-  <parameter name="CosTheta" type="float"> 0.95 </parameter>
   <parameter name="Energy" type="float"> 10 </parameter>
   <parameter name="ConeCosTheta" type="float"> 0.95 </parameter>
   <parameter name="Ratio" type="float"> 0.05 </parameter>

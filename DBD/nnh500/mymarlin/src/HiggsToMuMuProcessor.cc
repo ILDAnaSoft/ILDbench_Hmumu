@@ -1137,6 +1137,7 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
   TLorentzVector ISR_4mom(0,0,0,0);
   if( ISR != 0 ){
     int n_ISR = ISR->getNumberOfElements();
+    _data.n_ISR = n_ISR;
     for( int i = 0; i < n_ISR; i++ ){
       ReconstructedParticle* pfo_ISR = dynamic_cast< ReconstructedParticle* >( ISR->getElementAt(i) );
       ISR_4mom += TLorentzVector( pfo_ISR->getMomentum(), pfo_ISR->getEnergy() );
@@ -1935,6 +1936,8 @@ void HiggsToMuMuProcessor::makeNTuple() {
 
   _dataTree->Branch( "muminus_momres", &d.muminus_momres, "muminus_momres" );
   _dataTree->Branch( "muplus_momres" , &d.muplus_momres , "muplus_momres"  );
+
+  _dataTree->Branch( "n_ISR"     , &d.n_ISR     , "n_ISR/I"    );
   _dataTree->Branch( "pseudomass", &d.pseudomass, "pseudomass" );
 
   //_dataTree->Branch( "mumu_mass_mc" , &d.mumu_mass_mc , "mumu_mass_mc"  );
