@@ -160,6 +160,14 @@ sleep 1
 echo "Next run in 10 seconds."
 sleep 10
 
+echo "submission for 4f_ZZWWMix_hadronic"
+./submit-4f_ZZWWMix_hadronic.sh
+echo "done."
+
+sleep 1
+echo "Next run in 10 seconds."
+sleep 10
+
 echo "submission for 5f"
 ./submit-5f.sh
 echo "done."
@@ -174,6 +182,84 @@ sleep 20
 
 echo "submission for aa_4f"
 ./submit-aa_4f.sh
+echo "done."
+
+sleep 1
+echo "Next run in 60 seconds."
+sleep 20
+echo "Next run in 40 seconds."
+sleep 20
+echo "Next run in 20 seconds."
+sleep 20
+
+echo "submission for 6f_eeWW"
+./submit-6f_eeWW.sh
+echo "done."
+
+sleep 1
+echo "Next run in 60 seconds."
+sleep 20
+echo "Next run in 40 seconds."
+sleep 20
+echo "Next run in 20 seconds."
+sleep 20
+
+echo "submission for 6f_llWW"
+./submit-6f_llWW.sh
+echo "done."
+
+sleep 1
+echo "Next run in 40 seconds."
+sleep 20
+echo "Next run in 20 seconds."
+sleep 20
+
+echo "submission for 6f_vvWW"
+./submit-6f_vvWW.sh
+echo "done."
+
+sleep 1
+echo "Next run in 60 seconds."
+sleep 20
+echo "Next run in 40 seconds."
+sleep 20
+echo "Next run in 20 seconds."
+sleep 20
+
+echo "submission for 6f_xxWW"
+./submit-6f_xxWW.sh
+echo "done."
+
+sleep 1
+echo "Next run in 60 seconds."
+sleep 20
+echo "Next run in 40 seconds."
+sleep 20
+echo "Next run in 20 seconds."
+sleep 20
+
+echo "submission for 6f_xxxxZ"
+./submit-6f_xxxxZ.sh
+echo "done."
+
+sleep 1
+echo "Next run in 20 seconds."
+sleep 20
+
+echo "submission for 6f_yyyyZ"
+./submit-6f_yyyyZ.sh
+echo "done."
+
+sleep 1
+echo "Next run in 60 seconds."
+sleep 20
+echo "Next run in 40 seconds."
+sleep 20
+echo "Next run in 20 seconds."
+sleep 20
+
+echo "submission for 6f_ttbar"
+./submit-6f_ttbar.sh
 echo "done."
 
 echo "everything done."

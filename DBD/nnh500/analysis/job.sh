@@ -98,6 +98,11 @@ chmod 755 condor_submit.sh
 mv condor_submit.sh submit-4f_ZZWWMix_leptonic.sh
 echo "preparation done for 4f_ZZWWMix_leptonic."
 
+./runMarlin 4f_ZZWWMix_hadronic /afs/desy.de/user/s/skawada/sonas_work/stage_nnh500/analysis/init_ilcsoft.sh hmumu.xml list_4f_ZZWWMix_hadronic.txt 1 18
+chmod 755 condor_submit.sh
+mv condor_submit.sh submit-4f_ZZWWMix_hadronic.sh
+echo "preparation done for 4f_ZZWWMix_hadronic."
+
 ./runMarlin 5f /afs/desy.de/user/s/skawada/sonas_work/stage_nnh500/analysis/init_ilcsoft.sh hmumu.xml list_5f.txt 1 400
 chmod 755 condor_submit.sh
 mv condor_submit.sh submit-5f.sh
@@ -107,5 +112,40 @@ echo "preparation done for 5f."
 chmod 755 condor_submit.sh
 mv condor_submit.sh submit-aa_4f.sh
 echo "preparation done for aa_4f."
+
+./runMarlin 6f_eeWW /afs/desy.de/user/s/skawada/sonas_work/stage_nnh500/analysis/init_ilcsoft.sh hmumu.xml list_6f_eeWW.txt 1 84
+chmod 755 condor_submit.sh
+mv condor_submit.sh submit-6f_eeWW.sh
+echo "preparation done for 6f_eeWW."
+
+./runMarlin 6f_llWW /afs/desy.de/user/s/skawada/sonas_work/stage_nnh500/analysis/init_ilcsoft.sh hmumu.xml list_6f_llWW.txt 1 43
+chmod 755 condor_submit.sh
+mv condor_submit.sh submit-6f_llWW.sh
+echo "preparation done for 6f_llWW."
+
+./runMarlin 6f_vvWW /afs/desy.de/user/s/skawada/sonas_work/stage_nnh500/analysis/init_ilcsoft.sh hmumu.xml list_6f_vvWW.txt 1 56
+chmod 755 condor_submit.sh
+mv condor_submit.sh submit-6f_vvWW.sh
+echo "preparation done for 6f_vvWW."
+
+./runMarlin 6f_xxWW /afs/desy.de/user/s/skawada/sonas_work/stage_nnh500/analysis/init_ilcsoft.sh hmumu.xml list_6f_xxWW.txt 1 59
+chmod 755 condor_submit.sh
+mv condor_submit.sh submit-6f_xxWW.sh
+echo "preparation done for 6f_xxWW."
+
+./runMarlin 6f_xxxxZ /afs/desy.de/user/s/skawada/sonas_work/stage_nnh500/analysis/init_ilcsoft.sh hmumu.xml list_6f_xxxxZ.txt 1 28
+chmod 755 condor_submit.sh
+mv condor_submit.sh submit-6f_xxxxZ.sh
+echo "preparation done for 6f_xxxxZ."
+
+./runMarlin 6f_yyyyZ /afs/desy.de/user/s/skawada/sonas_work/stage_nnh500/analysis/init_ilcsoft.sh hmumu.xml list_6f_yyyyZ.txt 1 70
+chmod 755 condor_submit.sh
+mv condor_submit.sh submit-6f_yyyyZ.sh
+echo "preparation done for 6f_yyyyZ."
+
+./runMarlin 6f_ttbar /afs/desy.de/user/s/skawada/sonas_work/stage_nnh500/analysis/init_ilcsoft.sh hmumu.xml list_6f_ttbar.txt 1 1598
+chmod 755 condor_submit.sh
+mv condor_submit.sh submit-6f_ttbar.sh
+echo "preparation done for 6f_ttbar."
 
 echo "All preparation done."
