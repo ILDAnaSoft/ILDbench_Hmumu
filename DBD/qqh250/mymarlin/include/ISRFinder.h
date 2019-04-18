@@ -22,7 +22,6 @@ class ISRFinder : public Processor{
 
  protected:
   std::string _inputCollection;
-  std::string _allPFOCollection;
   std::string _outputCollection;
   std::string _isrCollection;
 
