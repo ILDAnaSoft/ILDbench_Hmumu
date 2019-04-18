@@ -103,7 +103,6 @@
 
 <processor name="MyISRFinder" type="ISRFinder">
   <parameter name="InputCollection" type="ReconstructedParticle"> PFOsWithoutIsoleps </parameter>
-  <parameter name="AllPFOCollection" type="ReconstructedParticle"> PandoraPFOs </parameter>
   <parameter name="OutputCollection" type="ReconstructedParticle"> PFOsWithoutISR </parameter>
   <parameter name="ISRCollection" type="ReconstructedParticle"> ISR </parameter>
   <parameter name="Energy" type="float"> 10 </parameter>
