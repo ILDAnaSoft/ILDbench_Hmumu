@@ -22,12 +22,6 @@ ISRFinder::ISRFinder()
 			   _inputCollection,
 			   std::string("PFOsWithoutIsoleps") );
 
-  registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE,
-			   "AllPFOCollection",
-			   "Input collection of all PFOs",
-			   _allPFOCollection,
-			   std::string("PandoraPFOs") );
-
   registerOutputCollection( LCIO::RECONSTRUCTEDPARTICLE,
 			    "OutputCollection",
 			    "Output collection after removing ISR",
@@ -39,11 +33,6 @@ ISRFinder::ISRFinder()
 			    "Output collection for ISR",
 			    _isrCollection,
 			    std::string("ISR") );
-
-  registerProcessorParameter( "CosTheta",
-			      "polar angle of PFO",
-			      _cosTheta,
-			      float(0.95) );
 
   registerProcessorParameter( "Energy",
 			      "energy of PFO",
@@ -75,31 +64,31 @@ void ISRFinder::processEvent( LCEvent *evt ){
   catch(...){
     std::cout << "NO inputs" << std::endl;
   }
-  LCCollection *pfoCol = evt->getCollection( _allPFOCollection );
   LCCollectionVec *outputCol = new LCCollectionVec( LCIO::RECONSTRUCTEDPARTICLE );
   outputCol->setSubset( true );
   LCCollectionVec *isrCol = new LCCollectionVec( LCIO::RECONSTRUCTEDPARTICLE );
   isrCol->setSubset( true );
 
   if( inputCol != 0 ){
-    unsigned int npfo = inputCol->getNumberOfElements();
-    for( unsigned int i = 0; i < npfo; i++ ){
+    int npfo = inputCol->getNumberOfElements();
+    for( int i = 0; i < npfo; i++ ){
       ReconstructedParticle *pfo = dynamic_cast< ReconstructedParticle* >( inputCol->getElementAt(i) );
       if( pfo->getType() != 22 ) outputCol->addElement( pfo );
 
       if( pfo->getType() == 22 ){
 	TVector3 pfo_3mom = TVector3( pfo->getMomentum() );
-	float pfo_costh = pfo_3mom.Unit().Dot( TVector3(0,0,1) );
 	float pfo_E = pfo->getEnergy();
 
-	if( fabs( pfo_costh ) > _cosTheta && pfo_E > _energy ){
+	if( pfo_E > _energy ){
 	  float coneE = 0;
-	  for( unsigned int j = 0; j < npfo; j++ ){
-	    //calcuate cone energy
-	    ReconstructedParticle* pfo_j = dynamic_cast< ReconstructedParticle* >( pfoCol->getElementAt(j) );
+	  for( int j = 0; j < npfo; j++ ){
+	    //calcuate charged cone energy
+	    ReconstructedParticle* pfo_j = dynamic_cast< ReconstructedParticle* >( inputCol->getElementAt(j) );
+	    if( pfo == pfo_j ) continue;
+	    if( pfo_j->getCharge() == 0 ) continue;
 	    TVector3 pfo_j_3mom = TVector3( pfo_j->getMomentum() );
 	    float conecosth = pfo_3mom.Unit().Dot( pfo_j_3mom.Unit() );
-	    if( pfo != pfo_j && fabs( conecosth ) > _coneCosTheta ) coneE += pfo_j->getEnergy();
+	    if( conecosth > _coneCosTheta ) coneE += pfo_j->getEnergy();
 	  }
 	  float ratioE = coneE / pfo_E;
 

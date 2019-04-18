@@ -22,12 +22,6 @@ ISRFinder::ISRFinder()
 			   _inputCollection,
 			   std::string("PFOsWithoutIsoleps") );
 
-  registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE,
-			   "AllPFOCollection",
-			   "Input collection of all PFOs",
-			   _allPFOCollection,
-			   std::string("PandoraPFOs") );
-
   registerOutputCollection( LCIO::RECONSTRUCTEDPARTICLE,
 			    "OutputCollection",
 			    "Output collection after removing ISR",
@@ -48,7 +42,7 @@ ISRFinder::ISRFinder()
   registerProcessorParameter( "ConeCosTheta",
 			      "definition of cone for isolation",
 			      _coneCosTheta,
-			      float(0.9) );
+			      float(0.95) );
 
   registerProcessorParameter( "Ratio",
 			      "pfo_E divided by coneE for isolation",
@@ -70,7 +64,6 @@ void ISRFinder::processEvent( LCEvent *evt ){
   catch(...){
     std::cout << "NO inputs" << std::endl;
   }
-  LCCollection *allCol = evt->getCollection( _allPFOCollection );
   LCCollectionVec *outputCol = new LCCollectionVec( LCIO::RECONSTRUCTEDPARTICLE );
   outputCol->setSubset( true );
   LCCollectionVec *isrCol = new LCCollectionVec( LCIO::RECONSTRUCTEDPARTICLE );
@@ -89,11 +82,13 @@ void ISRFinder::processEvent( LCEvent *evt ){
 	if( pfo_E > _energy ){
 	  float coneE = 0;
 	  for( int j = 0; j < npfo; j++ ){
-	    //calculate cone energy
-	    ReconstructedParticle* pfo_j = dynamic_cast< ReconstructedParticle* >( allCol->getElementAt(j) );
+	    //calcuate charged cone energy
+	    ReconstructedParticle* pfo_j = dynamic_cast< ReconstructedParticle* >( inputCol->getElementAt(j) );
+	    if( pfo == pfo_j ) continue;
+	    if( pfo_j->getCharge() == 0 ) continue;
 	    TVector3 pfo_j_3mom = TVector3( pfo_j->getMomentum() );
 	    float conecosth = pfo_3mom.Unit().Dot( pfo_j_3mom.Unit() );
-	    if( pfo != pfo_j && conecosth > _coneCosTheta ) coneE += pfo_j->getEnergy();
+	    if( conecosth > _coneCosTheta ) coneE += pfo_j->getEnergy();
 	  }
 	  float ratioE = coneE / pfo_E;
 
