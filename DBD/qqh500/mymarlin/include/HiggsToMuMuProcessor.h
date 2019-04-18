@@ -255,6 +255,8 @@ class HiggsToMuMuProcessor : public Processor{
     float pfo_Pt[NMAX_PFOS];
     int   pfo_ntrk[NMAX_PFOS];
     int   pfo_nclus[NMAX_PFOS];
+    float pfo_coneE[NMAX_PFOS];
+    float pfo_ratioE[NMAX_PFOS];
 
     float pfo_d0[NMAX_PFOS];
     float pfo_z0[NMAX_PFOS];
@@ -439,6 +441,12 @@ class HiggsToMuMuProcessor : public Processor{
     int   jet1_neutral;
     int   jet2_charged;
     int   jet2_neutral;
+    float jet1_E;
+    float jet2_E;
+    float jet1_M;
+    float jet2_M;
+    float jet1_costh;
+    float jet2_costh;
 
     //************
     //loop for ISR

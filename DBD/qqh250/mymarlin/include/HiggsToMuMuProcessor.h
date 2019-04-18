@@ -433,6 +433,8 @@ class HiggsToMuMuProcessor : public Processor{
     int   jet2_charged;
     float jet1_E;
     float jet2_E;
+    float jet1_M;
+    float jet2_M;
     float jet1_costh;
     float jet2_costh;
 

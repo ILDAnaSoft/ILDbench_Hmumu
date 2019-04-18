@@ -1269,7 +1269,7 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
   //************
   TLorentzVector jet_4mom(0,0,0,0);
   TVector3 jet1_3mom(0,0,0), jet2_3mom(0,0,0);
-  float jet1_E = 0, jet2_E = 0;
+  float jet1_E = 0, jet2_E = 0, jet1_M = 0, jet2_M = 0;
   int jet1_n = 0, jet1_p = 0, jet2_n = 0, jet2_p = 0;
   float jet1_costh = 0, jet2_costh = 0;
   if( Jets != 0 ){
@@ -1279,6 +1279,7 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
       ReconstructedParticle* jet = dynamic_cast< ReconstructedParticle* >( Jets->getElementAt(i) );
       jet_4mom += TLorentzVector( jet->getMomentum(), jet->getEnergy() );
       if( i == 0 ){//jet #1
+        jet1_M = TLorentzVector( jet->getMomentum(), jet->getEnergy() ).M();
 	jet1_3mom = TVector3( jet->getMomentum() );
 	jet1_E = jet->getEnergy();
 	jet1_costh = jet1_3mom.Unit().Dot( TVector3(0,0,1) );
@@ -1291,6 +1292,7 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
 	}
       }
       if( i == 1 ){//jet #2
+        jet2_M = TLorentzVector( jet->getMomentum(), jet->getEnergy() ).M();
 	jet2_3mom = TVector3( jet->getMomentum() );
 	jet2_E = jet->getEnergy();
 	jet2_costh = jet2_3mom.Unit().Dot( TVector3(0,0,1) );
@@ -1318,6 +1320,8 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
       _data.jet2_charged = jet2_p;
       _data.jet1_E = jet1_E;
       _data.jet2_E = jet2_E;
+      _data.jet1_M = jet1_M;
+      _data.jet2_M = jet2_M;
       _data.jet1_costh = jet1_costh;
       _data.jet2_costh = jet2_costh;
     }
@@ -1328,6 +1332,8 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
       _data.jet2_charged = jet1_p;
       _data.jet1_E = jet2_E;
       _data.jet2_E = jet1_E;
+      _data.jet1_M = jet1_M;
+      _data.jet2_M = jet2_M;
       _data.jet1_costh = jet2_costh;
       _data.jet2_costh = jet1_costh;
     }
@@ -1749,6 +1755,8 @@ void HiggsToMuMuProcessor::makeNTuple() {
   _dataTree->Branch( "jet2_charged", &d.jet2_charged, "jet2_charged/I" );
   _dataTree->Branch( "jet1_E"      , &d.jet1_E      , "jet1_E"         );
   _dataTree->Branch( "jet2_E"      , &d.jet2_E      , "jet2_E"         );
+  _dataTree->Branch( "jet1_M"      , &d.jet1_M      , "jet1_M"         );
+  _dataTree->Branch( "jet2_M"      , &d.jet2_M      , "jet2_M"         );
   _dataTree->Branch( "jet1_costh"  , &d.jet1_costh  , "jet1_costh"     );
   _dataTree->Branch( "jet2_costh"  , &d.jet2_costh  , "jet2_costh"     );
 
