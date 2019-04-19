@@ -1726,6 +1726,72 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
                ( fabs( xsection - 0.0624   ) < 0.0001 ) ||
                ( fabs( xsection - 0.0240394) < 0.0001 ) ) sprocess = "ae_eyyyy";
     }
+    //temporary solution for 6f samples, they have "parameter Process [string]: processNO"! SHIT!
+    if( sprocess == "108501" || sprocess == "108502" || sprocess == "108503" || sprocess == "108504" ) sprocess = "6f_xxveev";
+    if( sprocess == "108505" || sprocess == "108506" || sprocess == "108507" ) sprocess = "6f_xxvelv" ;
+    if( sprocess == "108508" || sprocess == "108509" || sprocess == "108510" ) sprocess = "6f_xxvlev" ;
+    if( sprocess == "108511" || sprocess == "108512" ) sprocess = "6f_xxvllv";
+    if( sprocess == "108513" || sprocess == "108514" || sprocess == "108515" ) sprocess = "6f_xxveyx" ;
+    if( sprocess == "108516" || sprocess == "108517" || sprocess == "108518" ) sprocess = "6f_xxxyev" ;
+    if( sprocess == "108519" || sprocess == "108520" ) sprocess = "6f_xxvlyx";
+    if( sprocess == "108521" || sprocess == "108522" ) sprocess = "6f_xxxylv";
+    if( sprocess == "108523" || sprocess == "108524" ) sprocess = "6f_vvvvxx";
+    if( sprocess == "108525" || sprocess == "108526" ) sprocess = "6f_vvvvyy";
+    if( sprocess == "108527" || sprocess == "108528" || sprocess == "108529" || sprocess == "108530" ) sprocess = "6f_xxxxee";
+    if( sprocess == "108531" || sprocess == "108532" ) sprocess = "6f_xxxxvv";
+    if( sprocess == "108533" || sprocess == "108534" ) sprocess = "6f_xxxxll";
+    if( sprocess == "108535" || sprocess == "108536" ) sprocess = "6f_xxxxxx";
+    if( sprocess == "108537" || sprocess == "108538" || sprocess == "108539" || sprocess == "108540" ) sprocess = "6f_eeeeee";
+    if( sprocess == "108541" || sprocess == "108542" || sprocess == "108543" || sprocess == "108544" ) sprocess = "6f_eeeell";
+    if( sprocess == "108545" || sprocess == "108546" || sprocess == "108547" || sprocess == "108548" ) sprocess = "6f_llllee";
+    if( sprocess == "108549" || sprocess == "108550" ) sprocess = "6f_llllll";
+    if( sprocess == "108551" || sprocess == "108552" || sprocess == "108553" || sprocess == "108554" ) sprocess = "6f_eeeexx";
+    if( sprocess == "108555" || sprocess == "108556" || sprocess == "108557" || sprocess == "108558" ) sprocess = "6f_eeeeyy";
+    if( sprocess == "108559" || sprocess == "108560" || sprocess == "108561" || sprocess == "108562" ) sprocess = "6f_eellxx";
+    if( sprocess == "108563" || sprocess == "108564" || sprocess == "108565" || sprocess == "108566" ) sprocess = "6f_eellyy";
+    if( sprocess == "108567" || sprocess == "108568" || sprocess == "108569" || sprocess == "108570" ) sprocess = "6f_yyyyee";
+    if( sprocess == "108571" || sprocess == "108572" ) sprocess = "6f_yyyyll";
+    if( sprocess == "108573" || sprocess == "108574" ) sprocess = "6f_yyyyyy";
+    if( sprocess == "108575" || sprocess == "108576" || sprocess == "108577" ) sprocess = "6f_llvelv";
+    if( sprocess == "108578" || sprocess == "108579" || sprocess == "108580" ) sprocess = "6f_llvlev";
+    if( sprocess == "108581" || sprocess == "108582" ) sprocess = "6f_llvllv";
+    if( sprocess == "108583" || sprocess == "108584" || sprocess == "108585" ) sprocess = "6f_llveyx";
+    if( sprocess == "108586" || sprocess == "108587" || sprocess == "108588" ) sprocess = "6f_llxyev";
+    if( sprocess == "108589" || sprocess == "108590" ) sprocess = "6f_llvlyx";
+    if( sprocess == "108591" || sprocess == "108592" ) sprocess = "6f_llxylv";
+    if( sprocess == "108593" || sprocess == "108594" ) sprocess = "6f_llxyyx";
+    if( sprocess == "108595" || sprocess == "108596" || sprocess == "108597" || sprocess == "108598" ) sprocess = "6f_vvveev";
+    if( sprocess == "108599" || sprocess == "108600" || sprocess == "108601" ) sprocess = "6f_vvvelv";
+    if( sprocess == "108602" || sprocess == "108603" || sprocess == "108604" ) sprocess = "6f_vvvlev";
+    if( sprocess == "108605" || sprocess == "108606" ) sprocess = "6f_vvvllv";
+    if( sprocess == "108607" || sprocess == "108608" || sprocess == "108609" ) sprocess = "6f_vvveyx";
+    if( sprocess == "108610" || sprocess == "108611" || sprocess == "108612" ) sprocess = "6f_vvxyev";
+    if( sprocess == "108613" || sprocess == "108614" ) sprocess = "6f_vvvlyx";
+    if( sprocess == "108615" || sprocess == "108616" ) sprocess = "6f_vvxylv";
+    if( sprocess == "108617" || sprocess == "108618" ) sprocess = "6f_vvxyyx";
+    if( sprocess == "108619" || sprocess == "108620" || sprocess == "108621" || sprocess == "108622" ) sprocess = "6f_eeveev";
+    if( sprocess == "108623" || sprocess == "108624" || sprocess == "108625" || sprocess == "108626" ) sprocess = "6f_eevelv";
+    if( sprocess == "108627" || sprocess == "108628" || sprocess == "108629" || sprocess == "108630" ) sprocess = "6f_eevlev";
+    if( sprocess == "108631" || sprocess == "108632" || sprocess == "108633" || sprocess == "108634" ) sprocess = "6f_eevllv";
+    if( sprocess == "108635" || sprocess == "108636" || sprocess == "108637" || sprocess == "108638" ) sprocess = "6f_eeveyx";
+    if( sprocess == "108639" || sprocess == "108640" || sprocess == "108641" || sprocess == "108642" ) sprocess = "6f_eexyev";
+    if( sprocess == "108643" || sprocess == "108644" || sprocess == "108645" || sprocess == "108646" ) sprocess = "6f_eevlyx";
+    if( sprocess == "108647" || sprocess == "108648" || sprocess == "108649" || sprocess == "108650" ) sprocess = "6f_eexylv";
+    if( sprocess == "108651" || sprocess == "108652" || sprocess == "108653" || sprocess == "108654" ) sprocess = "6f_eexyyx";
+    if( sprocess == "108655" || sprocess == "108656" || sprocess == "108657" || sprocess == "108658" ) sprocess = "6f_yyveev";
+    if( sprocess == "108659" || sprocess == "108660" || sprocess == "108661" ) sprocess = "6f_yyvelv";
+    if( sprocess == "108662" || sprocess == "108663" || sprocess == "108664" ) sprocess = "6f_yyvlev";
+    if( sprocess == "108665" || sprocess == "108666" ) sprocess = "6f_yyvllv";
+    if( sprocess == "108667" || sprocess == "108668" || sprocess == "108669" ) sprocess = "6f_yyveyx";
+    if( sprocess == "108670" || sprocess == "108671" || sprocess == "108672" ) sprocess = "6f_yyxyev";
+    if( sprocess == "108673" || sprocess == "108674" ) sprocess = "6f_yyvlyx";
+    if( sprocess == "108675" || sprocess == "108676" ) sprocess = "6f_yyxylv";
+    if( sprocess == "108677" || sprocess == "108678" ) sprocess = "6f_yyuyyu";
+    if( sprocess == "108679" || sprocess == "108680" ) sprocess = "6f_yyuyyc";
+    if( sprocess == "108681" || sprocess == "108682" ) sprocess = "6f_yycyyu";
+    if( sprocess == "108683" || sprocess == "108684" ) sprocess = "6f_yycyyc";
+    if( sprocess == "108685" || sprocess == "108686" ) sprocess = "6f_yyyyvv";
+    if( sprocess == "108687" || sprocess == "108688" ) sprocess = "6f_xxxyyx";
     //temporary solution for newly added higgs_ffh samples, they have "parameter Process [string]: higgs"! SHIT!
     if( sprocess == "higgs" ){
       if( ( fabs( xsection - 5.67904 ) < 0.0001 ) ||
