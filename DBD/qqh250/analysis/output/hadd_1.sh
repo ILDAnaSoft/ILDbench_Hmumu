@@ -38,22 +38,10 @@ hadd 4f_all.root 4f_singleW_leptonic.root 4f_singleW_semileptonic.root 4f_single
 echo "delete intermediate files"
 rm 4f_singleW_leptonic.root 4f_singleW_semileptonic.root 4f_singleZee_leptonic.root 4f_singleZee_semileptonic.root 4f_singleZnunu_leptonic.root 4f_singleZnunu_semileptonic.root 4f_singleZsingleWMix_leptonic.root 4f_WW_leptonic.root 4f_WW_semileptonic.root 4f_WW_hadronic.root 4f_ZZ_leptonic.root 4f_ZZ_semileptonic.root 4f_ZZ_hadronic.root 4f_ZZWWMix_leptonic.root 4f_ZZWWMix_hadronic.root
 
-echo "combining files except aa_2f and 1f_3f"
+echo "combining files above"
 hadd alldata1.root hmumu.root higgs_ffh.root 2f_all.root 4f_all.root
 
 echo "delete intermediate files"
 rm hmumu.root higgs_ffh.root 2f_all.root 4f_all.root
-
-echo "combining 1f_3f background"
-hadd 1f_3f.root 1f_3f/1f_3f-???.root
-
-echo "combine aa_2f background"
-hadd aa_2f.root aa_2f/aa_2f-???.root
-
-echo "combine 2 processes"
-hadd alldata2.root 1f_3f.root aa_2f.root
-
-echo "delete intermediate files"
-rm 1f_3f.root aa_2f.root
 
 echo "finished!"
