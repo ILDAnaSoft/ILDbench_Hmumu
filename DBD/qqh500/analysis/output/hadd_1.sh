@@ -5,18 +5,6 @@ echo "START hadd..."
 echo "combining signal process"
 hadd hmumu.root hmumu/hmumu-???.root
 
-echo "combining ffh background"
-hadd higgs_ffh.root higgs_ffh/higgs_ffh-???.root
-
-echo "combining 2f backgrounds"
-hadd 2f_Z_bhabhag.root 2f_Z_bhabhag/2f_Z_bhabhag-???.root
-hadd 2f_Z_hadronic.root 2f_Z_hadronic/2f_Z_hadronic-???.root
-hadd 2f_Z_leptonic.root 2f_Z_leptonic/2f_Z_leptonic-???.root
-echo "combine into single 2f file"
-hadd 2f_all.root 2f_Z_bhabhag.root 2f_Z_hadronic.root 2f_Z_leptonic.root
-echo "deleting intermediate files"
-rm 2f_Z_bhabhag.root 2f_Z_hadronic.root 2f_Z_leptonic.root
-
 echo "combining 4f backgrounds"
 hadd 4f_singleW_leptonic.root 4f_singleW_leptonic/4f_singleW_leptonic-???.root
 hadd 4f_singleW_semileptonic.root 4f_singleW_semileptonic/4f_singleW_semileptonic-???.root
@@ -40,13 +28,13 @@ rm 4f_singleW_leptonic.root 4f_singleW_semileptonic.root 4f_singleZee_leptonic.r
 echo "combining 5f background"
 hadd 5f.root 5f/5f-???.root
 
-echo "combine aa_4f background"
-hadd aa_4f.root aa_4f/aa_4f-???.root
+echo "combining part of 6f_ttbar"
+hadd 6f_ttbar1.root 6f_ttbar/6f_ttbar-9??.root
 
 echo "combine everything"
-hadd alldata.root hmumu.root higgs_ffh.root 2f_all.root 4f_all.root 5f.root aa_4f.root
+hadd alldata1.root hmumu.root 4f_all.root 5f.root 6f_ttbar1.root
 
 echo "delete intermediate files"
-rm hmumu.root higgs_ffh.root 2f_all.root 4f_all.root 5f.root aa_4f.root
+rm hmumu.root higgs_ffh.root 2f_all.root 4f_all.root 5f.root 6f_ttbar1.root
 
 echo "finished!"
