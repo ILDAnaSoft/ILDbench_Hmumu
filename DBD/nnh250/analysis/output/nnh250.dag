@@ -1,0 +1,10 @@
+JOB A delete.submit
+JOB B1 hadd_1.submit
+JOB B2 hadd_2.submit
+JOB C1 select_1.submit
+JOB C2 select_2.submit
+JOB D final.submit
+PARENT A CHILD B1 B2
+PARENT B1 CHILD C1
+PARENT B2 CHILD C2
+PARENT C1 C2 CHILD D

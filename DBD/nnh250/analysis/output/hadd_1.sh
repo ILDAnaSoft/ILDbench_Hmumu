@@ -1,6 +1,7 @@
 #!/bin/bash
 
-echo "START hadd..."
+source /afs/desy.de/user/s/skawada/sonas_work/stage_nnh250/analysis/init_ilcsoft.sh
+cd /afs/desy.de/user/s/skawada/sonas_work/stage_nnh250/analysis/output
 
 echo "combining signal process"
 hadd hmumu.root hmumu/hmumu-???.root

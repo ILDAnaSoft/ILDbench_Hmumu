@@ -1,0 +1,13 @@
+executable = delete.sh
+universe = vanilla
+notify_user = shin-ichi.kawada@desy.de
+JobNotification = Error
+log = delete_jobstatus.log
+output = delete_output.log
+error = delete_error.log
++RequestRuntime = 3600
+RequestMemory = 2G
+RequestDisk = 1G
+Requirements = OpSysAndVer == "SL6"
++MyProject = "af-ilc"
+queue
