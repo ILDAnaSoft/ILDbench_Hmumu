@@ -1,0 +1,13 @@
+executable = final.sh
+universe = vanilla
+notify_user = shin-ichi.kawada@desy.de
+JobNotification = Always
+log = final_jobstatus.log
+output = final_output.log
+error = final_error.log
++RequestRuntime = 3600*3
+RequestMemory = 2G
+RequestDisk = 50G
+Requirements = OpSysAndVer == "SL6"
++MyProject = "af-ilc"
+queue

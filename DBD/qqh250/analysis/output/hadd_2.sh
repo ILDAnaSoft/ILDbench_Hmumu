@@ -1,6 +1,7 @@
 #!/bin/bash
 
-echo "START hadd..."
+source /afs/desy.de/user/s/skawada/sonas_work/stage_qqh250/analysis/init_ilcsoft.sh
+cd /afs/desy.de/user/s/skawada/sonas_work/stage_qqh250/analysis/output
 
 echo "combining 1f_3f background"
 hadd 1f_3f.root 1f_3f/1f_3f-???.root
