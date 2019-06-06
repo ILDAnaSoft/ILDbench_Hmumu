@@ -1,12 +1,12 @@
 # Current Status
-Now new feature of IsolatedLeptonTagging: not using impact parameters are implemented.
-Now I'm working on for such version.
+Now new feature of IsolatedLeptonTagging: not using impact parameters and energy deposit in yoke are implemented.
+Now I'm working on with such version.
 In order to use current package, you have to download the entire MarlinReco package and compile/install them.
 (I downloaded the version as of 2019/Jan./15)
 
 # Caution
 These codes will only work with ilcsoft v02-00-02.
-For other versions maybe does not work, or tons of warning message will appear.
+For other versions maybe do not work, or tons of warning message will appear.
 
 The `VertexInfo` functionality has some memory-related problem which I don't know how to solve it.
 At the end of the job, `Marlin` will give us the crush information, while expected numbers are correctly filled in NTuple.
@@ -14,7 +14,7 @@ For analyzers point of view it is not a problem, but this problem should be fixe
 
 
 # How To Use
-0. Assume you are in the plain terminal. Initialize your ilcsoft by doing `source /YOUR_ILCSOFT_PATH/init_ilcsoft.sh`.
+0. Assume you are in a plain terminal. Initialize your ilcsoft by doing `source /YOUR_ILCSOFT_PATH/init_ilcsoft.sh`.
 1. Do following things.  
 ```
 mkdir build
@@ -55,5 +55,5 @@ hmumu.xml
 0. `InitDD4hep`: necessary for `VertexInfo` functionality
 1. `Add4MomCovMatrixCharged`: calculate convariance matrix in momenta space from track parameter space
 2. `ThrustReconstruction`,`Sphere`: calculate event-shape variables
-3. `IsolatedLeptonTagging`: to select h->mu+mu- candidate from `PandoraPFOs`
+3. `IsolatedLeptonTagging`: select h->mu+mu- candidate from `PandoraPFOs`
 4. `HiggsToMuMuProcessor`: extract/calculate necessary variables, and store in NTuple
