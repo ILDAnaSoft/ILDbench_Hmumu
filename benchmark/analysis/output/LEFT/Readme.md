@@ -15,14 +15,14 @@ MakeAllWithWeight("file1","file2",dataTree,nbin,nlow,nhigh,"variable","cut_condi
 Then you should see the histogram of variable with cut_condition applied (if cut_condition == 1, then no cuts are applied).
 Now you can investigate your favorite cuts.
 
-3. create your precuts root file
-When you finish your cut-based analysis for preselection, it is recommended to create your own preselected file with using `SkimCut.C`.
+3. create your precuts-applied root file
 ```
 root -l -b
 .L SkimCut.C+
 SkimCut("alldata_cut1.root","alldata_precuts.root","dataTree","YOUR_PRESELECTION_CUTS")
 .q
 ```
+When you finish your cut-based analysis for preselection, it is recommended to create your own preselected file with using `SkimCut.C`.
 The final product alldata_precuts.root is used for further analysis.
 
 # Explanation
@@ -39,5 +39,5 @@ Mainly this part is used to define preselection before TMVA analysis.
 - `stackwithcut.C`: create histogram of variable, using different color for different processes, hard-coded many things to specify process
 - `simple.C`: similar to `stackwithcut.C` but all backgrounds are treated inclusively
 3. tools
-- `norm.C`: create histogram of variable, using different color for different processes, hard-coded many things to specify process, all histograms are normalized 1
+- `norm.C`: create histogram of variable, using different color for different processes, hard-coded many things to specify process, all histograms are normalized to 1
 - `norm_sig.C`: similar to `norm.C`, but only show normalized signal histogram, useful for comparison between IDR-L and IDR-S
