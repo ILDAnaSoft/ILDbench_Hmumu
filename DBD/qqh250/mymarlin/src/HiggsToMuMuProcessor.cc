@@ -59,19 +59,7 @@ HiggsToMuMuProcessor::HiggsToMuMuProcessor() : Processor( "HiggsToMuMuProcessor"
 			   std::string("PFOsWithoutIsoleps") );
 
   registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE,
-			   "InputForVetoCollection",
-			   "Name of isolated leptons after removing isolated muons from Higgs for the veto",
-			   _colForVeto,
-			   std::string("ForVeto") );
-
-  registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE,
-			   "InputJetCollection",
-			   "Name of jet collection",
-			   _colJets,
-			   std::string("Jets") );
-
-  registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE,
-			   "InputISRCollection",
+			   "InputISRCOllection",
 			   "Name of ISR",
 			   _colISR,
 			   std::string("ISR") );
@@ -130,7 +118,6 @@ void HiggsToMuMuProcessor::processRunHeader( LCRunHeader* run ) {
 void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) { 
   _nEvt++;
   if( _nEvt % 1000 == 0 ) std::cout << "processing event "<< _nEvt << std::endl;
-  //std::cout << _nEvt << std::endl;
 
   // this gets called for every event 
   // usually the working horse ...
@@ -154,20 +141,6 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
   catch(...){
     cout << "no pfos after isolated lepton tagging in this event" << endl;
   }
-  LCCollection* ForVeto = 0;
-  try{
-    ForVeto = evt->getCollection( _colForVeto );
-  }
-  catch(...){
-    cout << "no isolated leptons for veto in this event" << endl;
-  }
-  LCCollection* Jets = 0;
-  try{
-    Jets = evt->getCollection( _colJets );
-  }
-  catch(...){
-    cout << "no jets in this event" << endl;
-  }
   LCCollection* ISR = 0;
   try{
     ISR = evt->getCollection( _colISR );
@@ -175,7 +148,6 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
   catch(...){
     cout << "no ISR in this event" << endl;
   }
-
   LCCollection* AllMC = evt->getCollection( _colMC ) ;
   _navpfo = new LCRelationNavigator( evt->getCollection( _mcpfoRelation ) );
 
@@ -299,6 +271,7 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
 	  if( abs( decay ) == 2 ) _data.h_nboson_m++;
 	}
 
+
       }
 
     }
@@ -415,8 +388,8 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
     }
     _data.nq = nq; _data.ne = ne; _data.nm = nm; _data.nt = nt; _data.nn = nn; _data.no = no;
     _data.massff = ( forff1_4mom + forff2_4mom ).M();
-    _data.mass1  = ( for4f1_4mom + for4f2_4mom ).M();
-    _data.mass2  = ( for4f3_4mom + for4f4_4mom ).M();
+    _data.mass1 = ( for4f1_4mom + for4f2_4mom ).M();
+    _data.mass2 = ( for4f3_4mom + for4f4_4mom ).M();
 
     //check MC muons and its pair mass
     if( MC->getPDG() == 13 && count_muminus == 0 ){
@@ -587,233 +560,195 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
   float pT_muplus  = TMath::Sqrt( muplus_mom4_mc[0]*muplus_mom4_mc[0]
 				 +muplus_mom4_mc[1]*muplus_mom4_mc[1] );
 
-  float transmomres = 1E-3;
-  float momres_muminus = transmomres * pT_muminus * pT_muminus;
-  float random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
-  TLorentzVector smear_muminus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muminus,
-                                                 TMath::Sin( TMath::Pi() / 4. ) * random_momres_muminus,
-                                                 0,
-                                                 0 );
-  float momres_muplus = transmomres * pT_muplus * pT_muplus;
-  float random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
-  TLorentzVector smear_muplus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muplus,
-                                                TMath::Sin( TMath::Pi() / 4. ) * random_momres_muplus,
-                                                0,
-                                                0 );
+  float resolution = 1E-3;
+  float mom_res = TMath::Sqrt( resolution );
+  TLorentzVector smear_muminus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muminus),
+						 gRandom->Gaus(0,mom_res*pT_muminus),
+						 0,
+						 0 );
+  TLorentzVector smear_muplus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muplus),
+						gRandom->Gaus(0,mom_res*pT_muplus),
+						0,
+						0 );
   TLorentzVector muminus_mom4_mc_smear = muminus_mom4_mc + smear_muminus;
   TLorentzVector muplus_mom4_mc_smear  = muplus_mom4_mc + smear_muplus;
   _data.mumu_mass_mc_smear_1_3 = ( muminus_mom4_mc_smear + muplus_mom4_mc_smear ).M();
 
-  transmomres = 5E-4;
-  momres_muminus = transmomres * pT_muminus * pT_muminus;
-  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
-  smear_muminus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  TMath::Sin( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  0,
-                                  0 );
-  momres_muplus = transmomres * pT_muplus * pT_muplus;
-  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
-  smear_muplus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 TMath::Sin( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 0,
-                                 0 );
+  resolution = 5E-4;
+  mom_res = TMath::Sqrt( resolution );
+  smear_muminus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muminus),
+				  gRandom->Gaus(0,mom_res*pT_muminus),
+				  0,
+				  0 );
+  smear_muplus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muplus),
+				 gRandom->Gaus(0,mom_res*pT_muplus),
+				 0,
+				 0 );
   muminus_mom4_mc_smear = muminus_mom4_mc + smear_muminus;
   muplus_mom4_mc_smear  = muplus_mom4_mc + smear_muplus;
   _data.mumu_mass_mc_smear_5_4 = ( muminus_mom4_mc_smear + muplus_mom4_mc_smear ).M();
 
-  transmomres = 3E-4;
-  momres_muminus = transmomres * pT_muminus * pT_muminus;
-  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
-  smear_muminus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  TMath::Sin( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  0,
-                                  0 );
-  momres_muplus = transmomres * pT_muplus * pT_muplus;
-  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
-  smear_muplus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 TMath::Sin( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 0,
-                                 0 );
+  resolution = 3E-4;
+  mom_res = TMath::Sqrt( resolution );
+  smear_muminus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muminus),
+				  gRandom->Gaus(0,mom_res*pT_muminus),
+				  0,
+				  0 );
+  smear_muplus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muplus),
+				 gRandom->Gaus(0,mom_res*pT_muplus),
+				 0,
+				 0 );
   muminus_mom4_mc_smear = muminus_mom4_mc + smear_muminus;
   muplus_mom4_mc_smear  = muplus_mom4_mc + smear_muplus;
   _data.mumu_mass_mc_smear_3_4 = ( muminus_mom4_mc_smear + muplus_mom4_mc_smear ).M();
 
-  transmomres = 2E-4;
-  momres_muminus = transmomres * pT_muminus * pT_muminus;
-  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
-  smear_muminus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  TMath::Sin( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  0,
-                                  0 );
-  momres_muplus = transmomres * pT_muplus * pT_muplus;
-  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
-  smear_muplus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 TMath::Sin( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 0,
-                                 0 );
+  resolution = 2E-4;
+  mom_res = TMath::Sqrt( resolution );
+  smear_muminus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muminus),
+				  gRandom->Gaus(0,mom_res*pT_muminus),
+				  0,
+				  0 );
+  smear_muplus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muplus),
+				 gRandom->Gaus(0,mom_res*pT_muplus),
+				 0,
+				 0 );
   muminus_mom4_mc_smear = muminus_mom4_mc + smear_muminus;
   muplus_mom4_mc_smear  = muplus_mom4_mc + smear_muplus;
   _data.mumu_mass_mc_smear_2_4 = ( muminus_mom4_mc_smear + muplus_mom4_mc_smear ).M();
 
-  transmomres = 1E-4;
-  momres_muminus = transmomres * pT_muminus * pT_muminus;
-  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
-  smear_muminus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  TMath::Sin( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  0,
-                                  0 );
-  momres_muplus = transmomres * pT_muplus * pT_muplus;
-  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
-  smear_muplus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 TMath::Sin( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 0,
-                                 0 );
+  resolution = 1E-4;
+  mom_res = TMath::Sqrt( resolution );
+  smear_muminus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muminus),
+				  gRandom->Gaus(0,mom_res*pT_muminus),
+				  0,
+				  0 );
+  smear_muplus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muplus),
+				 gRandom->Gaus(0,mom_res*pT_muplus),
+				 0,
+				 0 );
   muminus_mom4_mc_smear = muminus_mom4_mc + smear_muminus;
   muplus_mom4_mc_smear  = muplus_mom4_mc + smear_muplus;
   _data.mumu_mass_mc_smear_1_4 = ( muminus_mom4_mc_smear + muplus_mom4_mc_smear ).M();
 
-  transmomres = 5E-5;
-  momres_muminus = transmomres * pT_muminus * pT_muminus;
-  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
-  smear_muminus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  TMath::Sin( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  0,
-                                  0 );
-  momres_muplus = transmomres * pT_muplus * pT_muplus;
-  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
-  smear_muplus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 TMath::Sin( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 0,
-                                 0 );
+  resolution = 5E-5;
+  mom_res = TMath::Sqrt( resolution );
+  smear_muminus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muminus),
+				  gRandom->Gaus(0,mom_res*pT_muminus),
+				  0,
+				  0 );
+  smear_muplus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muplus),
+				 gRandom->Gaus(0,mom_res*pT_muplus),
+				 0,
+				 0 );
   muminus_mom4_mc_smear = muminus_mom4_mc + smear_muminus;
   muplus_mom4_mc_smear  = muplus_mom4_mc + smear_muplus;
   _data.mumu_mass_mc_smear_5_5 = ( muminus_mom4_mc_smear + muplus_mom4_mc_smear ).M();
 
-  transmomres = 3E-5;
-  momres_muminus = transmomres * pT_muminus * pT_muminus;
-  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
-  smear_muminus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  TMath::Sin( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  0,
-                                  0 );
-  momres_muplus = transmomres * pT_muplus * pT_muplus;
-  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
-  smear_muplus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 TMath::Sin( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 0,
-                                 0 );
+  resolution = 3E-5;
+  mom_res = TMath::Sqrt( resolution );
+  smear_muminus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muminus),
+				  gRandom->Gaus(0,mom_res*pT_muminus),
+				  0,
+				  0 );
+  smear_muplus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muplus),
+				 gRandom->Gaus(0,mom_res*pT_muplus),
+				 0,
+				 0 );
   muminus_mom4_mc_smear = muminus_mom4_mc + smear_muminus;
   muplus_mom4_mc_smear  = muplus_mom4_mc + smear_muplus;
   _data.mumu_mass_mc_smear_3_5 = ( muminus_mom4_mc_smear + muplus_mom4_mc_smear ).M();
 
-  transmomres = 2E-5;
-  momres_muminus = transmomres * pT_muminus * pT_muminus;
-  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
-  smear_muminus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  TMath::Sin( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  0,
-                                  0 );
-  momres_muplus = transmomres * pT_muplus * pT_muplus;
-  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
-  smear_muplus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 TMath::Sin( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 0,
-                                 0 );
+  resolution = 2E-5;
+  mom_res = TMath::Sqrt( resolution );
+  smear_muminus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muminus),
+				  gRandom->Gaus(0,mom_res*pT_muminus),
+				  0,
+				  0 );
+  smear_muplus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muplus),
+				 gRandom->Gaus(0,mom_res*pT_muplus),
+				 0,
+				 0 );
   muminus_mom4_mc_smear = muminus_mom4_mc + smear_muminus;
   muplus_mom4_mc_smear  = muplus_mom4_mc + smear_muplus;
   _data.mumu_mass_mc_smear_2_5 = ( muminus_mom4_mc_smear + muplus_mom4_mc_smear ).M();
 
-  transmomres = 1E-5;
-  momres_muminus = transmomres * pT_muminus * pT_muminus;
-  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
-  smear_muminus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  TMath::Sin( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  0,
-                                  0 );
-  momres_muplus = transmomres * pT_muplus * pT_muplus;
-  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
-  smear_muplus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 TMath::Sin( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 0,
-                                 0 );
+  resolution = 1E-5;
+  mom_res = TMath::Sqrt( resolution );
+  smear_muminus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muminus),
+				  gRandom->Gaus(0,mom_res*pT_muminus),
+				  0,
+				  0 );
+  smear_muplus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muplus),
+				 gRandom->Gaus(0,mom_res*pT_muplus),
+				 0,
+				 0 );
   muminus_mom4_mc_smear = muminus_mom4_mc + smear_muminus;
   muplus_mom4_mc_smear  = muplus_mom4_mc + smear_muplus;
   _data.mumu_mass_mc_smear_1_5 = ( muminus_mom4_mc_smear + muplus_mom4_mc_smear ).M();
 
-  transmomres = 5E-6;
-  momres_muminus = transmomres * pT_muminus * pT_muminus;
-  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
-  smear_muminus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  TMath::Sin( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  0,
-                                  0 );
-  momres_muplus = transmomres * pT_muplus * pT_muplus;
-  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
-  smear_muplus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 TMath::Sin( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 0,
-                                 0 );
+  resolution = 5E-6;
+  mom_res = TMath::Sqrt( resolution );
+  smear_muminus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muminus),
+				  gRandom->Gaus(0,mom_res*pT_muminus),
+				  0,
+				  0 );
+  smear_muplus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muplus),
+				 gRandom->Gaus(0,mom_res*pT_muplus),
+				 0,
+				 0 );
   muminus_mom4_mc_smear = muminus_mom4_mc + smear_muminus;
   muplus_mom4_mc_smear  = muplus_mom4_mc + smear_muplus;
   _data.mumu_mass_mc_smear_5_6 = ( muminus_mom4_mc_smear + muplus_mom4_mc_smear ).M();
 
-  transmomres = 3E-6;
-  momres_muminus = transmomres * pT_muminus * pT_muminus;
-  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
-  smear_muminus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  TMath::Sin( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  0,
-                                  0 );
-  momres_muplus = transmomres * pT_muplus * pT_muplus;
-  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
-  smear_muplus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 TMath::Sin( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 0,
-                                 0 );
+  resolution = 3E-6;
+  mom_res = TMath::Sqrt( resolution );
+  smear_muminus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muminus),
+				  gRandom->Gaus(0,mom_res*pT_muminus),
+				  0,
+				  0 );
+  smear_muplus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muplus),
+				 gRandom->Gaus(0,mom_res*pT_muplus),
+				 0,
+				 0 );
   muminus_mom4_mc_smear = muminus_mom4_mc + smear_muminus;
   muplus_mom4_mc_smear  = muplus_mom4_mc + smear_muplus;
   _data.mumu_mass_mc_smear_3_6 = ( muminus_mom4_mc_smear + muplus_mom4_mc_smear ).M();
 
-  transmomres = 2E-6;
-  momres_muminus = transmomres * pT_muminus * pT_muminus;
-  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
-  smear_muminus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  TMath::Sin( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  0,
-                                  0 );
-  momres_muplus = transmomres * pT_muplus * pT_muplus;
-  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
-  smear_muplus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 TMath::Sin( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 0,
-                                 0 );
+  resolution = 2E-6;
+  mom_res = TMath::Sqrt( resolution );
+  smear_muminus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muminus),
+				  gRandom->Gaus(0,mom_res*pT_muminus),
+				  0,
+				  0 );
+  smear_muplus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muplus),
+				 gRandom->Gaus(0,mom_res*pT_muplus),
+				 0,
+				 0 );
   muminus_mom4_mc_smear = muminus_mom4_mc + smear_muminus;
   muplus_mom4_mc_smear  = muplus_mom4_mc + smear_muplus;
   _data.mumu_mass_mc_smear_2_6 = ( muminus_mom4_mc_smear + muplus_mom4_mc_smear ).M();
 
-  transmomres = 1E-6;
-  momres_muminus = transmomres * pT_muminus * pT_muminus;
-  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
-  smear_muminus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  TMath::Sin( TMath::Pi() / 4. ) * random_momres_muminus,
-                                  0,
-                                  0 );
-  momres_muplus = transmomres * pT_muplus * pT_muplus;
-  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
-  smear_muplus = TLorentzVector( TMath::Cos( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 TMath::Sin( TMath::Pi() / 4. ) * random_momres_muplus,
-                                 0,
-                                 0 );
+  resolution = 1E-6;
+  mom_res = TMath::Sqrt( resolution );
+  smear_muminus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muminus),
+				  gRandom->Gaus(0,mom_res*pT_muminus),
+				  0,
+				  0 );
+  smear_muplus = TLorentzVector( gRandom->Gaus(0,mom_res*pT_muplus),
+				 gRandom->Gaus(0,mom_res*pT_muplus),
+				 0,
+				 0 );
   muminus_mom4_mc_smear = muminus_mom4_mc + smear_muminus;
   muplus_mom4_mc_smear  = muplus_mom4_mc + smear_muplus;
   _data.mumu_mass_mc_smear_1_6 = ( muminus_mom4_mc_smear + muplus_mom4_mc_smear ).M();
+
 
   //*************
   //PFO loop part
   //*************
   const float CM = 250.;
   const float initial_Px = CM * TMath::Sin(0.007);
-  const TLorentzVector CM_4mom(initial_Px,0,0,CM);
+  TLorentzVector CM_4mom(initial_Px,0,0,CM);
   int npfos = AllPFOs->getNumberOfElements();
   TVector3 calcPt(0,0,0);
   float maxPt = 0, Pt = 0;
@@ -1031,11 +966,11 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
           muplus_covMat8 = isolep->getCovMatrix()[8];
           muplus_covMat9 = isolep->getCovMatrix()[9];
 
-	  //transeverse momentum resolution sigma(1/pT) + sigma(pT)/pT^2
-	  float resterm1 = muplus_3mom[0]*muplus_3mom[0]*muplus_covMat0;
-	  float resterm2 = muplus_3mom[1]*muplus_3mom[1]*muplus_covMat2;
-	  float resterm3 = 2.*muplus_3mom[0]*muplus_3mom[1]*muplus_covMat1;
-	  muplus_transmomres = TMath::Sqrt( resterm1 + resterm2 + resterm3 ) / TMath::Power( muplus_Pt, 3 );
+          //transeverse momentum resolution sigma(1/pT) + sigma(pT)/pT^2
+          float resterm1 = muplus_3mom[0]*muplus_3mom[0]*muplus_covMat0;
+          float resterm2 = muplus_3mom[1]*muplus_3mom[1]*muplus_covMat2;
+          float resterm3 = 2.*muplus_3mom[0]*muplus_3mom[1]*muplus_covMat1;
+          muplus_transmomres = TMath::Sqrt( resterm1 + resterm2 + resterm3 ) / TMath::Power( muplus_Pt, 3 );
 
 	  if( trkvec.size() > 0 ){//track parameters of mu+
 	    const Track* trk = trkvec[0];
@@ -1214,10 +1149,11 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
   _data.mumu_costh_tobeam = TVector3(0,0,1).Dot( mupair_3mom.Unit() );
   _data.mumu_acop = TMath::Cos( muminus_3mom.Phi() - muplus_3mom.Phi() - TMath::Pi() );
 
-  //calculate recoil mass against h->mumu, consider initial state, ISR effect, and h->mumu
+  //calcualte recoil mass against h->mumu, consider intial state, ISR effect, and h->mumu
   TLorentzVector ISR_4mom(0,0,0,0);
   if( ISR != 0 ){
     int n_ISR = ISR->getNumberOfElements();
+    _data.n_ISR = n_ISR;
     for( int i = 0; i < n_ISR; i++ ){
       ReconstructedParticle* pfo_ISR = dynamic_cast< ReconstructedParticle* >( ISR->getElementAt(i) );
       ISR_4mom += TLorentzVector( pfo_ISR->getMomentum(), pfo_ISR->getEnergy() );
@@ -1273,11 +1209,11 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
   TVector3 cross  = L_3mom.Cross( l_3mom );
   float    cross2 = cross.Mag2();
 
-  float P = beam*L_E - L_E*L_E + 0.5*mLEP*mLEP;
-  float Q = -beam*l_E - lL + 0.5*mlep*mlep;
-  float in = sum2*(beam-L_E)*(beam-L_E) - (P+Q)*(P+Q);
-  float M2 = 2 * ( P*l2 - Q*L2 + (P-Q)*lL + TMath::Sqrt(cross2*in) ) / ( sum2 );
-  _data.pseudomass = TMath::Sqrt(M2);
+    float P = beam*L_E - L_E*L_E + 0.5*mLEP*mLEP;
+    float Q = -beam*l_E - lL + 0.5*mlep*mlep;
+    float in = sum2*(beam-L_E)*(beam-L_E) - (P+Q)*(P+Q);
+    float M2 = 2 * ( P*l2 - Q*L2 + (P-Q)*lL + TMath::Sqrt(cross2*in) ) / ( sum2 );
+    _data.pseudomass = TMath::Sqrt(M2);
 
 
   //*************************************
@@ -1308,116 +1244,6 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
   _data.mass_woisoleps = mom4_woisoleps.M();
 
 
-  //********
-  //for veto
-  //********
-  if( ForVeto != 0 ){
-    _data.n_forveto = ForVeto->getNumberOfElements();
-  }
-
-
-  //************
-  //loop for jet
-  //************
-  TLorentzVector jet_4mom(0,0,0,0);
-  TVector3 jet1_3mom(0,0,0), jet2_3mom(0,0,0);
-  float jet1_E = 0, jet2_E = 0, jet1_M = 0, jet2_M = 0;
-  int jet1_n = 0, jet1_p = 0, jet2_n = 0, jet2_p = 0;
-  float jet1_costh = 0, jet2_costh = 0;
-  if( Jets != 0 ){
-    int nJets = Jets->getNumberOfElements();
-    _data.nJets = nJets;
-    for( int i = 0; i < nJets; i++ ){
-      ReconstructedParticle* jet = dynamic_cast< ReconstructedParticle* >( Jets->getElementAt(i) );
-      jet_4mom += TLorentzVector( jet->getMomentum(), jet->getEnergy() );
-      if( i == 0 ){//jet #1
-        jet1_M = TLorentzVector( jet->getMomentum(), jet->getEnergy() ).M();
-	jet1_3mom = TVector3( jet->getMomentum() );
-	jet1_E = jet->getEnergy();
-	jet1_costh = jet1_3mom.Unit().Dot( TVector3(0,0,1) );
-	const ReconstructedParticleVec& pfovec = jet->getParticles();
-	for( unsigned int j = 0; j < pfovec.size(); j++ ){
-	  ReconstructedParticle* jetparticle = pfovec[j];
-	  int charge = jetparticle->getCharge();
-	  if( charge == 0 ) jet1_n++;
-	  else jet1_p++;
-	}
-      }
-      if( i == 1 ){//jet #2
-        jet2_M = TLorentzVector( jet->getMomentum(), jet->getEnergy() ).M();
-	jet2_3mom = TVector3( jet->getMomentum() );
-	jet2_E = jet->getEnergy();
-	jet2_costh = jet2_3mom.Unit().Dot( TVector3(0,0,1) );
-	const ReconstructedParticleVec& pfovec = jet->getParticles();
-	for( unsigned int j = 0; j < pfovec.size(); j++ ){
-	  ReconstructedParticle* jetparticle = pfovec[j];
-	  int charge = jetparticle->getCharge();
-	  if( charge == 0 ) jet2_n++;
-	  else jet2_p++;
-	}
-      }
-    }
-
-    _data.mass_jj   = ( jet_4mom ).M();
-    _data.E_jj      = ( jet_4mom ).E();
-    _data.costh_jj  = ( jet1_3mom.Unit() ).Dot( jet2_3mom.Unit() );
-    _data.costh_Z   = TVector3(0,0,1).Dot( ( jet_4mom ).Vect().Unit() );
-    _data.recoil_jj = ( CM_4mom - jet_4mom ).M();
-
-    //determine leading jet by its energy
-    if( jet1_E > jet2_E ){
-      _data.jet1_neutral = jet1_n;
-      _data.jet1_charged = jet1_p;
-      _data.jet2_neutral = jet2_n;
-      _data.jet2_charged = jet2_p;
-      _data.jet1_E = jet1_E;
-      _data.jet2_E = jet2_E;
-      _data.jet1_M = jet1_M;
-      _data.jet2_M = jet2_M;
-      _data.jet1_costh = jet1_costh;
-      _data.jet2_costh = jet2_costh;
-    }
-    else{
-      _data.jet1_neutral = jet2_n;
-      _data.jet1_charged = jet2_p;
-      _data.jet2_neutral = jet1_n;
-      _data.jet2_charged = jet1_p;
-      _data.jet1_E = jet2_E;
-      _data.jet2_E = jet1_E;
-      _data.jet1_M = jet1_M;
-      _data.jet2_M = jet2_M;
-      _data.jet1_costh = jet2_costh;
-      _data.jet2_costh = jet1_costh;
-    }
-  }
-
-
-  //************
-  //loop for ISR
-  //************
-  if( ISR != 0 ){
-    _data.n_ISR = ISR->getNumberOfElements();
-    for( int i = 0; i < ISR->getNumberOfElements(); i++ ){
-      ReconstructedParticle* pfo_ISR = dynamic_cast< ReconstructedParticle* >( ISR->getElementAt(i) );
-      TLorentzVector ISR_4mom = TLorentzVector( pfo_ISR->getMomentum(), pfo_ISR->getEnergy() );
-      float coneE = 0;
-
-      for( int j = 0; j < AllPFOs->getNumberOfElements(); j++ ){
-	ReconstructedParticle* pfo = dynamic_cast< ReconstructedParticle* >( AllPFOs->getElementAt(j) );
-	TLorentzVector pfo_4mom = TLorentzVector( pfo->getMomentum(), pfo->getEnergy() );
-
-	float costh = ISR_4mom.Vect().Unit().Dot( pfo_4mom.Vect().Unit() );
-	if( fabs( costh ) > 0.9 && pfo_ISR!=pfo ) coneE += pfo_4mom.E();
-
-      }
-      _data.coneE[i] = coneE;
-      _data.ratioE[i] = coneE / ISR_4mom.E();
-    }
-
-  }
-
-
-
   //****************
   //read process map
   //****************
@@ -1425,9 +1251,12 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
     std::string sprocess = evt->parameters().getStringVal( "Process" );
     float xsection = evt->parameters().getFloatVal( "CrossSection_fb" );
     _data.xsec = xsection;
+    //cout << "before: " << sprocess << endl;
 
     //temporary solution for "parameter Process [string]: higgs_ffh"
     if( sprocess == "higgs_ffh" ) sprocess = "ffh_mumu";
+
+    //cout << "after: " << sprocess << endl;
 
     if ( _mapProcess.find( sprocess ) == _mapProcess.end() ) {
       streamlog_out(ERROR) << "Error: process not found in the process map!" << std::endl; 
@@ -1446,7 +1275,6 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
       } 
     }
 
-    //if( sprocess == "ffh_mumu" && _data.processid == 0 ) _data.processid = 108164;
   }
 
   // Fill the event data 
@@ -1479,6 +1307,7 @@ void HiggsToMuMuProcessor::end(){
   _otfile->Close();
 
   std::cout << "END OF PROCESSING" << std::endl;
+
 }
 
 void HiggsToMuMuProcessor::makeNTuple() {
@@ -1574,8 +1403,8 @@ void HiggsToMuMuProcessor::makeNTuple() {
   _dataTree->Branch( "esum_mc"           , &d.esum_mc           , "esum_mc"            );
   _dataTree->Branch( "esum_charged_mc"   , &d.esum_charged_mc   , "esum_charged_mc"    );
   _dataTree->Branch( "esum_neutral_mc"   , &d.esum_neutral_mc   , "esum_neutral_mc"    );
-  _dataTree->Branch( "overlay_E_mc"      , &d.overlay_E_mc      , "overlay_E_mc"       );
   _dataTree->Branch( "overlay_mc"        , &d.overlay_mc        , "overlay_mc/I"       );
+  _dataTree->Branch( "overlay_E_mc"      , &d.overlay_E_mc      , "overlay_E_mc"       );
   _dataTree->Branch( "overlay_charged_mc", &d.overlay_charged_mc, "overlay_charged_mc" );
   _dataTree->Branch( "overlay_neutral_mc", &d.overlay_neutral_mc, "overlay_neutral_mc" );
   _dataTree->Branch( "costh_missmom_mc"  , &d.costh_missmom_mc  , "costh_missmom_mc"   );
@@ -1742,12 +1571,14 @@ void HiggsToMuMuProcessor::makeNTuple() {
   _dataTree->Branch( "muplus_bcal"    , &d.muplus_bcal    , "muplus_bcal"     );
   _dataTree->Branch( "muplus_ecalfrac", &d.muplus_ecalfrac, "muplus_ecalfrac" );
   _dataTree->Branch( "muplus_EbyP"    , &d.muplus_EbyP    , "muplus_EbyP"     );
-  //_dataTree->Branch( "muplus_VXD"     , &d.muplus_VXD     , "muplus_VXD/I"    );
-  //_dataTree->Branch( "muplus_FTD"     , &d.muplus_FTD     , "muplus_FTD/I"    );
-  //_dataTree->Branch( "muplus_SIT"     , &d.muplus_SIT     , "muplus_SIT/I"    );
-  //_dataTree->Branch( "muplus_TPC"     , &d.muplus_TPC     , "muplus_TPC/I"    );
-  //_dataTree->Branch( "muplus_SET"     , &d.muplus_SET     , "muplus_SET/I"    );
-  //_dataTree->Branch( "muplus_ETD"     , &d.muplus_ETD     , "muplus_ETD/I"    );
+  /*
+  _dataTree->Branch( "muplus_VXD"     , &d.muplus_VXD     , "muplus_VXD/I"    );
+  _dataTree->Branch( "muplus_FTD"     , &d.muplus_FTD     , "muplus_FTD/I"    );
+  _dataTree->Branch( "muplus_SIT"     , &d.muplus_SIT     , "muplus_SIT/I"    );
+  _dataTree->Branch( "muplus_TPC"     , &d.muplus_TPC     , "muplus_TPC/I"    );
+  _dataTree->Branch( "muplus_SET"     , &d.muplus_SET     , "muplus_SET/I"    );
+  _dataTree->Branch( "muplus_ETD"     , &d.muplus_ETD     , "muplus_ETD/I"    );
+  */
 
   _dataTree->Branch( "muminus_ecal"    , &d.muminus_ecal    , "muminus_ecal"     );
   _dataTree->Branch( "muminus_hcal"    , &d.muminus_hcal    , "muminus_hcal"     );
@@ -1757,12 +1588,14 @@ void HiggsToMuMuProcessor::makeNTuple() {
   _dataTree->Branch( "muminus_bcal"    , &d.muminus_bcal    , "muminus_bcal"     );
   _dataTree->Branch( "muminus_ecalfrac", &d.muminus_ecalfrac, "muminus_ecalfrac" );
   _dataTree->Branch( "muminus_EbyP"    , &d.muminus_EbyP    , "muminus_EbyP"     );
-  //_dataTree->Branch( "muminus_VXD"     , &d.muminus_VXD     , "muminus_VXD/I"    );
-  //_dataTree->Branch( "muminus_FTD"     , &d.muminus_FTD     , "muminus_FTD/I"    );
-  //_dataTree->Branch( "muminus_SIT"     , &d.muminus_SIT     , "muminus_SIT/I"    );
-  //_dataTree->Branch( "muminus_TPC"     , &d.muminus_TPC     , "muminus_TPC/I"    );
-  //_dataTree->Branch( "muminus_SET"     , &d.muminus_SET     , "muminus_SET/I"    );
-  //_dataTree->Branch( "muminus_ETD"     , &d.muminus_ETD     , "muminus_ETD/I"    );
+  /*
+  _dataTree->Branch( "muminus_VXD"     , &d.muminus_VXD     , "muminus_VXD/I"    );
+  _dataTree->Branch( "muminus_FTD"     , &d.muminus_FTD     , "muminus_FTD/I"    );
+  _dataTree->Branch( "muminus_SIT"     , &d.muminus_SIT     , "muminus_SIT/I"    );
+  _dataTree->Branch( "muminus_TPC"     , &d.muminus_TPC     , "muminus_TPC/I"    );
+  _dataTree->Branch( "muminus_SET"     , &d.muminus_SET     , "muminus_SET/I"    );
+  _dataTree->Branch( "muminus_ETD"     , &d.muminus_ETD     , "muminus_ETD/I"    );
+  */
 
   //MC matching of isolated lepton
   _dataTree->Branch( "mc_muplus_PDG"        , &d.mc_muplus_PDG        , "mc_muplus_PDG/I"         );
@@ -1780,6 +1613,7 @@ void HiggsToMuMuProcessor::makeNTuple() {
   _dataTree->Branch( "mumu_costh_tobeam", &d.mumu_costh_tobeam, "mumu_costh_tobeam" );
   _dataTree->Branch( "mumu_mom_mag"     , &d.mumu_mom_mag     , "mumu_mom_mag"      );
 
+  _dataTree->Branch( "n_ISR"     , &d.n_ISR     , "n_ISR/I"    );
   _dataTree->Branch( "pseudomass", &d.pseudomass, "pseudomass" );
 
   //_dataTree->Branch( "mumu_mass_mc" , &d.mumu_mass_mc , "mumu_mass_mc"  );
@@ -1792,32 +1626,6 @@ void HiggsToMuMuProcessor::makeNTuple() {
   _dataTree->Branch( "pfowo_costh", &d.pfowo_costh, "pfowo_costh[npfos]" );
   _dataTree->Branch( "n_highPt"   , &d.n_highPt   , "n_highPt/I"         );
   _dataTree->Branch( "mass_woisoleps", &d.mass_woisoleps, "mass_woisoleps" );
-
-  //for veto
-  _dataTree->Branch( "n_forveto", &d.n_forveto, "n_forveto/I" );
-
-  //parameter of jets
-  _dataTree->Branch( "nJets"    , &d.nJets    , "nJets/I"    );
-  _dataTree->Branch( "mass_jj"  , &d.mass_jj  , "mass_jj"    );
-  _dataTree->Branch( "costh_jj" , &d.costh_jj , "costh_jj"   );
-  _dataTree->Branch( "E_jj"     , &d.E_jj     , "E_jj"       );
-  _dataTree->Branch( "costh_Z"  , &d.costh_Z  , "costh_Z"    );
-  _dataTree->Branch( "recoil_jj", &d.recoil_jj, "recoil_jj"  );
-  _dataTree->Branch( "jet1_neutral", &d.jet1_neutral, "jet1_neutral/I" );
-  _dataTree->Branch( "jet1_charged", &d.jet1_charged, "jet1_charged/I" );
-  _dataTree->Branch( "jet2_neutral", &d.jet2_neutral, "jet2_neutral/I" );
-  _dataTree->Branch( "jet2_charged", &d.jet2_charged, "jet2_charged/I" );
-  _dataTree->Branch( "jet1_E"      , &d.jet1_E      , "jet1_E"         );
-  _dataTree->Branch( "jet2_E"      , &d.jet2_E      , "jet2_E"         );
-  _dataTree->Branch( "jet1_M"      , &d.jet1_M      , "jet1_M"         );
-  _dataTree->Branch( "jet2_M"      , &d.jet2_M      , "jet2_M"         );
-  _dataTree->Branch( "jet1_costh"  , &d.jet1_costh  , "jet1_costh"     );
-  _dataTree->Branch( "jet2_costh"  , &d.jet2_costh  , "jet2_costh"     );
-
-  //for ISR
-  _dataTree->Branch( "n_ISR" , &d.n_ISR , "n_ISR/I"       );
-  _dataTree->Branch( "coneE" , &d.coneE , "coneE[npfos]"  );
-  _dataTree->Branch( "ratioE", &d.ratioE, "ratioE[npfos]" );
 
   return;
 }
