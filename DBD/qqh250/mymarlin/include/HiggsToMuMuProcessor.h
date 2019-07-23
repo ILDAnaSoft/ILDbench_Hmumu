@@ -73,6 +73,8 @@ class HiggsToMuMuProcessor : public Processor{
   std::string _colAllPFOs;
   std::string _colIsoleps;
   std::string _colPFOsWithoutIsoleps;
+  std::string _colForVeto;
+  std::string _colJets;
   std::string _colISR;
   std::string _colMC;
   std::string _mcpfoRelation;
@@ -399,7 +401,6 @@ class HiggsToMuMuProcessor : public Processor{
     float mumu_costh_tobeam;
     float mumu_mom_mag;
 
-    int n_ISR;
     float pseudomass;
     //float mumu_mass_mc;
     //float mumu_E_mc;
@@ -413,6 +414,39 @@ class HiggsToMuMuProcessor : public Processor{
     float pfowo_costh[NMAX_PFOS];
     int   n_highPt;
     float mass_woisoleps;
+
+    //********
+    //for veto
+    //********
+    int n_forveto;
+
+    //************
+    //loop of jets
+    //************
+    int   nJets;
+    float mass_jj;
+    float costh_jj;
+    float E_jj;
+    float costh_Z;
+    float recoil_jj;
+    int   jet1_neutral;
+    int   jet1_charged;
+    int   jet2_neutral;
+    int   jet2_charged;
+    float jet1_E;
+    float jet2_E;
+    float jet1_M;
+    float jet2_M;
+    float jet1_costh;
+    float jet2_costh;
+
+    //***********
+    //loop of ISR
+    //***********
+    int   n_ISR;
+    float coneE[NMAX_PFOS];
+    float ratioE[NMAX_PFOS];
+
   };
 
   RECO_DATA _data;
