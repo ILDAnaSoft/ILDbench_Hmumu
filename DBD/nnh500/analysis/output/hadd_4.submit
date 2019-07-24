@@ -1,0 +1,13 @@
+executable = hadd_4.sh
+universe = vanilla
+notify_user = shin-ichi.kawada@desy.de
+JobNotification = Always
+log = hadd_4_jobstatus.log
+output = hadd_4_output.log
+error = hadd_4_error.log
++RequestRuntime = 3600*12
+RequestMemory = 8G
+RequestDisk = 200G
+Requirements = OpSysAndVer == "SL6"
++MyProject = "af-ilc"
+queue
