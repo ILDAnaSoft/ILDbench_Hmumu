@@ -1,0 +1,13 @@
+executable = select_6.sh
+universe = vanilla
+notify_user = shin-ichi.kawada@desy.de
+JobNotification = Always
+log = select_6_jobstatus.log
+output = select_6_output.log
+error = select_6_error.log
++RequestRuntime = 3600*12
+RequestMemory = 8G
+RequestDisk = 50G
+Requirements = OpSysAndVer == "SL6"
++MyProject = "af-ilc"
+queue

@@ -1,0 +1,13 @@
+executable = select_4.sh
+universe = vanilla
+notify_user = shin-ichi.kawada@desy.de
+JobNotification = Always
+log = select_4_jobstatus.log
+output = select_4_output.log
+error = select_4_error.log
++RequestRuntime = 3600*12
+RequestMemory = 8G
+RequestDisk = 50G
+Requirements = OpSysAndVer == "SL6"
++MyProject = "af-ilc"
+queue
