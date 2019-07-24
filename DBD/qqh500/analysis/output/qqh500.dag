@@ -1,0 +1,27 @@
+JOB A delete.submit
+JOB B1 hadd_1.submit
+JOB B2 hadd_2.submit
+JOB B3 hadd_3.submit
+JOB B4 hadd_4.submit
+JOB B5 hadd_5.submit
+JOB B6 hadd_6.submit
+JOB B7 hadd_7.submit
+JOB C1 select_1.submit
+JOB C2 select_2.submit
+JOB C3 select_3.submit
+JOB C4 select_4.submit
+JOB C5 select_5.submit
+JOB C6 select_6.submit
+JOB C7 select_7.submit
+JOB D final.submit
+PARENT A CHILD B1 B2 B3
+PARENT B1 CHILD C1
+PARENT B2 CHILD C2
+PARENT B3 CHILD C3
+PARENT C1 C2 C3 CHILD B4 B5 B6
+PARENT B4 CHILD C4
+PARENT B5 CHILD C5
+PARENT B6 CHILD C6
+PARENT C4 C5 C6 CHILD B7
+PARENT B7 CHILD C7
+PARENT C7 CHILD D
