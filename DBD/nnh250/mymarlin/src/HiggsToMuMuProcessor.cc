@@ -554,6 +554,7 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
   _data.mumu_mass_mc = ( muminus_mom4_mc + muplus_mom4_mc ).M();
   _data.mumu_costh_mc = ( muminus_mom4_mc.Vect().Unit() ).Dot( muplus_mom4_mc.Vect().Unit() );
 
+  /*
   //test for smearing
   TVector3 vec_pT_muminus = TVector3( muminus_mom4_mc[0], muminus_mom4_mc[1], 0 );
   TVector3 vec_pX_muminus = TVector3( muminus_mom4_mc[0], 0, 0 );
@@ -790,6 +791,157 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
   muminus_mom4_mc_smear = muminus_mom4_mc + smear_muminus;
   muplus_mom4_mc_smear  = muplus_mom4_mc + smear_muplus;
   _data.mumu_mass_mc_smear_1_6 = ( muminus_mom4_mc_smear + muplus_mom4_mc_smear ).M();
+  */
+
+  //test for smearing taking into account full covariant matrix (assume muon is massless)
+  TVector3 vec3_muminus = TVector3( muminus_mom4_mc[0], muminus_mom4_mc[1], muminus_mom4_mc[2] );
+  float pT_muminus = TMath::Sqrt( muminus_mom4_mc[0]*muminus_mom4_mc[0]
+                                  +muminus_mom4_mc[1]*muminus_mom4_mc[1] );
+  float sinth_muminus = pT_muminus / vec3_muminus.Mag();
+  float tanth_muminus = pT_muminus / muminus_mom4_mc[2];
+  float cosphi_muminus = muminus_mom4_mc[0] / pT_muminus;
+  float sinphi_muminus = muminus_mom4_mc[1] / pT_muminus;
+  TVector3 vec3_muplus = TVector3( muplus_mom4_mc[0], muplus_mom4_mc[1], muplus_mom4_mc[2] );
+  float pT_muplus = TMath::Sqrt( muplus_mom4_mc[0]*muplus_mom4_mc[0]
+                                 +muplus_mom4_mc[1]*muplus_mom4_mc[1] );
+  float sinth_muplus = pT_muplus / vec3_muplus.Mag();
+  float tanth_muplus = pT_muplus / muplus_mom4_mc[2];
+  float cosphi_muplus = muplus_mom4_mc[0] / pT_muplus;
+  float sinphi_muplus = muplus_mom4_mc[1] / pT_muplus;
+  float coeff = ( (1 / (sinth_muminus*sinth_muplus))
+                  - cosphi_muminus*cosphi_muplus - sinphi_muminus*sinphi_muplus
+                  - (1 / (tanth_muminus*tanth_muplus)) );
+  if( coeff < 0 ) coeff = -coeff;
+
+  float transmomres = 1E-3;
+  float momres_muminus = transmomres * pT_muminus * pT_muminus;
+  float momres_muplus = transmomres * pT_muplus * pT_muplus;
+  float sigma_term1st = 0.5 * ( pT_muplus / pT_muminus ) * coeff * momres_muminus * momres_muminus;
+  float sigma_term2nd = 0.5 * ( pT_muminus / pT_muplus ) * coeff * momres_muplus * momres_muplus;
+  _data.sigma_mumu_mass_1_3 = TMath::Sqrt( sigma_term1st + sigma_term2nd );
+  float random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
+  float random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
+  _data.mumu_mass_mc_smear_1_3 = TMath::Sqrt( 2 * ( pT_muminus + random_momres_muminus ) * ( pT_muplus + random_momres_muplus ) * coeff );
+
+  transmomres = 5E-4;
+  momres_muminus = transmomres * pT_muminus * pT_muminus;
+  momres_muplus = transmomres * pT_muplus * pT_muplus;
+  sigma_term1st = 0.5 * ( pT_muplus / pT_muminus ) * coeff * momres_muminus * momres_muminus;
+  sigma_term2nd = 0.5 * ( pT_muminus / pT_muplus ) * coeff * momres_muplus * momres_muplus;
+  _data.sigma_mumu_mass_5_4 = TMath::Sqrt( sigma_term1st + sigma_term2nd );
+  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
+  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
+  _data.mumu_mass_mc_smear_5_4 = TMath::Sqrt( 2 * ( pT_muminus + random_momres_muminus ) * ( pT_muplus + random_momres_muplus ) * coeff );
+
+  transmomres = 3E-4;
+  momres_muminus = transmomres * pT_muminus * pT_muminus;
+  momres_muplus = transmomres * pT_muplus * pT_muplus;
+  sigma_term1st = 0.5 * ( pT_muplus / pT_muminus ) * coeff * momres_muminus * momres_muminus;
+  sigma_term2nd = 0.5 * ( pT_muminus / pT_muplus ) * coeff * momres_muplus * momres_muplus;
+  _data.sigma_mumu_mass_3_4 = TMath::Sqrt( sigma_term1st + sigma_term2nd );
+  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
+  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
+  _data.mumu_mass_mc_smear_3_4 = TMath::Sqrt( 2 * ( pT_muminus + random_momres_muminus ) * ( pT_muplus + random_momres_muplus ) * coeff );
+
+  transmomres = 2E-4;
+  momres_muminus = transmomres * pT_muminus * pT_muminus;
+  momres_muplus = transmomres * pT_muplus * pT_muplus;
+  sigma_term1st = 0.5 * ( pT_muplus / pT_muminus ) * coeff * momres_muminus * momres_muminus;
+  sigma_term2nd = 0.5 * ( pT_muminus / pT_muplus ) * coeff * momres_muplus * momres_muplus;
+  _data.sigma_mumu_mass_2_4 = TMath::Sqrt( sigma_term1st + sigma_term2nd );
+  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
+  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
+  _data.mumu_mass_mc_smear_2_4 = TMath::Sqrt( 2 * ( pT_muminus + random_momres_muminus ) * ( pT_muplus + random_momres_muplus ) * coeff );
+
+  transmomres = 1E-4;
+  momres_muminus = transmomres * pT_muminus * pT_muminus;
+  momres_muplus = transmomres * pT_muplus * pT_muplus;
+  sigma_term1st = 0.5 * ( pT_muplus / pT_muminus ) * coeff * momres_muminus * momres_muminus;
+  sigma_term2nd = 0.5 * ( pT_muminus / pT_muplus ) * coeff * momres_muplus * momres_muplus;
+  _data.sigma_mumu_mass_1_4 = TMath::Sqrt( sigma_term1st + sigma_term2nd );
+  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
+  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
+  _data.mumu_mass_mc_smear_1_4 = TMath::Sqrt( 2 * ( pT_muminus + random_momres_muminus ) * ( pT_muplus + random_momres_muplus ) * coeff );
+
+  transmomres = 5E-5;
+  momres_muminus = transmomres * pT_muminus * pT_muminus;
+  momres_muplus = transmomres * pT_muplus * pT_muplus;
+  sigma_term1st = 0.5 * ( pT_muplus / pT_muminus ) * coeff * momres_muminus * momres_muminus;
+  sigma_term2nd = 0.5 * ( pT_muminus / pT_muplus ) * coeff * momres_muplus * momres_muplus;
+  _data.sigma_mumu_mass_5_5 = TMath::Sqrt( sigma_term1st + sigma_term2nd );
+  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
+  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
+  _data.mumu_mass_mc_smear_5_5 = TMath::Sqrt( 2 * ( pT_muminus + random_momres_muminus ) * ( pT_muplus + random_momres_muplus ) * coeff );
+
+  transmomres = 3E-5;
+  momres_muminus = transmomres * pT_muminus * pT_muminus;
+  momres_muplus = transmomres * pT_muplus * pT_muplus;
+  sigma_term1st = 0.5 * ( pT_muplus / pT_muminus ) * coeff * momres_muminus * momres_muminus;
+  sigma_term2nd = 0.5 * ( pT_muminus / pT_muplus ) * coeff * momres_muplus * momres_muplus;
+  _data.sigma_mumu_mass_3_5 = TMath::Sqrt( sigma_term1st + sigma_term2nd );
+  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
+  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
+  _data.mumu_mass_mc_smear_3_5 = TMath::Sqrt( 2 * ( pT_muminus + random_momres_muminus ) * ( pT_muplus + random_momres_muplus ) * coeff );
+
+  transmomres = 2E-5;
+  momres_muminus = transmomres * pT_muminus * pT_muminus;
+  momres_muplus = transmomres * pT_muplus * pT_muplus;
+  sigma_term1st = 0.5 * ( pT_muplus / pT_muminus ) * coeff * momres_muminus * momres_muminus;
+  sigma_term2nd = 0.5 * ( pT_muminus / pT_muplus ) * coeff * momres_muplus * momres_muplus;
+  _data.sigma_mumu_mass_2_5 = TMath::Sqrt( sigma_term1st + sigma_term2nd );
+  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
+  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
+  _data.mumu_mass_mc_smear_2_5 = TMath::Sqrt( 2 * ( pT_muminus + random_momres_muminus ) * ( pT_muplus + random_momres_muplus ) * coeff );
+
+  transmomres = 1E-5;
+  momres_muminus = transmomres * pT_muminus * pT_muminus;
+  momres_muplus = transmomres * pT_muplus * pT_muplus;
+  sigma_term1st = 0.5 * ( pT_muplus / pT_muminus ) * coeff * momres_muminus * momres_muminus;
+  sigma_term2nd = 0.5 * ( pT_muminus / pT_muplus ) * coeff * momres_muplus * momres_muplus;
+  _data.sigma_mumu_mass_1_5 = TMath::Sqrt( sigma_term1st + sigma_term2nd );
+  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
+  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
+  _data.mumu_mass_mc_smear_1_5 = TMath::Sqrt( 2 * ( pT_muminus + random_momres_muminus ) * ( pT_muplus + random_momres_muplus ) * coeff );
+
+  transmomres = 5E-6;
+  momres_muminus = transmomres * pT_muminus * pT_muminus;
+  momres_muplus = transmomres * pT_muplus * pT_muplus;
+  sigma_term1st = 0.5 * ( pT_muplus / pT_muminus ) * coeff * momres_muminus * momres_muminus;
+  sigma_term2nd = 0.5 * ( pT_muminus / pT_muplus ) * coeff * momres_muplus * momres_muplus;
+  _data.sigma_mumu_mass_5_6 = TMath::Sqrt( sigma_term1st + sigma_term2nd );
+  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
+  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
+  _data.mumu_mass_mc_smear_1_5 = TMath::Sqrt( 2 * ( pT_muminus + random_momres_muminus ) * ( pT_muplus + random_momres_muplus ) * coeff );
+
+  transmomres = 3E-6;
+  momres_muminus = transmomres * pT_muminus * pT_muminus;
+  momres_muplus = transmomres * pT_muplus * pT_muplus;
+  sigma_term1st = 0.5 * ( pT_muplus / pT_muminus ) * coeff * momres_muminus * momres_muminus;
+  sigma_term2nd = 0.5 * ( pT_muminus / pT_muplus ) * coeff * momres_muplus * momres_muplus;
+  _data.sigma_mumu_mass_3_6 = TMath::Sqrt( sigma_term1st + sigma_term2nd );
+  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
+  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
+  _data.mumu_mass_mc_smear_3_6 = TMath::Sqrt( 2 * ( pT_muminus + random_momres_muminus ) * ( pT_muplus + random_momres_muplus ) * coeff );
+
+  transmomres = 2E-6;
+  momres_muminus = transmomres * pT_muminus * pT_muminus;
+  momres_muplus = transmomres * pT_muplus * pT_muplus;
+  sigma_term1st = 0.5 * ( pT_muplus / pT_muminus ) * coeff * momres_muminus * momres_muminus;
+  sigma_term2nd = 0.5 * ( pT_muminus / pT_muplus ) * coeff * momres_muplus * momres_muplus;
+  _data.sigma_mumu_mass_2_6 = TMath::Sqrt( sigma_term1st + sigma_term2nd );
+  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
+  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
+  _data.mumu_mass_mc_smear_2_6 = TMath::Sqrt( 2 * ( pT_muminus + random_momres_muminus ) * ( pT_muplus + random_momres_muplus ) * coeff );
+
+  transmomres = 1E-6;
+  momres_muminus = transmomres * pT_muminus * pT_muminus;
+  momres_muplus = transmomres * pT_muplus * pT_muplus;
+  sigma_term1st = 0.5 * ( pT_muplus / pT_muminus ) * coeff * momres_muminus * momres_muminus;
+  sigma_term2nd = 0.5 * ( pT_muminus / pT_muplus ) * coeff * momres_muplus * momres_muplus;
+  _data.sigma_mumu_mass_1_6 = TMath::Sqrt( sigma_term1st + sigma_term2nd );
+  random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
+  random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
+  _data.mumu_mass_mc_smear_1_6 = TMath::Sqrt( 2 * ( pT_muminus + random_momres_muminus ) * ( pT_muplus + random_momres_muplus ) * coeff );
 
   //*************
   //PFO loop part
@@ -1236,6 +1388,41 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
     _data.sigma_mumu_mass = ( 1 / _data.mumu_mass ) * TMath::Sqrt( term1st + term2nd );
   }
 
+  //scan for actual transverse momentum resolution in full
+  float test_transmomres = 3E-5;
+  float test_sigmax_muminus = muminus_Pt * muminus_Pt * test_transmomres * TMath::Cos( muminus_azi );
+  float test_sigmay_muminus = muminus_Pt * muminus_Pt * test_transmomres * TMath::Sin( muminus_azi );
+  float test_sigmaz_muminus = muminus_Pt * muminus_Pt * test_transmomres
+    / ( TMath::Sqrt( 1/(muminus_costh*muminus_costh) -1 ) );
+  float test_sigmaE_muminus = muminus_Pt * muminus_Pt * test_transmomres
+    / ( TMath::Sqrt( 1 - muminus_costh * muminus_costh ) );
+  float test_sigmax_muplus = muplus_Pt * muplus_Pt * test_transmomres * TMath::Cos( muplus_azi );
+  float test_sigmay_muplus = muplus_Pt * muplus_Pt * test_transmomres * TMath::Sin( muplus_azi );
+  float test_sigmaz_muplus = muplus_Pt * muplus_Pt * test_transmomres
+    / ( TMath::Sqrt( 1/(muplus_costh*muplus_costh) -1 ) );
+  float test_sigmaE_muplus = muplus_Pt * muplus_Pt * test_transmomres
+    / ( TMath::Sqrt( 1 - muplus_costh * muplus_costh ) );
+  float test_term1st = 0., test_term2nd = 0.;
+  test_term1st = - muplus_4mom[0] * ( muplus_4mom[0]*test_sigmax_muminus*test_sigmax_muminus + muplus_4mom[1]*muminus_covMat1
+				      + muplus_4mom[2]*muminus_covMat3 + muplus_4mom[3]*muminus_covMat6 )
+    - muplus_4mom[1] * ( muplus_4mom[0]*muminus_covMat1 + muplus_4mom[1]*test_sigmay_muminus*test_sigmay_muminus
+			 + muplus_4mom[2]*muminus_covMat4 + muplus_4mom[3]*muminus_covMat7 )
+    - muplus_4mom[2] * ( muplus_4mom[0]*muminus_covMat3 + muplus_4mom[1]*muminus_covMat4
+			 + muplus_4mom[2]*test_sigmaz_muminus*test_sigmaz_muminus + muplus_4mom[3]*muminus_covMat8 )
+    + muplus_4mom[3] * ( muplus_4mom[0]*muminus_covMat6 + muplus_4mom[1]*muminus_covMat7
+			 + muplus_4mom[2]*muminus_covMat8 + muplus_4mom[3]*test_sigmaE_muminus*test_sigmaE_muminus );
+  test_term2nd = - muminus_4mom[0] * ( muminus_4mom[0]*test_sigmax_muplus*test_sigmax_muplus + muminus_4mom[1]*muplus_covMat1
+				       + muminus_4mom[2]*muplus_covMat3 + muminus_4mom[3]*muplus_covMat6 )
+    - muminus_4mom[1] * ( muminus_4mom[0]*muplus_covMat1 + muminus_4mom[1]*test_sigmay_muplus*test_sigmay_muplus
+			  + muminus_4mom[2]*muplus_covMat4 + muminus_4mom[3]*muplus_covMat7 )
+    - muminus_4mom[2] * ( muminus_4mom[0]*muplus_covMat3 + muminus_4mom[1]*muplus_covMat4
+			  + muminus_4mom[2]*test_sigmaz_muplus*test_sigmaz_muplus + muminus_4mom[3]*muplus_covMat8 )
+    + muminus_4mom[3] * ( muminus_4mom[0]*muplus_covMat6 + muminus_4mom[1]*muplus_covMat7
+			  + muminus_4mom[2]*muplus_covMat8 + muminus_4mom[3]*test_sigmaE_muplus*test_sigmaE_muplus );
+  if( _data.mumu_mass != 0 ){
+    _data.sigma_mumu_mass_test = ( 1 / _data.mumu_mass ) * TMath::Sqrt( test_term1st + test_term2nd );
+  }
+
   //pseudomass method used at OPAL
   TVector3 boostVec = -CM_4mom.BoostVector();
   TLorentzVector boost_muminus_4mom = muminus_4mom;
@@ -1651,15 +1838,30 @@ void HiggsToMuMuProcessor::makeNTuple() {
   _dataTree->Branch( "mc_muminus_PDG"       , &d.mc_muminus_PDG       , "mc_muminus_PDG/I"        );
   _dataTree->Branch( "parent_mc_muminus_PDG", &d.parent_mc_muminus_PDG, "parent_mc_muminus_PDG/I" );
 
-  _dataTree->Branch( "mumu_E"           , &d.mumu_E           , "mumu_E"            );
-  _dataTree->Branch( "mumu_mass"        , &d.mumu_mass        , "mumu_mass"         );
-  _dataTree->Branch( "mumu_costh"       , &d.mumu_costh       , "mumu_costh"        );
-  _dataTree->Branch( "mumu_acop"        , &d.mumu_acop        , "mumu_acop"         );
-  _dataTree->Branch( "mumu_Pt"          , &d.mumu_Pt          , "mumu_Pt"           );
-  _dataTree->Branch( "sigma_mumu_mass"  , &d.sigma_mumu_mass  , "sigma_mumu_mass"   );
-  _dataTree->Branch( "recoilmass"       , &d.recoilmass       , "recoilmass"        );
-  _dataTree->Branch( "mumu_costh_tobeam", &d.mumu_costh_tobeam, "mumu_costh_tobeam" );
-  _dataTree->Branch( "mumu_mom_mag"     , &d.mumu_mom_mag     , "mumu_mom_mag"      );
+  _dataTree->Branch( "mumu_E"              , &d.mumu_E              , "mumu_E"               );
+  _dataTree->Branch( "mumu_mass"           , &d.mumu_mass           , "mumu_mass"            );
+  _dataTree->Branch( "mumu_costh"          , &d.mumu_costh          , "mumu_costh"           );
+  _dataTree->Branch( "mumu_acop"           , &d.mumu_acop           , "mumu_acop"            );
+  _dataTree->Branch( "mumu_Pt"             , &d.mumu_Pt             , "mumu_Pt"              );
+  _dataTree->Branch( "sigma_mumu_mass"     , &d.sigma_mumu_mass     , "sigma_mumu_mass"      );
+  _dataTree->Branch( "sigma_mumu_mass_test", &d.sigma_mumu_mass_test, "sigma_mumu_mass_test" );
+  _dataTree->Branch( "recoilmass"          , &d.recoilmass          , "recoilmass"           );
+  _dataTree->Branch( "mumu_costh_tobeam"   , &d.mumu_costh_tobeam   , "mumu_costh_tobeam"    );
+  _dataTree->Branch( "mumu_mom_mag"        , &d.mumu_mom_mag        , "mumu_mom_mag"         );
+
+  _dataTree->Branch( "sigma_mumu_mass_1_3", &d.sigma_mumu_mass_1_3, "sigma_mumu_mass_1_3" );
+  _dataTree->Branch( "sigma_mumu_mass_5_4", &d.sigma_mumu_mass_5_4, "sigma_mumu_mass_5_4" );
+  _dataTree->Branch( "sigma_mumu_mass_3_4", &d.sigma_mumu_mass_3_4, "sigma_mumu_mass_3_4" );
+  _dataTree->Branch( "sigma_mumu_mass_2_4", &d.sigma_mumu_mass_2_4, "sigma_mumu_mass_2_4" );
+  _dataTree->Branch( "sigma_mumu_mass_1_4", &d.sigma_mumu_mass_1_4, "sigma_mumu_mass_1_4" );
+  _dataTree->Branch( "sigma_mumu_mass_5_5", &d.sigma_mumu_mass_5_5, "sigma_mumu_mass_5_5" );
+  _dataTree->Branch( "sigma_mumu_mass_3_5", &d.sigma_mumu_mass_3_5, "sigma_mumu_mass_3_5" );
+  _dataTree->Branch( "sigma_mumu_mass_2_5", &d.sigma_mumu_mass_2_5, "sigma_mumu_mass_2_5" );
+  _dataTree->Branch( "sigma_mumu_mass_1_5", &d.sigma_mumu_mass_1_5, "sigma_mumu_mass_1_5" );
+  _dataTree->Branch( "sigma_mumu_mass_5_6", &d.sigma_mumu_mass_5_6, "sigma_mumu_mass_5_6" );
+  _dataTree->Branch( "sigma_mumu_mass_3_6", &d.sigma_mumu_mass_3_6, "sigma_mumu_mass_3_6" );
+  _dataTree->Branch( "sigma_mumu_mass_2_6", &d.sigma_mumu_mass_2_6, "sigma_mumu_mass_2_6" );
+  _dataTree->Branch( "sigma_mumu_mass_1_6", &d.sigma_mumu_mass_1_6, "sigma_mumu_mass_1_6" );
 
   _dataTree->Branch( "n_ISR"     , &d.n_ISR     , "n_ISR/I"    );
   _dataTree->Branch( "pseudomass", &d.pseudomass, "pseudomass" );
