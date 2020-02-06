@@ -85,9 +85,11 @@
   <!--Cut on the mva output of isolated muon selection-->
   <parameter name="CutOnTheISOMuonMVA" type="float"> 0.7 </parameter>
   <!--Directory of Weights for the Isolated Electron MVA Classification-->
-  <parameter name="DirOfISOElectronWeights" type="string"> /afs/desy.de/project/ilcsoft/sw/x86_64_gcc48_sl6/v01-17-09/MarlinReco/v01-14/Analysis/IsolatedLeptonTagging/example/isolated_electron_weights </parameter>
+  <!--parameter name="DirOfISOElectronWeights" type="string"> /afs/desy.de/project/ilcsoft/sw/x86_64_gcc48_sl6/v01-17-09/MarlinReco/v01-14/Analysis/IsolatedLeptonTagging/example/isolated_electron_weights </parameter-->
+  <parameter name="DirOfISOElectronWeights" type="string"> /cvmfs/ilc.desy.de/sw/x86_64_gcc48_sl6/v01-17-09/MarlinReco/v01-14/Analysis/IsolatedLeptonTagging/example/isolated_electron_weights </parameter>
   <!--Directory of Weights for the Isolated Muon MVA Classification-->
-  <parameter name="DirOfISOMuonWeights" type="string"> /afs/desy.de/project/ilcsoft/sw/x86_64_gcc48_sl6/v01-17-09/MarlinReco/v01-14/Analysis/IsolatedLeptonTagging/example/isolated_muon_weights </parameter>
+  <!--parameter name="DirOfISOMuonWeights" type="string"> /afs/desy.de/project/ilcsoft/sw/x86_64_gcc48_sl6/v01-17-09/MarlinReco/v01-14/Analysis/IsolatedLeptonTagging/example/isolated_muon_weights </parameter-->
+  <parameter name="DirOfISOMuonWeights" type="string"> /cvmfs/ilc.desy.de/sw/x86_64_gcc48_sl6/v01-17-09/MarlinReco/v01-14/Analysis/IsolatedLeptonTagging/example/isolated_muon_weights </parameter>
   <!--Name of the PandoraPFOs collection-->
   <parameter name="InputPandoraPFOsCollection" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs </parameter>
   <!--flag to select one most like isolated lepton-->
@@ -142,9 +144,11 @@
   <!--Cut on the mva output of isolated muon selection-->
   <parameter name="CutOnTheISOMuonMVA" type="float"> 0.7 </parameter>
   <!--Directory of Weights for the Isolated Electron MVA Classification-->
-  <parameter name="DirOfISOElectronWeights" type="string"> /afs/desy.de/project/ilcsoft/sw/x86_64_gcc48_sl6/v01-17-09/MarlinReco/v01-14/Analysis/IsolatedLeptonTagging/example/isolated_electron_weights </parameter>
+  <!--parameter name="DirOfISOElectronWeights" type="string"> /afs/desy.de/project/ilcsoft/sw/x86_64_gcc48_sl6/v01-17-09/MarlinReco/v01-14/Analysis/IsolatedLeptonTagging/example/isolated_electron_weights </parameter-->
+  <parameter name="DirOfISOElectronWeights" type="string"> /cvmfs/ilc.desy.de/sw/x86_64_gcc48_sl6/v01-17-09/MarlinReco/v01-14/Analysis/IsolatedLeptonTagging/example/isolated_electron_weights </parameter>
   <!--Directory of Weights for the Isolated Muon MVA Classification-->
-  <parameter name="DirOfISOMuonWeights" type="string"> /afs/desy.de/project/ilcsoft/sw/x86_64_gcc48_sl6/v01-17-09/MarlinReco/v01-14/Analysis/IsolatedLeptonTagging/example/isolated_muon_weights </parameter>
+  <!--parameter name="DirOfISOMuonWeights" type="string"> /afs/desy.de/project/ilcsoft/sw/x86_64_gcc48_sl6/v01-17-09/MarlinReco/v01-14/Analysis/IsolatedLeptonTagging/example/isolated_muon_weights </parameter-->
+  <parameter name="DirOfISOMuonWeights" type="string"> /cvmfs/ilc.desy.de/sw/x86_64_gcc48_sl6/v01-17-09/MarlinReco/v01-14/Analysis/IsolatedLeptonTagging/example/isolated_muon_weights </parameter>
   <!--Name of the PandoraPFOs collection-->
   <parameter name="InputPandoraPFOsCollection" type="string" lcioInType="ReconstructedParticle"> PFOsWithoutISR </parameter>
   <!--flag to select one most like isolated lepton-->
