@@ -397,9 +397,24 @@ class HiggsToMuMuProcessor : public Processor{
     float mumu_Pt;
     float mumu_acop;
     float sigma_mumu_mass;
+    float sigma_mumu_mass_test;
     float recoilmass;
     float mumu_costh_tobeam;
     float mumu_mom_mag;
+
+    float sigma_mumu_mass_1_3;
+    float sigma_mumu_mass_5_4;
+    float sigma_mumu_mass_3_4;
+    float sigma_mumu_mass_2_4;
+    float sigma_mumu_mass_1_4;
+    float sigma_mumu_mass_5_5;
+    float sigma_mumu_mass_3_5;
+    float sigma_mumu_mass_2_5;
+    float sigma_mumu_mass_1_5;
+    float sigma_mumu_mass_5_6;
+    float sigma_mumu_mass_3_6;
+    float sigma_mumu_mass_2_6;
+    float sigma_mumu_mass_1_6;
 
     float pseudomass;
     //float mumu_mass_mc;
