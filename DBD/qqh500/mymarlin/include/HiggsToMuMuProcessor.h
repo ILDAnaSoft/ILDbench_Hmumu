@@ -315,6 +315,7 @@ class HiggsToMuMuProcessor : public Processor{
     float muplus_azi;
     float muplus_Pt;
     float muplus_mom_mag;
+    float muplus_transmomres;
     int   n_muminus;
     float muminus_E;
     float muminus_costh;
@@ -322,6 +323,7 @@ class HiggsToMuMuProcessor : public Processor{
     float muminus_azi;
     float muminus_Pt;
     float muminus_mom_mag;
+    float muminus_transmomres;
     float sum_charge_costh;
     float leadingmu_E;
     float subleadingmu_E;
