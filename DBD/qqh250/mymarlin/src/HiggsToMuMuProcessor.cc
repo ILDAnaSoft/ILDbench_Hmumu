@@ -944,7 +944,7 @@ void HiggsToMuMuProcessor::processEvent( LCEvent * evt ) {
   _data.sigma_mumu_mass_5_6 = TMath::Sqrt( sigma_term1st + sigma_term2nd );
   random_momres_muminus = gRandom->Gaus( 0, momres_muminus );
   random_momres_muplus = gRandom->Gaus( 0, momres_muplus );
-  _data.mumu_mass_mc_smear_1_5 = TMath::Sqrt( 2 * ( pT_muminus + random_momres_muminus ) * ( pT_muplus + random_momres_muplus ) * coeff );
+  _data.mumu_mass_mc_smear_5_6 = TMath::Sqrt( 2 * ( pT_muminus + random_momres_muminus ) * ( pT_muplus + random_momres_muplus ) * coeff );
 
   transmomres = 3E-6;
   momres_muminus = transmomres * pT_muminus * pT_muminus;
