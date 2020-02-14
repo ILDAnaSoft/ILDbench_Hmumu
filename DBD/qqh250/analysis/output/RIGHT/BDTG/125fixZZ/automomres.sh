@@ -3,7 +3,7 @@
 for momres in {1_3,5_4,3_4,2_4,1_4,5_5,3_5,2_5,1_5,5_6,3_6,2_6,1_6}
 #for momres in {1_3,1_6}
 do
-    cd /afs/desy.de/user/s/skawada/sonas_work/stage_qqh250/analysis/output/LEFT/BDTG/125fixZZ/${momres}
+    cd /afs/desy.de/user/s/skawada/sonas_work/stage_qqh250/analysis/output/RIGHT/BDTG/125fixZZ/${momres}
     cp truedata.txt ../${momres}_fix/.
     rm *~ *orig *log exec*submit submit*sh toyMC*C result*txt
     echo "prepare scripts for ${momres}..."
