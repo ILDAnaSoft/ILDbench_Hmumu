@@ -1,0 +1,125 @@
+#ifndef __CINT__
+#include "RooGlobalFunc.h"
+#endif
+#include "RooRealVar.h"
+#include "RooDataSet.h"
+#include "RooDataHist.h"
+#include "RooCBShape.h"
+#include "RooPolynomial.h"
+#include "RooChebychev.h"
+#include "RooGaussian.h"
+#include "RooAbsData.h"
+#include "RooPlot.h"
+
+#include <fstream>
+#include "TStopwatch.h"
+using namespace RooFit;
+
+void toyMC(){
+  TStopwatch sw;
+  sw.Start();
+
+  //canvas
+  TCanvas* c = new TCanvas("c","c",1200,600);
+  c->Divide(2);
+  c->cd(1);
+
+  //result file
+  ofstream ofs("resultCASECASE.txt");
+
+  //calculate # of sig.bkg events in template
+  TFile *file = TFile::Open("../alldata_after.root");
+  TTree *tree = (TTree*) file->Get("datatest");
+  RooRealVar processid("processid","processid",0,300000);
+  RooRealVar type("type","type",0,100);
+  RooRealVar mumu_mass("mumu_mass","mumu_mass",120,130);
+  RooRealVar BDTGoutput("BDTGoutput","BDTGoutput",-1,1);
+  RooRealVar weight2("weight2","weight2",0,200);
+  RooDataSet *data = new RooDataSet("data","template data",RooArgSet(processid,type,mumu_mass,BDTGoutput,weight2),Import(*tree) );
+  RooDataSet wdata( data->GetName(), data->GetTitle(), data, *data->get(), 0, weight2.GetName() );
+  RooDataSet *sdata = wdata.reduce( Cut("((processid>=108161&&processid<=108164)&&(type>=1&&type<=5))&&mumu_mass>120&&BDTGoutput>BDTGBDTG") );
+  RooDataSet *bdata = wdata.reduce( Cut("!((processid>=108161&&processid<=108164)&&(type>=1&&type<=5))&&mumu_mass>120&&BDTGoutput>BDTGBDTG") );
+  const Double_t nsig_template = sdata->sumEntries();
+  const Double_t nbkg_template = bdata->sumEntries();
+
+  //signal p.d.f., Crystal Ball function
+  RooRealVar mean("mean","mean",125);
+  RooRealVar sigma("sigma","sigma",SIGMASIGMA);
+  RooRealVar alpha("alpha","alpha",ALPHAALPHA);
+  RooRealVar n("n","n",POWERPOWER);
+  RooCBShape CB("CB","CB function",mumu_mass,mean,sigma,alpha,n);
+  RooRealVar gmean("gmean","gmean",GMEANGMEAN);
+  RooRealVar gsigma("gsigma","gsigma",GSIGMAGSIGMA);
+  RooGaussian gauss("gauss","gauss",mumu_mass,gmean,gsigma);
+  RooRealVar CBfrac("CBfrac","CBfrac",CBFRACCBFRAC);
+  RooAddPdf CBgauss("CBgauss","CBgauss",RooArgSet(CB,gauss),RooArgSet(CBfrac));
+
+  //background p.d.f., Chebychev polynomial
+  RooRealVar p0("p0","p0",LINEARLINEAR);
+  RooChebychev poly("poly","poly",mumu_mass,RooArgSet(p0));
+
+  //construct CB+poly p.d.f.
+  RooRealVar nsig("nsig","# signal",nsig_template,-50,100);
+  nsig.setBins(150);
+  //RooRealVar nbkg("nbkg","# background",nbkg_template,0,2*nbkg_template);
+  RooRealVar nbkg("nbkg","# background",nbkg_template);
+  RooAddPdf model("model","CBgauss+poly",RooArgList(CBgauss,poly),RooArgList(nsig,nbkg));
+
+  //store signal yield
+  RooDataSet *hyield = new RooDataSet("hyield","hyield",RooArgSet(nsig));
+
+  //generate toy MC data
+  for( Int_t np = 0; np < 20000; np++ ){
+    if( np%1000 == 0 ) cerr << "pseudo-experiment #" << np << endl;
+    gRandom->SetSeed(np*10000);
+    Double_t nsig_pseudo = gRandom->Poisson(nsig_template);
+    RooDataSet *toydata_s = CBgauss.generate(mumu_mass,nsig_pseudo,AutoBinned(kFALSE));
+    //cerr << "# pseudo-sig = " << toydata_s->numEntries() << endl;
+    Double_t nbkg_pseudo = gRandom->Poisson(nbkg_template);
+    RooDataSet *toydata_b = poly.generate(mumu_mass,nbkg_pseudo,AutoBinned(kFALSE));
+    //cerr << "# pseudo-bkg = " << toydata_b->numEntries() << endl;
+
+    RooDataSet *toydata = new RooDataSet(*toydata_s);
+    toydata->append(*toydata_b);
+
+    //perform fitting with model to toy MC data, extended maximmum-likelihood method
+    model.fitTo(*toydata,Minos(kTRUE),Extended(kTRUE),Save(),Verbose(kFALSE),PrintLevel(-1),Warnings(kFALSE));
+
+    //plot toy MC data and p.d.f.
+    RooPlot* frame = mumu_mass.frame();
+    toydata->plotOn(frame);
+    model.plotOn(frame);
+    model.plotOn(frame,Components(poly),LineStyle(kDashed));
+    frame->Draw();
+    
+    //nsig.Print();
+    //nbkg.Print();
+    hyield->add(RooArgSet(nsig));
+    
+  }
+  
+  c->cd(2);
+  RooDataHist *hyield_bin = hyield->binnedClone();
+  RooPlot* frame2 = nsig.frame(Bins(150));
+  hyield_bin->plotOn(frame2,Binning(150),DataError(RooAbsData::Poisson));
+  RooRealVar yield_mean("yield_mean","yield_mean",nsig_template,-50,100);
+  RooRealVar yield_sigma("yield_sigma","yield_sigma",nsig_template/2,0,10*nsig_template);
+  RooGaussian ygauss("ygauss","ygauss",nsig,yield_mean,yield_sigma);
+  ygauss.fitTo(*hyield_bin);
+  ygauss.plotOn(frame2);
+  frame2->Draw();
+  yield_mean.Print();
+  yield_sigma.Print();
+
+  Double_t mv = yield_mean.getVal();
+  Double_t me = yield_mean.getError();
+  Double_t sv = yield_sigma.getVal();
+  Double_t se = yield_sigma.getError();
+  ofs << "mean = " << mv << " +- " << me << endl;
+  ofs << "sigma = " << sv << " +- " << se << endl;
+  ofs << "finalprecision = " << 100 * sv / mv << "%" << endl;
+  ofs << "fiterror = " << 100 * TMath::Sqrt( (se*se)/(mv*mv) + (sv*sv*me*me)/(mv*mv*mv*mv) ) << "%" << endl;
+
+  sw.Stop();
+  cerr << sw.Print() << endl;
+}
